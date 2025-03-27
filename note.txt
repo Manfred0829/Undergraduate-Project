@@ -5,14 +5,6 @@
 匯出依賴：pipenv requirements > requirements.txt
 
 
-rebrandly:
-api: 000289fd396d44248b70567e2ac9dab4
-
-url: rebrand.ly/JohnnyDo-flask-app
-url id: 07c4e1aefb354771a5c4be8904ac0dae
-
-git token: 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
-
 color:
 #4A55A2
 #7895CB
