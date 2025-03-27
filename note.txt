@@ -1,0 +1,27 @@
+初始化環境： pipenv install
+進入環境： pipenv shell
+安裝與紀錄依賴：pipenv install package_name
+退出環境：exit
+匯出依賴：pipenv requirements > requirements.txt
+
+
+rebrandly:
+api: 000289fd396d44248b70567e2ac9dab4
+
+url: rebrand.ly/JohnnyDo-flask-app
+url id: 07c4e1aefb354771a5c4be8904ac0dae
+
+git token: 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
+
+color:
+#4A55A2
+#7895CB
+#A0BFE0
+#C5DFF8
+
+
+#282829
+#434344
+
+#FFFFFF
+#F5F5F7
