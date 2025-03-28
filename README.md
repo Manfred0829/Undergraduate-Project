@@ -108,13 +108,10 @@ python app.py
 
 ---
 
-
 ## 注意事項
 
 * 請勿在公開環境中洩漏 API 金鑰與 Token。
 * 確保 `pipenv shell` 環境啟動後再執行 Flask 伺服器。
-
-
 
 # Git 使用指南
 
@@ -136,11 +133,22 @@ git push --force origin main
 
 ## 推送 (`push`) 變更
 
-### 1. 建立新分支（命名規則：`user_name-branch-package_name`）
+### 1. 建立新分支
 
 ```sh
 git checkout -b new-branch-name
 ```
+
+
+| 分支類型       | 命名規範                  | 例子                          |
+| -------------- | ------------------------- | ----------------------------- |
+| **主分支**     | `main`、`develop`         | `main`、`develop`             |
+| **功能分支**   | `feature/描述`            | `feature/add-dark-mode`       |
+| **修復分支**   | `bugfix/描述`、`fix/描述` | `bugfix/fix-memory-leak`      |
+| **熱修復分支** | `hotfix/描述`             | `hotfix/security-patch`       |
+| **釋出分支**   | `release/版本號`          | `release/v1.2.0`              |
+| **測試/實驗**  | `experiment/描述`         | `experiment/new-db-structure` |
+| **個人分支**   | `username/描述`           | `manfred/refactor-frontend`   |
 
 ### 2. 確認當前狀態（可選）
 
