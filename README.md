@@ -192,13 +192,31 @@ git push origin new-branch-name
 git branch
 ```
 
+###  推送 main 分支並設為 upstream
+```sh
+git push -u origin main
+```
+> 推薦第一次使用，可以將本地的 main 分支與遠端的 origin/main 綁定。之後執行 git push 或 git pull 可以不需要指定 origin main。
+
 ### 切換分支
 
 ```sh
 git checkout branch_name
 ```
 
-### 拉取最新變更
+### 創建分支並切換
+
+```sh
+git checkout -b branch_name
+```
+
+### 重新命名目前所在分支
+
+```sh
+git branch -M branch_name
+```
+
+### 從遠端的 main 分支拉取最新變更
 
 ```sh
 git pull origin main
