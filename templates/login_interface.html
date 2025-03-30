@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學習系統登入頁面</title>
+    <style> 
+        * { /* 全局選擇器(*)應用於所有元素 */
+            margin: 0; /* 移除默認外邊距 */
+            padding: 0; /* 移除默認內邊距 */
+            box-sizing: border-box; /* 使元素的寬度和高度包括內邊距和邊框 */
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+        }
+
+        body {
+            display: flex; /* 使用彈性盒子布局 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            min-height: 100vh; /* 最小高度為視口高度的100% */
+            background: linear-gradient(120deg, #434344, #282829); /* 創建漸變背景 */
+            overflow: hidden; /* 隱藏溢出的內容 */
+            
+        }
+        .container { /* 選擇有class="container"的元素 */
+            display: flex;
+            width: 100%;
+            max-width: 1000px; /* 最大寬度為1000像素 */
+            background: rgba(255, 255, 255, 0.9);
+            
+            border-radius: 15px; /* 設置圓角半徑 */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* 添加陰影效果 */
+            overflow: hidden;
+        }
+
+        .login-image {
+            flex: 1; /* 占用可用空間的比例 */
+            background: url('/api/placeholder/600/800') center/cover; /* 設置背景圖片並居中，覆蓋整個區域 */
+            position: relative; /* 設置相對定位 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-image::before { /* ::before: 創建一個偽元素 */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 12, 12, 0.4);
+        }
+
+        .welcome-text {
+            position: relative;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .welcome-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .login-form {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-form h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            {% comment %} background-color: #F5F5F7; {% endcomment %}
+
+        }
+
+        .form-group input:focus {
+            border-color: #4e8cff;
+            box-shadow: 0 0 0 3px rgba(78, 140, 255, 0.2);
+            outline: none;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .remember-forgot a {
+            color: #4e8cff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .remember-forgot a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input {
+            margin-right: 5px;
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, #4e8cff, #2563eb);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to right, #3b7dff, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 140, 255, 0.4);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .register-link a {
+            color: #4e8cff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .register-link a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 90%;
+            }
+
+            .login-image {
+                display: none;
+            }
+
+            .login-form {
+                padding: 40px 25px;
+            }
+        }
+    </style>
+</head>
+<body> <!--包含頁面的可見內容，如文本、圖像、表單等-->
+    <div class="container"> <!--一個容器元素，用於包裹其他元素，這裡作為登入頁面的主容器-->
+        <div class="login-image"> <!--左側的圖片區域容器-->
+            <div class="welcome-text">
+                <h2>個人化學習系統</h2>
+                <p>登入帳戶後即可進入</p>
+            </div>
+        </div>
+        <div class="login-form"> <!--右側登入表單區域的容器-->
+            <h1>使用者登入</h1>
+            <form id="login-form"> <!--id用於JavaScript中識別這個表單-->
+                <div class="form-group">
+                    <label for="username">帳號</label>
+                    <input type="text" id="username" name="username" placeholder="請輸入您的帳號" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密碼</label>
+                    <input type="password" id="password" name="password" placeholder="請輸入您的密碼" required>
+                </div>
+                <div class="remember-forgot">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">記住我</label>
+                    </div>
+                    <a href="#">忘記密碼？</a>
+                </div>
+                <button type="submit" class="login-btn">登入</button>
+                <div class="register-link">
+                    還沒有帳號？<a href="#">立即註冊</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // document.getElementById('login-form'): 獲取ID為'login-form'的表單元素
+        // addEventListener('submit', function(e) {...}): 為表單添加提交事件監聽器
+        document.getElementById('login-form').addEventListener('submit', function(e) { 
+            e.preventDefault(); // 阻止表單的默認提交行為
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // 這裡可以放置登入驗證的程式碼
+            console.log('登入嘗試', { username, password }); // 在瀏覽器控制台輸出信息，用於調試
+            
+            // 模擬登入成功後跳轉
+            // window.location.href = 'dashboard.html';
+            
+            // 或顯示錯誤訊息
+            alert('登入功能已觸發！在實際應用中，這裡會進行後端驗證。');
+        });
+    </script>
+</body>
+</html>
