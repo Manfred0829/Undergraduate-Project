@@ -106,7 +106,7 @@
             font-size: 1rem;
             transition: all 0.3s ease;
             background-color: #f8f9fa;
-            {% comment %} background-color: #F5F5F7; {% endcomment %}
+            /* background-color: #F5F5F7; */
 
         }
 
@@ -244,7 +244,7 @@
             console.log('登入嘗試', { username, password }); // 在瀏覽器控制台輸出信息，用於調試
             
             // 模擬登入成功後跳轉
-            // window.location.href = 'dashboard.html';
+            window.location.href = '/user_interface';
             
             // 或顯示錯誤訊息
             alert('登入功能已觸發！在實際應用中，這裡會進行後端驗證。');
