@@ -208,6 +208,13 @@ git push -u origin main
 
 > 推薦第一次使用，可以將本地的 main 分支與遠端的 origin/main 綁定。之後執行 git push 或 git pull 可以不需要指定 origin main。
 
+### 移除在 staging area 的檔案
+```sh
+git reset HEAD <file>
+```
+> 在執行完 git add . 後，所有 modified files 會進入 staging area ，準備提交（commit）
+
+
 ### 還原本地檔案為遠端版本
 ```sh
 git checkout -- <file>
