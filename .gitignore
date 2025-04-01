@@ -1,2 +1,3 @@
 self/
 .env
+.DS_Store
