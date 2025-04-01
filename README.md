@@ -72,13 +72,23 @@ REBRANDLY_LINK_ID = "07c4e1aefb354771a5c4be8904ac0dae"
 ngrok.set_auth_token("2tfriendjn7OPP98aWS1j2mBrCN_2vNRGFCwj4ATujaFik4xC")
 ```
 
-```###
+### 2. 啟動伺服器
+
 
 請確保已進入 `pipenv shell` 環境：
 
 ```sh
 python app.py
 ```
+
+---
+
+## .gitignore 說明
+
+此檔案內指定的所有內容不會被上傳到github，目前包含兩個項目：
+
+1. self/：為一個料夾，可以用來存放個人暫存用、實驗用檔案
+2. .env：為一個環境檔，用來儲存api token, key等隱私資訊
 
 ---
 
@@ -97,7 +107,6 @@ python app.py
 ---
 
 ## 配色規範
-
 
 | 顏色   | HEX       |
 | ------ | --------- |
@@ -126,7 +135,7 @@ git push --force origin main
 
 > **⚠️ 注意**：`git push --force` 可能會覆蓋遠端分支，請謹慎使用！
 > **🚫 之後請勿再執行 `git init` 或 `git push --force`**，避免影響遠端版本控制。
->
+> 
 > repository-url：https://github.com/Manfred0829/Undergraduate-Project/tree/main
 
 ---
@@ -138,7 +147,6 @@ git push --force origin main
 ```sh
 git checkout -b new-branch-name
 ```
-
 
 | 分支類型       | 命名規範                  | 例子                          |
 | -------------- | ------------------------- | ----------------------------- |
@@ -192,10 +200,12 @@ git push origin new-branch-name
 git branch
 ```
 
-###  推送 main 分支並設為 upstream
+### 推送 main 分支並設為 upstream
+
 ```sh
 git push -u origin main
 ```
+
 > 推薦第一次使用，可以將本地的 main 分支與遠端的 origin/main 綁定。之後執行 git push 或 git pull 可以不需要指定 origin main。
 
 ### 切換分支
@@ -235,3 +245,4 @@ git merge branch_name
 * **請勿直接推送至 `main` 分支**，請使用 **feature 分支** 提交變更，並透過 Pull Request (PR) 進行審查與合併。
 * **提交訊息 (`commit message`) 應完整描述本次改動**，避免簡短或無意義的訊息，例如 `"update"` 或 `"fix"`。
 * **使用 `git status` 檢查修改內容**，避免提交未預期的檔案。
+
