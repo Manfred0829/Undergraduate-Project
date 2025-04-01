@@ -5,6 +5,8 @@ import subprocess
 from flask import Flask, render_template, request, redirect, url_for
 from pyngrok import ngrok  # 確保已安裝 pip install pyngrok
 
+PORT = 5002
+
 # Rebrandly 設定（請填入你的 API Key 和 Domain）
 REBRANDLY_API_KEY = "000289fd396d44248b70567e2ac9dab4"
 REBRANDLY_LINK_ID = "07c4e1aefb354771a5c4be8904ac0dae"  # 例如 "xyz123" (從 Rebrandly 網址設定中取得)
@@ -14,20 +16,20 @@ ngrok.set_auth_token("2tfriendjn7OPP98aWS1j2mBrCN_2vNRGFCwj4ATujaFik4xC")
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    return render_template('index.html')
+def login_interface():
+    return render_template('login_interface.html')
 
 @app.route('/login', methods=['POST'])
 def login():
-    return redirect(url_for('main'))
+    return redirect(url_for('user_interface'))
 
-@app.route('/main')
-def main():
-    return render_template('main.html')
+@app.route('/user_interface')
+def user_interface():
+    return render_template('user_interface.html')  # return render_template('user_interface.html')
 
 def start_ngrok():
     """ 開啟 ngrok 隧道並取得公開網址 """
-    public_url = ngrok.connect(5000).public_url  # 建立 5000 端口的公開網址
+    public_url = ngrok.connect(PORT).public_url  # 建立 5000 端口的公開網址
     print(f"ngrok 隧道已啟動: {public_url}")
     return public_url
 
@@ -61,4 +63,4 @@ if __name__ == '__main__':
     update_rebrandly(ngrok_url)
 
     # 3️⃣ 啟動 Flask 伺服器
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=PORT, debug=False)
