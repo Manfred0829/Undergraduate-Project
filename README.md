@@ -208,6 +208,11 @@ git push -u origin main
 
 > 推薦第一次使用，可以將本地的 main 分支與遠端的 origin/main 綁定。之後執行 git push 或 git pull 可以不需要指定 origin main。
 
+### 還原本地檔案為遠端版本
+```sh
+git checkout -- <file>
+```
+
 ### 切換分支
 
 ```sh
