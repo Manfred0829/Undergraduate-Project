@@ -64,16 +64,17 @@ pipenv requirements > requirements.txt
 
 ### 1. 設置環境變數
 
-請在 `.env` 或系統環境變數中設置以下內容：
+請在 `.env` 中設置以下內容：
 
 ```python
-REBRANDLY_API_KEY = "000289fd396d44248b70567e2ac9dab4"
-REBRANDLY_LINK_ID = "07c4e1aefb354771a5c4be8904ac0dae"
-ngrok.set_auth_token("2tfriendjn7OPP98aWS1j2mBrCN_2vNRGFCwj4ATujaFik4xC")
+REBRANDLY_API_KEY=000289fd396d44248b70567e2ac9dab4
+REBRANDLY_LINK_ID=07c4e1aefb354771a5c4be8904ac0dae
+NFROK_AUTH_TOKEN=2tfriendjn7OPP98aWS1j2mBrCN_2vNRGFCwj4ATujaFik4xC
 ```
 
-### 2. 啟動伺服器
+註：PROJECT_ROOT會在初次import config時自動更新，不須手動填入
 
+### 2. 啟動伺服器
 
 請確保已進入 `pipenv shell` 環境：
 
@@ -108,6 +109,7 @@ python app.py
 
 ## 配色規範
 
+
 | 顏色   | HEX       |
 | ------ | --------- |
 | 深灰色 | `#282829` |
@@ -135,7 +137,7 @@ git push --force origin main
 
 > **⚠️ 注意**：`git push --force` 可能會覆蓋遠端分支，請謹慎使用！
 > **🚫 之後請勿再執行 `git init` 或 `git push --force`**，避免影響遠端版本控制。
-> 
+>
 > repository-url：https://github.com/Manfred0829/Undergraduate-Project/tree/main
 
 ---
@@ -147,6 +149,7 @@ git push --force origin main
 ```sh
 git checkout -b new-branch-name
 ```
+
 
 | 分支類型       | 命名規範                  | 例子                          |
 | -------------- | ------------------------- | ----------------------------- |
@@ -209,27 +212,33 @@ git push -u origin feature
 > 推薦第一次使用，可以將本地的 feature 分支與遠端的 origin/feature 綁定。之後執行 git push 或 git pull 可以不需要指定 origin feature。
 
 ### 移除在 staging area 的檔案
+
 ```sh
 git reset HEAD <file>
 ```
+
 > 在執行完 git add . 後，所有 modified files 會進入 staging area ，準備提交（commit）
 
-
 ### 還原本地檔案為遠端版本
+
 ```sh
 git checkout -- <file>
 ```
 
 ### 取消追蹤檔案
+
 ```sh
 git rm --cached your_file
 ```
+
 > 讓 Git 不再追蹤檔案，但仍保留在工作目錄
 
 ### 刪除檔案
+
 ```sh
 git rm -f your_file
 ```
+
 > 連工作區的檔案一起刪除
 
 ### 切換分支
@@ -269,4 +278,3 @@ git merge branch_name
 * **請勿直接推送至 `main` 分支**，請使用 **feature 分支** 提交變更，並透過 Pull Request (PR) 進行審查與合併。
 * **提交訊息 (`commit message`) 應完整描述本次改動**，避免簡短或無意義的訊息，例如 `"update"` 或 `"fix"`。
 * **使用 `git status` 檢查修改內容**，避免提交未預期的檔案。
-
