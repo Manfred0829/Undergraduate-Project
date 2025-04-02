@@ -200,10 +200,10 @@ git push origin new-branch-name
 git branch
 ```
 
-### 推送 main 分支並設為 upstream
+### 推送 feature 分支並設為 upstream
 
 ```sh
-git push -u origin main
+git push -u origin feature
 ```
 
 > 推薦第一次使用，可以將本地的 main 分支與遠端的 origin/main 綁定。之後執行 git push 或 git pull 可以不需要指定 origin main。
@@ -219,6 +219,18 @@ git reset HEAD <file>
 ```sh
 git checkout -- <file>
 ```
+
+### 取消追蹤檔案
+```sh
+git rm --cached your_file
+```
+> 讓 Git 不再追蹤檔案，但仍保留在工作目錄
+
+### 刪除檔案
+```sh
+git rm -f your_file
+```
+> 連工作區的檔案一起刪除
 
 ### 切換分支
 
