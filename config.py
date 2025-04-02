@@ -23,3 +23,4 @@ def get_project_root():
             f.write(f"PROJECT_ROOT={project_root}\n")
     
     return project_root
+

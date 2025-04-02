@@ -23,3 +23,4 @@ def read_json(relative_path):
     file_path = os.path.join(get_project_root(), relative_path)
     with open(file_path, 'r', encoding='utf-8') as f:
         return json.load(f)
+
