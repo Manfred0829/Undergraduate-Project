@@ -14,7 +14,7 @@ import config
 class TestJsonIO(unittest.TestCase):
     def setUp(self):
         """在測試開始前，設定測試檔案路徑"""
-        self.test_file = os.path.join(config.PROJECT_ROOT, "tests/test_data.json")
+        self.test_file = os.path.join(config.get_project_root, "tests/test_data.json")
 
         """在測試前準備測試用的檔案與資料"""
         self.test_data = {"name": "Alice", "age": 25}
