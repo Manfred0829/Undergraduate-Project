@@ -9,6 +9,7 @@ pyngrok = "*"
 requests = "*"
 numpy = "*"
 scikit-learn = "*"
+dotenv = "*"
 
 [dev-packages]
 

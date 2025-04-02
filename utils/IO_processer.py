@@ -1,6 +1,6 @@
 import json
 import os
-from utils.config import get_project_root
+from config import get_project_root
 
 def write_json(data, relative_path):
     """

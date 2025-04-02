@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from utils.IO_processer import write_json, read_json
 from utils.similarity_calculator import get_most_similar_index, get_similarity_pairs
-from utils.config import get_project_root
+from config import get_project_root
 
 
 class TestJsonIO(unittest.TestCase):
