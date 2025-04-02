@@ -206,7 +206,7 @@ git branch
 git push -u origin feature
 ```
 
-> 推薦第一次使用，可以將本地的 main 分支與遠端的 origin/main 綁定。之後執行 git push 或 git pull 可以不需要指定 origin main。
+> 推薦第一次使用，可以將本地的 feature 分支與遠端的 origin/feature 綁定。之後執行 git push 或 git pull 可以不需要指定 origin feature。
 
 ### 移除在 staging area 的檔案
 ```sh
