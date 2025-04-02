@@ -7,6 +7,8 @@ name = "pypi"
 flask = "*"
 pyngrok = "*"
 requests = "*"
+numpy = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
