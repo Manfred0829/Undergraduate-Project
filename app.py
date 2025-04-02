@@ -4,14 +4,15 @@ import time
 import subprocess
 from flask import Flask, render_template, request, redirect, url_for
 from pyngrok import ngrok  # 確保已安裝 pip install pyngrok
+import config
 
 PORT = 5002
 
 # Rebrandly 設定（請填入你的 API Key 和 Domain）
-REBRANDLY_API_KEY = "000289fd396d44248b70567e2ac9dab4"
-REBRANDLY_LINK_ID = "07c4e1aefb354771a5c4be8904ac0dae"  # 例如 "xyz123" (從 Rebrandly 網址設定中取得)
+REBRANDLY_API_KEY = config.get_env_variable("REBRANDLY_API_KEY")
+REBRANDLY_LINK_ID = config.get_env_variable("REBRANDLY_LINK_ID")
 
-ngrok.set_auth_token("2tfriendjn7OPP98aWS1j2mBrCN_2vNRGFCwj4ATujaFik4xC")
+ngrok.set_auth_token(config.get_env_variable("NFROK_AUTH_TOKEN"))
 
 app = Flask(__name__)
 
@@ -51,7 +52,7 @@ def update_rebrandly(new_url):
     )
 
     if response.status_code == 200:
-        print(f"Rebrandly 短網址已更新至: {new_url}")
+        print("Rebrandly 短網址已連結至ngrok: https://rebrand.ly/JohnnyDo-flask-app")
     else:
         print(f"Rebrandly 更新失敗: {response.text}")
 
