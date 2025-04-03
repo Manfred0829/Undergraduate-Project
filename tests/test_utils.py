@@ -7,7 +7,7 @@ import numpy as np
 # 獲取當前文件的上層目錄（專案根目錄）
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from utils.IO_processer import write_json, read_json
+from utils.text_processer import write_json, read_json
 from utils.similarity_calculator import get_most_similar_index, get_similarity_pairs
 import config
 

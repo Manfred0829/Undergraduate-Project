@@ -13,6 +13,7 @@ dotenv = "*"
 google-generativeai = "*"
 openai = "==1.55.3"
 httpx = "==0.27.2"
+pdf2image = "*"
 
 [dev-packages]
 openai = "==1.55.3"
