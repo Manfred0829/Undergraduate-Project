@@ -10,9 +10,13 @@ requests = "*"
 numpy = "*"
 scikit-learn = "*"
 dotenv = "*"
+google-generativeai = "*"
+openai = "==1.55.3"
+httpx = "==0.27.2"
 
 [dev-packages]
+openai = "==1.55.3"
+httpx = "==0.27.2"
 
 [requires]
 python_version = "3.12"
-
