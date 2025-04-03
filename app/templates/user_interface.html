@@ -110,6 +110,7 @@
             position: fixed;
             left: 0;
             top: var(--topbar-height);
+            overflow-y: auto;
         }
 
         .sidebar-menu {
@@ -331,15 +332,15 @@
         }
 
         .history-item .score.good {
-            color: #28a745;
+            color: var(--success-color);
         }
 
         .history-item .score.average {
-            color: #fd7e14;
+            color: var(--warning-color);
         }
 
         .history-item .score.bad {
-            color: #dc3545;
+            color: var(--danger-color);
         }
 
         /* Modal Styles */
@@ -419,6 +420,118 @@
             margin-bottom: 5px;
         }
 
+        /* Upload Panels */
+        .upload-container {
+            max-width: 800px;
+        }
+
+        .file-list {
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .file-list-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-name svg {
+            width: 16px;
+            height: 16px;
+            color: #777;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        .upload-form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--secondary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group select,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .drag-drop-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 4px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+            background-color: white;
+        }
+
+        .drag-drop-area.active {
+            border-color: var(--primary-color);
+            background-color: var(--hover-color);
+        }
+
+        .drag-drop-area p {
+            margin-bottom: 10px;
+            color: #777;
+        }
+
         /* Pie Chart Canvas */
         #error-distribution-chart {
             height: 100%;
@@ -463,6 +576,22 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         出題
+                    </button>
+                </li>
+                <li>
+                    <button id="upload-lecture-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        上傳講義
+                    </button>
+                </li>
+                <li>
+                    <button id="upload-notes-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        上傳筆記
                     </button>
                 </li>
                 <li>
@@ -598,33 +727,130 @@
                 </div>
             </div>
 
+            <!-- Upload Lecture Panel -->
+            <div id="upload-lecture-panel" class="content-panel">
+                <h2>上傳講義</h2>
+                <div class="upload-container">
+                    <h3>目前講義</h3>
+                    <div class="file-list">
+                        <div class="file-list-item">
+                            <div class="file-name">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                                英語語法講義.pdf
+                            </div>
+                            <div class="file-actions">
+                                <button class="file-action-btn">下載</button>
+                                <button class="file-action-btn">刪除</button>
+                            </div>
+                        </div>
+                        <div class="file-list-item">
+                            <div class="file-name">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                                英語時態使用指南.docx
+                            </div>
+                            <div class="file-actions">
+                                <button class="file-action-btn">下載</button>
+                                <button class="file-action-btn">刪除</button>
+                            </div>
+                        </div>
+                        <div class="file-list-item">
+                            <div class="file-name">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                                英文詞彙學習講義.pdf
+                            </div>
+                            <div class="file-actions">
+                                <button class="file-action-btn">下載</button>
+                                <button class="file-action-btn">刪除</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-form">
+                        <h3>上傳新講義</h3>
+                        <div class="drag-drop-area" id="lecture-drag-area">
+                            <p>拖放檔案至此處或點擊選擇檔案</p>
+                            <p>支援 PDF、DOCX、PPT 等格式文件</p>
+                            <input type="file" id="lecture-file-upload" multiple style="display: none;">
+                            <button class="upload-btn" onclick="document.getElementById('lecture-file-upload').click()">選擇檔案</button>
+                        </div>
+                        <div id="lecture-file-list" style="margin-top: 10px;"></div>
+                        <button class="upload-btn" style="width: 100%;">上傳</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Notes Panel -->
+            <div id="upload-notes-panel" class="content-panel">
+                <h2>上傳筆記</h2>
+                <div class="upload-container">
+                    <h3>我的筆記</h3>
+                    <div class="file-list">
+                        <div class="file-list-item">
+                            <div class="file-name">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                </svg>
+                                英語語法筆記.pdf
+                            </div>
+                            <div class="file-actions">
+                                <button class="file-action-btn">下載</button>
+                                <button class="file-action-btn">刪除</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-form">
+                        <h3>上傳新筆記</h3>
+                        <div class="form-group">
+                            <label for="related-lecture">對應講義</label>
+                            <select id="related-lecture" class="form-control">
+                                <option value="">請選擇對應講義</option>
+                                <option value="英語語法講義.pdf">英語語法講義.pdf</option>
+                                <option value="英語時態使用指南.docx">英語時態使用指南.docx</option>
+                                <option value="英文詞彙學習講義.pdf">英文詞彙學習講義.pdf</option>
+                            </select>
+                        </div>
+                        <div class="drag-drop-area" id="notes-drag-area">
+                            <p>拖放檔案至此處或點擊選擇檔案</p>
+                            <p>支援 PDF、DOCX、JPG 等格式文件</p>
+                            <input type="file" id="notes-file-upload" multiple style="display: none;">
+                            <button class="upload-btn" onclick="document.getElementById('notes-file-upload').click()">選擇檔案</button>
+                        </div>
+                        <div id="notes-file-list" style="margin-top: 10px;"></div>
+                        <button class="upload-btn" style="width: 100%;">上傳</button>
+                    </div>
+                </div>
+            </div>
+            
             <!-- History Panel -->
             <div id="history-panel" class="content-panel">
-                <h2>學習紀錄查詢</h2>
+                <h2>學習歷程查詢</h2>
                 <div class="history-container">
                     <div class="history-chart">
                         <canvas id="error-distribution-chart"></canvas>
                     </div>
                     <div class="history-list">
+                        <h3>近期測驗記錄</h3>
                         <div class="history-item">
-                            <h4>英文語法測驗</h4>
-                            <div class="date">2025-03-30 14:35</div>
-                            <div class="score good">得分: 90% (9/10)</div>
+                            <h4>英文基礎語法測驗</h4>
+                            <div class="date">2023/05/12 14:30</div>
+                            <div class="score good">得分: 85/100</div>
+                        </div>
+                        <div class="history-item">
+                            <h4>英文時態測驗</h4>
+                            <div class="date">2023/05/10 09:15</div>
+                            <div class="score average">得分: 72/100</div>
                         </div>
                         <div class="history-item">
                             <h4>英文詞彙測驗</h4>
-                            <div class="date">2025-03-28 10:20</div>
-                            <div class="score average">得分: 75% (15/20)</div>
-                        </div>
-                        <div class="history-item">
-                            <h4>英文閱讀理解</h4>
-                            <div class="date">2025-03-25 16:45</div>
-                            <div class="score good">得分: 85% (17/20)</div>
-                        </div>
-                        <div class="history-item">
-                            <h4>英文聽力測驗</h4>
-                            <div class="date">2025-03-22 09:15</div>
-                            <div class="score bad">得分: 60% (6/10)</div>
+                            <div class="date">2023/05/05 16:45</div>
+                            <div class="score bad">得分: 65/100</div>
                         </div>
                     </div>
                 </div>
@@ -643,11 +869,6 @@
                 <div class="file-upload">
                     <label for="subject-name">科目名稱</label>
                     <input type="text" id="subject-name" placeholder="請輸入科目名稱" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px;">
-                </div>
-                <div class="file-upload">
-                    <label for="subject-file">上傳學習資料</label>
-                    <input type="file" id="subject-file" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px;">
-                    <p style="margin-top: 5px; font-size: 0.8rem; color: #777;">支援 PDF、DOCX、TXT 等格式文件</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -741,7 +962,151 @@
                 newSubjectModal.style.display = 'none';
             }
         });
+
+        // 新增的側邊欄按鈕處理
+        const uploadLectureBtn = document.getElementById('upload-lecture-btn');
+        const uploadNotesBtn = document.getElementById('upload-notes-btn');
+        const uploadLecturePanel = document.getElementById('upload-lecture-panel');
+        const uploadNotesPanel = document.getElementById('upload-notes-panel');
+
+        uploadLectureBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            uploadLectureBtn.classList.add('active');
+            
+            // 隱藏所有面板，改為完全隱藏而不僅僅是移除active樣式
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            uploadLecturePanel.classList.add('active');
+        });
+
+        uploadNotesBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            uploadNotesBtn.classList.add('active');
+            
+            // 隱藏所有面板，改為完全隱藏而不僅僅是移除active樣式
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            uploadNotesPanel.classList.add('active');
+        });
         
+        // 添加查詢按鈕的監聽器
+        historyBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            historyBtn.classList.add('active');
+            
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            historyPanel.classList.add('active');
+            
+            // 初始化圖表
+            initializeChart();
+        });
+        
+        // 更新大綱和出題按鈕的事件處理器
+        outlineBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            outlineBtn.classList.add('active');
+            
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            outlinePanel.classList.add('active');
+        });
+        
+        quizBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            quizBtn.classList.add('active');
+            
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            quizPanel.classList.add('active');
+        });
+
+        // 檔案拖放上傳功能
+        const fileDropAreas = document.querySelectorAll('.drag-drop-area');
+
+        fileDropAreas.forEach(area => {
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('drag-over');
+            });
+            
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('drag-over');
+            });
+            
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                // 這裡處理檔案上傳邏輯
+                console.log('檔案已選擇：', files);
+                
+                // 顯示選擇的檔案名稱
+                const fileInput = area.querySelector('input[type="file"]');
+                if (fileInput) {
+                    fileInput.files = files;
+                    updateSelectedFilesList(fileInput);
+                }
+            });
+        });
+
+        // 檔案選擇後更新顯示
+        document.querySelectorAll('.file-input').forEach(input => {
+            input.addEventListener('change', () => {
+                updateSelectedFilesList(input);
+            });
+        });
+
+        function updateSelectedFilesList(input) {
+            const files = input.files;
+            const fileArea = input.closest('.file-drop-area');
+            
+            if (files.length > 0) {
+                let fileNames = '';
+                for (let i = 0; i < files.length; i++) {
+                    fileNames += files[i].name + (i < files.length - 1 ? ', ' : '');
+                }
+                
+                const fileInfo = document.createElement('div');
+                fileInfo.className = 'selected-files';
+                fileInfo.innerHTML = `
+                    <p>已選擇 ${files.length} 個檔案:</p>
+                    <p class="file-names">${fileNames}</p>
+                `;
+                
+                // 移除已有的選擇檔案顯示
+                const existingInfo = fileArea.querySelector('.selected-files');
+                if (existingInfo) {
+                    existingInfo.remove();
+                }
+                
+                fileArea.appendChild(fileInfo);
+            }
+        }
+
         // Initialize error distribution chart
         function initializeChart() {
             const ctx = document.getElementById('error-distribution-chart').getContext('2d');
