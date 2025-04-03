@@ -4,7 +4,7 @@ from PIL import Image
 import base64
 from io import BytesIO
 
-def _read_pdf_to_images(pdf_path):
+def read_pdf_to_images(pdf_path):
     """將 PDF 轉換為一系列圖片"""
     images = convert_from_path(pdf_path)
     return images
@@ -51,12 +51,13 @@ def save_image(image, save_path):
         
 def process_pdf_to_base64(pdf_path):
     """將 PDF 轉換為 Base64 格式的圖片"""
-    images = _read_pdf_to_images(pdf_path)
+    images = read_pdf_to_images(pdf_path)
     base64_images = []
     for img in images:
         base64_image = convert_image_to_base64(img)
         base64_images.append(base64_image)
     return base64_images
+
 
 '''
 # 以下為測試範例

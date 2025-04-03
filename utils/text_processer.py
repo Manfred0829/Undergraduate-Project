@@ -9,7 +9,7 @@ def write_json(data, relative_path):
     :param data: 要寫入的 JSON 格式物件
     :param relative_path: 以專案根目錄為基準的相對路徑（例如 "data/sample.json"）
     """
-    file_path = os.path.join(config.get_project_root, relative_path)
+    file_path = os.path.join(config.get_project_root(), relative_path)
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
@@ -20,7 +20,8 @@ def read_json(relative_path):
     :param relative_path: 以專案根目錄為基準的相對路徑
     :return: JSON 格式的物件
     """
-    file_path = os.path.join(config.get_project_root, relative_path)
+    file_path = os.path.join(config.get_project_root(), relative_path)
+    print(f"File path: {file_path}")
     with open(file_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
