@@ -29,3 +29,34 @@ def get_env_variable(key, default=None):
     :return: 變數值或預設值
     """
     return os.getenv(key, default)
+
+class Config:
+    REBRANDLY_API_KEY = os.getenv('REBRANDLY_API_KEY')
+    REBRANDLY_LINK_ID = os.getenv('REBRANDLY_LINK_ID')
+    NGROK_AUTH_TOKEN = os.getenv('NGROK_AUTH_TOKEN')
+
+class DevelopmentConfig(Config):
+    """開發環境配置"""
+    DEBUG = True
+    # 開發環境特定配置
+    DATABASE_URL = "sqlite:///dev.db"
+
+class TestingConfig(Config):
+    """測試環境配置"""
+    TESTING = True
+    # 測試環境特定配置
+    DATABASE_URL = "sqlite:///test.db"
+
+class ProductionConfig(Config):
+    """生產環境配置"""
+    DEBUG = False
+    # 生產環境特定配置
+    DATABASE_URL = os.getenv('DATABASE_URL')
+
+# 配置映射字典 e.g. config['development']
+config = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}
