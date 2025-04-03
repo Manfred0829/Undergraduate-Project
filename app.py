@@ -12,7 +12,7 @@ PORT = 5002
 REBRANDLY_API_KEY = config.get_env_variable("REBRANDLY_API_KEY")
 REBRANDLY_LINK_ID = config.get_env_variable("REBRANDLY_LINK_ID")
 
-ngrok.set_auth_token(config.get_env_variable("NFROK_AUTH_TOKEN"))
+ngrok.set_auth_token(config.get_env_variable("NGROK_AUTH_TOKEN"))
 
 app = Flask(__name__)
 
