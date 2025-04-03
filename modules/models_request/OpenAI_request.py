@@ -22,38 +22,42 @@ class OpenAIRequest(LazySingleton):
         # 設定已初始化
         self._initialized = True
 
-    def generate_content(self, prompt, max_retries=3, timeout=10, return_json=False):
-        """呼叫 OpenAI API，可選擇是否轉換為 JSON"""
+    def generate_content(self, user_msg, max_retries=3, return_json=False):
+
         for attempt in range(max_retries):
             try:
-                with concurrent.futures.ThreadPoolExecutor() as executor:
-                    future = executor.submit(self._openai_chat, prompt)
-                    response = future.result(timeout=timeout)  # 設定超時
+                # 呼叫 OpenAI API 進行聊天
+                chat_completion = self.model.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": user_msg
+                        }
+                    ],
+                )
 
-                if response and hasattr(response, "choices"):
-                    text = response.choices[0].message.content
+                text = chat_completion.choices[0].message.content
 
-                    # 若啟用 JSON 模式，嘗試解析 JSON
-                    if return_json:
-                        try:
-                            return self._response_to_json(text)
-                        except ValueError as e:
-                            print(f"⚠️ JSON 解析錯誤: {e} (第 {attempt + 1} 次重試)...")
-                            continue  # 解析失敗則重試
+                # 若啟用 JSON 模式，嘗試解析 JSON
+                if return_json:
+                    try:
+                        return self._response_to_json(text)
+                    except ValueError as e:
+                        print(f"⚠️ JSON 解析錯誤: {e} (第 {attempt + 1} 次重試)...")
+                        time.sleep(2)  # 等待2秒後重試
+                        continue  # 解析失敗則重試 
 
-                    return text  # 純文本模式，直接返回
+                # 回傳聊天結果
+                return text
 
-                raise ValueError("API 回應無效")  # 若 response 為 None，則拋出錯誤
-
-            except concurrent.futures.TimeoutError:
-                print(f"⚠️ 請求超時 (第 {attempt + 1} 次重試)...")
             except Exception as e:
-                print(f"⚠️ 發生錯誤: {e} (第 {attempt + 1} 次重試)...")
-
-            time.sleep(2)  # 等待 2 秒後重試
+                # 捕捉其他錯誤
+                print(f"An error occurred: {e} (第 {attempt + 1} 次重試)...")
+                time.sleep(2)  # 等待2秒後重試
 
         raise RuntimeError("⛔ 超過最大重試次數，請求失敗")
-
+    
     def _response_to_json(self, response_str: str):
         """將 Gemini 回應轉換為 JSON"""
         try:
@@ -68,20 +72,42 @@ class OpenAIRequest(LazySingleton):
             print(response_str)
             raise e
         
+    def generate_embedding(self, text_list):
 
-    def _openai_chat(self,user_msg):
+        text_list = [text.replace("\n", " ") for text in text_list]
 
-        chat_completion = self.model.chat.completions.create(
+        response = self.model.embeddings.create(
+            input=text_list,
+            model="text-embedding-3-small"
+        )
+
+        return [response.data[i].embedding for i in range(len(response.data))]
+
+
+
+    def generate_img_OCR(self, base64_image, request_msg='What words are in the picture? Only give me the words.'):
+
+        response = self.model.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
+            {
+                "role": "user",
+                "content": [
                 {
-                    "role": "user",
-                    "content": user_msg
-                }
+                    "type": "text",
+                    "text": request_msg,
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                    "url":  f"data:image/jpeg;base64,{base64_image}"
+                    },
+                },
+                ],
+            }
             ],
         )
-        return chat_completion
-
+        return response.choices[0].message.content
 
 
     def processing_data_example(self):
