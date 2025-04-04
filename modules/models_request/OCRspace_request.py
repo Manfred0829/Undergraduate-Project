@@ -21,7 +21,7 @@ class OCRspaceRequest(LazySingleton):
         self._initialized = True
 
 
-    def generate_img_OCR(self, img_path, request_msg='What words are in the picture? Only give me the words.'):
+    def generate_img_OCR(self, img_path):
     
         raise NotImplementedError("Using default Data, didn't implemented OCR process.")
 
