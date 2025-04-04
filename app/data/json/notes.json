@@ -1,0 +1,18 @@
+{
+  "英文": [
+    {
+      "id": "97d51c3f-8d2b-4cb3-989b-af019fde6ea2",
+      "original_filename": "Homework_1.pdf",
+      "filename": "97d51c3f-8d2b-4cb3-989b-af019fde6ea2.pdf",
+      "file_path": "/Users/wushanglin/Undergraduate-Project/app/data/uploads/notes/英文/97d51c3f-8d2b-4cb3-989b-af019fde6ea2.pdf",
+      "file_size": 345453,
+      "file_type": "pdf",
+      "subject": "英文",
+      "lecture_id": null,
+      "upload_date": "2025-04-04 16:41:06",
+      "ocr_processed": false,
+      "ocr_text_path": null,
+      "vector_embeddings": null
+    }
+  ]
+}
