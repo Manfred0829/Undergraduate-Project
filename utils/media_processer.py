@@ -16,12 +16,12 @@ def _save_image_to_memory(image):
     img_byte_arr.seek(0)
     return img_byte_arr
 
-def convert_image_to_base64(image):
+def convert_PIL_to_base64(image):
     """將圖片轉換為 Base64 編碼"""
     img_byte_arr = _save_image_to_memory(image)
     return base64.b64encode(img_byte_arr.read()).decode('utf-8')
 
-def convert_base64_to_image(base64_str):
+def convert_base64_to_PIL(base64_str):
     """將 base64 字串轉換為 PIL Image 物件"""
     try:
         img_data = base64.b64decode(base64_str)
@@ -31,7 +31,7 @@ def convert_base64_to_image(base64_str):
         print(f"Base64 轉圖片失敗: {e}")
         return None
 
-def read_image(image_path):
+def read_image_to_PIL(image_path):
     """讀取圖片並返回 PIL Image 物件"""
     try:
         img = Image.open(image_path)
@@ -40,7 +40,7 @@ def read_image(image_path):
         print(f"讀取圖片失敗: {e}")
         return None
     
-def save_image(image, save_path):
+def save_image_from_PIL(image, save_path):
     """將 PIL Image 儲存到指定路徑"""
     try:
         image.save(save_path)
@@ -54,7 +54,7 @@ def process_pdf_to_base64(pdf_path):
     images = read_pdf_to_images(pdf_path)
     base64_images = []
     for img in images:
-        base64_image = convert_image_to_base64(img)
+        base64_image = convert_PIL_to_base64(img)
         base64_images.append(base64_image)
     return base64_images
 
