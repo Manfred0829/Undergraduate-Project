@@ -74,7 +74,7 @@ class OpenAIRequest(LazySingleton):
         
     def generate_embedding(self, text_list):
 
-        text_list = [text.replace("\n", " ") for text in text_list]
+        # text_list = [text.replace("\n", " ") for text in text_list]
 
         response = self.model.embeddings.create(
             input=text_list,
@@ -113,3 +113,39 @@ class OpenAIRequest(LazySingleton):
     def processing_data_example(self):
         """處理數據，要求回應為 JSON"""
         return self.generate_content("str1" + "str2", return_json=True)
+    
+
+    def processing_notes_repair(self,text):
+        prompt_prefix = """The content below is the OCR result which may have some missing words. Please do your best to repair the original meaning of the text. Do not delete any parts that cannot be repaired, use the original language same as given texts.
+        
+        OCR result:
+        """
+
+        return self.generate_content(prompt_prefix+text)
+    
+    def processing_notes_extract_notes(self,text):
+        prompt_prefix = """The content below is the text extracted from a student notes.
+
+        Task:
+        1. Seperate the text into one or many key points accroding to different concept.
+        2. Arrange the key point in the form of bullet points if possible.
+        3. Give every key points a short describe around 5 words as the title.
+        4. Output the result in json format: [{'Title':'the description of key point', 'Content':'the content of key point'}, {...}]
+        5. If the text content does not include any key points (e.g. The title page or section page etc.), output the empty json file: [].
+        6. All of the output text using the language same as given student notes texts (including Title result and Content result).
+
+        text of a student notes:
+        """
+
+        return self.generate_content(prompt_prefix+text,return_json=True)
+    
+
+
+    def processing_notes_embedding(self,notes_list):
+        texts_list = []
+
+        for note in notes_list:
+            text = note['Title'] + ": " + note['Content']
+            texts_list.append(text)
+
+        return self.generate_embedding(texts_list)

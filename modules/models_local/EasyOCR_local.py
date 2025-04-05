@@ -154,7 +154,7 @@ class EasyOCRLocal(LazySingleton):
         # 顯示圖片（而非儲存）
         plt.imshow(pil_image)
         plt.axis('off')  # 不顯示軸線
-        plt.show()  # 顯示圖片
+        plt.show(block=False)  # 顯示圖片
 
     def _crop_lines_from_PIL(self, pil_image, lines_box):
         """
@@ -196,13 +196,6 @@ class EasyOCRLocal(LazySingleton):
 
         #print("Step 4")
         cropped_images = self._crop_lines_from_PIL(pil_image,lines_box)
-
-        '''
-        # test
-        plt.imshow(cropped_images[0])
-        plt.axis('off')  # 不顯示軸線
-        plt.show()  # 顯示圖片
-        '''
         
         return cropped_images
 
