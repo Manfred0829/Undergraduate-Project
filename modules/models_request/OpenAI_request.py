@@ -123,7 +123,7 @@ class OpenAIRequest(LazySingleton):
 
         return self.generate_content(prompt_prefix+text)
     
-    def processing_notes_extract_notes(self,text):
+    def processing_notes_extract_keypoints(self,text):
         prompt_prefix = """The content below is the text extracted from a student notes.
 
         Task:
@@ -131,16 +131,14 @@ class OpenAIRequest(LazySingleton):
         2. Arrange the key point in the form of bullet points if possible.
         3. Give every key points a short describe around 5 words as the title.
         4. Output the result in json format: [{'Title':'the description of key point', 'Content':'the content of key point'}, {...}]
-        5. If the text content does not include any key points (e.g. The title page or section page etc.), output the empty json file: [].
-        6. All of the output text using the language same as given student notes texts (including Title result and Content result).
+        5. If the text content does not include any key points, output the empty json file: [].
+        6. All of the output texts using the language same as given student notes texts (including Title result and Content result).
 
         text of a student notes:
         """
 
         return self.generate_content(prompt_prefix+text,return_json=True)
     
-
-
     def processing_notes_embedding(self,notes_list):
         texts_list = []
 
@@ -149,3 +147,19 @@ class OpenAIRequest(LazySingleton):
             texts_list.append(text)
 
         return self.generate_embedding(texts_list)
+
+    def processing_handouts_extract_keypoints(self,text):
+        prompt_prefix = """The content below is the text extracted from a page of lecture ppt.
+
+        Task:
+        1. Seperate the text into one or many key points accroding to different concept.
+        2. Arrange the key point in the form of bullet points if possible.
+        3. Give every key points a short describe around 5 words as the title.
+        4. Output the result in json format: [{'Title':'the description of key point', 'Content':'the content of key point'}, {...}]
+        5. If the text content does not include any key points (e.g. The page is title page or section page etc.), output the empty json file: [].
+        6. All of the output texts using the language same as given ppt page texts (including Title result and Content result).
+
+        text of a ppt page:
+        """
+
+        return self.generate_content(prompt_prefix+text,return_json=True)
