@@ -23,7 +23,7 @@ def processing_note(img_path):
 
     # LLM process
     repaired_page = OpenAI.processing_notes_repair(page_texts)
-    notes_json = OpenAI.processing_notes_extract_notes(repaired_page)
+    notes_json = OpenAI.processing_notes_extract_keypoints(repaired_page)
     print(repaired_page)
     print(notes_json)
 
