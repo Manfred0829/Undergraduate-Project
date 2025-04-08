@@ -10,7 +10,7 @@ class OpenAIRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        from app import config 
+        import config 
         from openai import OpenAI
 
         client = OpenAI(

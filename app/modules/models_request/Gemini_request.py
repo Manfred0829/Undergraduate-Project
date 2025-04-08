@@ -10,7 +10,7 @@ class GeminiRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        from app import config 
+        import config 
         import google.generativeai as genai
 
         # 獲取 Api key

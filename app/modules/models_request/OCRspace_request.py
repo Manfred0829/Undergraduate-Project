@@ -12,7 +12,7 @@ class OCRspaceRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        from app import config 
+        import config 
 
         # 獲取 Api key
         self.OCRSPACE_API_TOKEN = config.get_env_variable("OCRSPACE_API_TOKEN")
