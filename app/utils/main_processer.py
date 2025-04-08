@@ -1,7 +1,7 @@
-from utils import media_processer as media, text_processer as text
+from app.utils import media_processer as media, text_processer as text
 # from modules.models_request.OCRspace_request import OCRspaceRequest
-from modules.models_local.EasyOCR_local import EasyOCRLocal
-from modules.models_request.OpenAI_request import OpenAIRequest
+from app.modules.models_local.EasyOCR_local import EasyOCRLocal
+from app.modules.models_request.OpenAI_request import OpenAIRequest
 
 
 def processing_note(img_path):
@@ -38,6 +38,6 @@ def processing_note(img_path):
         note['Keypoint_id'] = -1
 
     # save result
-    notes_db = text.read_json(r"data\assembly_language\notes.json",default_content=[])
+    notes_db = text.read_json(r"app\data\assembly_language\notes.json",default_content=[])
     notes_db.extend(notes_json)
-    text.write_json(notes_db, r"data\assembly_language\notes.json")
+    text.write_json(notes_db, r"app\data\assembly_language\notes.json")

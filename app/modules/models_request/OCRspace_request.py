@@ -3,7 +3,7 @@ import time
 import json
 import requests
 
-from modules.module_template import LazySingleton
+from app.modules.module_template import LazySingleton
 
 class OCRspaceRequest(LazySingleton):
     model = None
@@ -12,7 +12,7 @@ class OCRspaceRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        import config
+        from app import config 
 
         # 獲取 Api key
         self.OCRSPACE_API_TOKEN = config.get_env_variable("OCRSPACE_API_TOKEN")

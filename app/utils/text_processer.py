@@ -1,6 +1,6 @@
 import json
 import os
-import config 
+from app import config 
 
 def write_json(data, relative_path):
     """

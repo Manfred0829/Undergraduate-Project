@@ -15,7 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 
-from modules.module_template import LazySingleton
+from app.modules.module_template import LazySingleton
 
 class EasyOCRLocal(LazySingleton):
     model = None
