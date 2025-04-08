@@ -2,6 +2,7 @@ from app.utils import media_processer as media, text_processer as text
 # from modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
+import os
 
 
 def processing_note(subject, img_path):
@@ -37,7 +38,25 @@ def processing_note(subject, img_path):
     for note in notes_json:
         note['Keypoint_id'] = -1
 
-    # save result
-    notes_db = text.read_json(r"app\data\subject\notes.json",default_content=[])
+    # 從 img_path 中提取原始檔案名稱
+    original_filename = os.path.basename(img_path)
+    filename_without_ext = os.path.splitext(original_filename)[0]
+    
+    # 建立輸出路徑
+    output_dir = os.path.join("app", "data_json", subject, "notes")
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, f"{filename_without_ext}.json")
+    
+
+    original_filename = os.path.basename(img_path)
+    filename_without_ext = os.path.splitext(original_filename)[0]
+    
+    path = os.path.join("app", "data", subject, filename_without_ext + ".json")
+    notes_db = text.read_json(path, default_content=[])
     notes_db.extend(notes_json)
-    text.write_json(notes_db, r"app\data\subject\notes.json")
+    # 儲存合併後的結果到原始位置
+    text.write_json(notes_db, path)
+
+def processing_lecture(subject, img_path):
+    pass
+

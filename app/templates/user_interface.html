@@ -1177,6 +1177,7 @@
             
             // 添加科目到表單數據
             formData.append('subject', subject);
+            formData.append('save_path', `app/data_upload/${subject}/lectures`);
             
             // 發送上傳請求
             fetch('/api/upload/lecture', {
@@ -1191,11 +1192,9 @@
             })
             .then(data => {
                 if (data.success) {
-                    // 上傳成功，更新界面
-                    alert('講義上傳成功！');
-                    
-                    // 重新載入講義列表
-                    loadLectureList(subject);
+                    alert('講義上傳成功！系統將自動處理檔案...');
+                    // 開始監控處理狀態
+                    monitorProcessingStatus('lecture', data.file_id, subject);
                 } else {
                     alert('上傳失敗: ' + data.error);
                 }
@@ -1220,6 +1219,7 @@
             
             // 添加科目到表單數據
             formData.append('subject', subject);
+            formData.append('save_path', `app/data_upload/${subject}/notes`);
             
             // 獲取選擇的關聯講義
             const relatedLecture = document.getElementById('related-lecture');
@@ -1240,11 +1240,9 @@
             })
             .then(data => {
                 if (data.success) {
-                    // 上傳成功，更新界面
-                    alert('筆記上傳成功！');
-                    
-                    // 重新載入筆記列表
-                    loadNoteList(subject);
+                    alert('筆記上傳成功！系統將自動處理檔案...');
+                    // 開始監控處理狀態
+                    monitorProcessingStatus('note', data.file_id, subject);
                 } else {
                     alert('上傳失敗: ' + data.error);
                 }
@@ -1255,381 +1253,82 @@
             });
         }
 
-        // 獲取講義列表
-        function loadLectureList(subject) {
-            fetch(`/api/lectures/${subject}`)
-            .then(response => response.json())
-            .then(lectures => {
-                // 更新講義列表
-                const fileList = document.querySelector('#upload-lecture-panel .file-list');
-                fileList.innerHTML = '';
-                
-                lectures.forEach(lecture => {
-                    const item = document.createElement('div');
-                    item.className = 'file-list-item';
-                    item.innerHTML = `
-                        <div class="file-name">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            ${lecture.original_filename}
-                        </div>
-                        <div class="file-actions">
-                            <button class="file-action-btn" onclick="processOCR('lecture', '${lecture.id}')">文字辨識</button>
-                            <button class="file-action-btn" onclick="deleteFile('lecture', '${lecture.id}')">刪除</button>
-                        </div>
-                    `;
-                    fileList.appendChild(item);
-                });
-                
-                // 同時更新筆記上傳頁面的講義選擇下拉列表
-                const relatedLectureSelect = document.getElementById('related-lecture');
-                relatedLectureSelect.innerHTML = '<option value="">請選擇對應講義</option>';
-                
-                lectures.forEach(lecture => {
-                    const option = document.createElement('option');
-                    option.value = lecture.id;
-                    option.textContent = lecture.original_filename;
-                    relatedLectureSelect.appendChild(option);
-                });
-            })
-            .catch(error => {
-                console.error('載入講義列表錯誤:', error);
-            });
-        }
+        // 監控處理狀態的函數
+        function monitorProcessingStatus(fileType, fileId, subject) {
+            const checkInterval = 2000; // 每2秒檢查一次
+            const maxAttempts = 30; // 最多檢查30次（1分鐘）
+            let attempts = 0;
 
-        // 獲取筆記列表
-        function loadNoteList(subject) {
-            fetch(`/api/notes/${subject}`)
-            .then(response => response.json())
-            .then(notes => {
-                // 更新筆記列表
-                const fileList = document.querySelector('#upload-notes-panel .file-list');
-                fileList.innerHTML = '';
-                
-                notes.forEach(note => {
-                    const item = document.createElement('div');
-                    item.className = 'file-list-item';
-                    item.innerHTML = `
-                        <div class="file-name">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                            ${note.original_filename}
-                        </div>
-                        <div class="file-actions">
-                            <button class="file-action-btn" onclick="processOCR('note', '${note.id}')">文字辨識</button>
-                            <button class="file-action-btn" onclick="deleteFile('note', '${note.id}')">刪除</button>
-                        </div>
-                    `;
-                    fileList.appendChild(item);
-                });
-            })
-            .catch(error => {
-                console.error('載入筆記列表錯誤:', error);
-            });
-        }
-
-        // 刪除檔案
-        function deleteFile(fileType, fileId) {
-            if (!confirm('確定要刪除此檔案嗎？')) {
-                return;
-            }
-            
-            fetch(`/api/upload/${fileType}/${fileId}`, {
-                method: 'DELETE'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('刪除失敗');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('刪除成功');
-                    
-                    // 獲取當前選中的科目
-                    const subjectDropdown = document.getElementById('subject-dropdown');
-                    const subject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
-                    
-                    // 重新載入檔案列表
-                    if (fileType === 'lecture') {
-                        loadLectureList(subject);
-                    } else {
-                        loadNoteList(subject);
-                    }
-                } else {
-                    alert('刪除失敗: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('刪除錯誤:', error);
-                alert('刪除失敗: ' + error.message);
-            });
-        }
-
-        // 處理OCR
-        function processOCR(fileType, fileId) {
-            fetch(`/api/process/ocr/${fileType}/${fileId}`, {
-                method: 'POST'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('處理失敗');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('文字辨識處理成功！');
-                    
-                    // 詢問是否要進行向量嵌入處理
-                    if (confirm('是否要進行向量嵌入處理？')) {
-                        processEmbedding(fileType, fileId);
-                    }
-                } else {
-                    alert('處理失敗: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('OCR處理錯誤:', error);
-                alert('處理失敗: ' + error.message);
-            });
-        }
-
-        // 處理向量嵌入
-        function processEmbedding(fileType, fileId) {
-            fetch(`/api/process/embedding/${fileType}/${fileId}`, {
-                method: 'POST'
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('處理失敗');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('向量嵌入處理成功！');
-                } else {
-                    alert('處理失敗: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('向量嵌入處理錯誤:', error);
-                alert('處理失敗: ' + error.message);
-            });
-        }
-
-        // 比較講義和筆記
-        function compareLectureNote(lectureId, noteId) {
-            fetch('/api/process/compare', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    lecture_id: lectureId,
-                    note_id: noteId
+            const checkStatus = () => {
+                fetch(`/api/process/status/${fileType}/${fileId}`, {
+                    method: 'GET'
                 })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('比較失敗');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('比較成功！相似度: ' + data.comparison.similarity_score);
-                    
-                    // 這裡可以顯示比較結果，例如在對話框中
-                    const matchingResults = data.comparison.matching_sections;
-                    let resultsHtml = '<h3>講義與筆記對應關係</h3><ul>';
-                    
-                    matchingResults.forEach(match => {
-                        resultsHtml += `<li>
-                            <strong>講義部分:</strong> ${match.lecture_section}<br>
-                            <strong>筆記部分:</strong> ${match.note_section}<br>
-                            <strong>相似度:</strong> ${match.similarity}
-                        </li>`;
-                    });
-                    
-                    resultsHtml += '</ul>';
-                    
-                    // 在實際應用中，這裡應該顯示一個漂亮的結果視窗
-                    // 這裡僅用alert簡單演示
-                    alert(resultsHtml);
-                } else {
-                    alert('比較失敗: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('比較錯誤:', error);
-                alert('比較失敗: ' + error.message);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('檢查狀態失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'completed') {
+                        alert(`${fileType === 'lecture' ? '講義' : '筆記'}處理完成！`);
+                        // 重新載入列表
+                        if (fileType === 'lecture') {
+                            loadLectureList(subject);
+                        } else {
+                            loadNoteList(subject);
+                        }
+                    } else if (data.status === 'processing') {
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            setTimeout(checkStatus, checkInterval);
+                        } else {
+                            alert('處理超時，請稍後再檢查');
+                        }
+                    } else if (data.status === 'error') {
+                        alert('處理過程中發生錯誤: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('檢查狀態錯誤:', error);
+                    alert('檢查處理狀態時發生錯誤');
+                });
+            };
+
+            // 開始第一次檢查
+            checkStatus();
         }
 
-        // 當科目下拉列表改變時，載入對應的講義和筆記
-        document.getElementById('subject-dropdown').addEventListener('change', (e) => {
-            const subject = e.target.options[e.target.selectedIndex].text;
-            if (subject && subject !== '+ 新增科目') {
-                loadLectureList(subject);
-                loadNoteList(subject);
-            }
-        });
-
-        // 監聽講義上傳按鈕
-        document.querySelector('#upload-lecture-panel .upload-btn[style="width: 100%;"]').addEventListener('click', () => {
-            const fileInput = document.getElementById('lecture-file-upload');
-            if (fileInput.files.length === 0) {
-                alert('請先選擇檔案');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            uploadLecture(formData);
-        });
-
-        // 監聽筆記上傳按鈕
-        document.querySelector('#upload-notes-panel .upload-btn[style="width: 100%;"]').addEventListener('click', () => {
-            const fileInput = document.getElementById('notes-file-upload');
-            if (fileInput.files.length === 0) {
-                alert('請先選擇檔案');
-                return;
-            }
-            
-            const formData = new FormData();
-            formData.append('file', fileInput.files[0]);
-            uploadNote(formData);
-        });
-
-        // 初始化 - 載入當前選擇的科目的數據
-        window.addEventListener('DOMContentLoaded', () => {
+        // 定期檢查新檔案的函數
+        function checkNewFiles() {
             const subjectDropdown = document.getElementById('subject-dropdown');
             const subject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
             
             if (subject && subject !== '+ 新增科目') {
-                loadLectureList(subject);
-                loadNoteList(subject);
+                fetch(`/api/process/check-new-files/${subject}`, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('檢查新檔案失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.has_new_files) {
+                        // 如果有新檔案，重新載入列表
+                        loadLectureList(subject);
+                        loadNoteList(subject);
+                    }
+                })
+                .catch(error => {
+                    console.error('檢查新檔案錯誤:', error);
+                });
             }
-        });
+        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // 講義上傳按鈕
-            const lectureUploadBtn = document.querySelector('#upload-lecture-panel .upload-btn[style="width: 100%;"]');
-            if (lectureUploadBtn) {
-                lectureUploadBtn.addEventListener('click', function() {
-                    const fileInput = document.getElementById('lecture-file-upload');
-                    if (!fileInput.files.length) {
-                        alert('請選擇要上傳的講義檔案');
-                        return;
-                    }
-                    
-                    // 創建FormData對象
-                    const formData = new FormData();
-                    formData.append('file', fileInput.files[0]);
-                    
-                    // 發送上傳請求
-                    fetch('/api/upload/test-lecture', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('上傳結果:', data);
-                        if (data.success) {
-                            // 創建成功通知
-                            const successMsg = document.createElement('div');
-                            successMsg.className = 'upload-success-message';
-                            successMsg.style.color = 'green';
-                            successMsg.style.fontWeight = 'bold';
-                            successMsg.style.marginTop = '10px';
-                            successMsg.textContent = `上傳成功: ${data.file_info.original_filename}`;
-                            
-                            // 顯示在上傳按鈕下方
-                            const uploadForm = document.querySelector('#upload-lecture-panel .upload-form');
-                            uploadForm.appendChild(successMsg);
-                            
-                            // 5秒後自動移除通知
-                            setTimeout(() => {
-                                successMsg.remove();
-                            }, 5000);
-                            
-                            // 清空文件選擇
-                            fileInput.value = '';
-                            // 清空已選擇檔案的顯示
-                            const fileList = document.getElementById('lecture-file-list');
-                            if (fileList) fileList.innerHTML = '';
-                        } else {
-                            alert('上傳失敗: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('上傳錯誤:', error);
-                        alert('上傳過程中發生錯誤，請檢查控制台獲取詳細信息');
-                    });
-                });
-            }
-            
-            // 筆記上傳按鈕
-            const noteUploadBtn = document.querySelector('#upload-notes-panel .upload-btn[style="width: 100%;"]');
-            if (noteUploadBtn) {
-                noteUploadBtn.addEventListener('click', function() {
-                    const fileInput = document.getElementById('notes-file-upload');
-                    if (!fileInput.files.length) {
-                        alert('請選擇要上傳的筆記檔案');
-                        return;
-                    }
-                    
-                    // 創建FormData對象
-                    const formData = new FormData();
-                    formData.append('file', fileInput.files[0]);
-                    
-                    // 發送上傳請求
-                    fetch('/api/upload/test-note', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('上傳結果:', data);
-                        if (data.success) {
-                            // 創建成功通知
-                            const successMsg = document.createElement('div');
-                            successMsg.className = 'upload-success-message';
-                            successMsg.style.color = 'green';
-                            successMsg.style.fontWeight = 'bold';
-                            successMsg.style.marginTop = '10px';
-                            successMsg.textContent = `上傳成功: ${data.file_info.original_filename}`;
-                            
-                            // 顯示在上傳按鈕下方
-                            const uploadForm = document.querySelector('#upload-notes-panel .upload-form');
-                            uploadForm.appendChild(successMsg);
-                            
-                            // 5秒後自動移除通知
-                            setTimeout(() => {
-                                successMsg.remove();
-                            }, 5000);
-                            
-                            // 清空文件選擇
-                            fileInput.value = '';
-                            // 清空已選擇檔案的顯示
-                            const fileList = document.getElementById('notes-file-list');
-                            if (fileList) fileList.innerHTML = '';
-                        } else {
-                            alert('上傳失敗: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('上傳錯誤:', error);
-                        alert('上傳過程中發生錯誤，請檢查控制台獲取詳細信息');
-                    });
-                });
-            }
-        });
+        // 每30秒檢查一次新檔案
+        setInterval(checkNewFiles, 30000);
     </script>
 </body>
 </html>
