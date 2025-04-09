@@ -897,6 +897,12 @@
             outlinePanel.classList.add('active');
             quizPanel.classList.remove('active');
             historyPanel.classList.remove('active');
+            
+            // 獲取當前選擇的科目，並更新大綱內容
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                updateOutlineContent(selectedSubject);
+            }
         });
         
         quizBtn.addEventListener('click', () => {
@@ -907,6 +913,12 @@
             outlinePanel.classList.remove('active');
             quizPanel.classList.add('active');
             historyPanel.classList.remove('active');
+            
+            // 獲取當前選擇的科目，並更新測驗內容
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                updateQuizContent(selectedSubject);
+            }
         });
         
         historyBtn.addEventListener('click', () => {
@@ -955,6 +967,461 @@
                 newSubjectModal.style.display = 'none';
             });
         });
+        
+        // 處理新增科目的功能
+        const addSubjectBtn = document.querySelector('.modal-footer .modal-btn.primary');
+        addSubjectBtn.addEventListener('click', () => {
+            const subjectNameInput = document.getElementById('subject-name');
+            const subjectName = subjectNameInput.value.trim();
+            
+            if (subjectName) {
+                // 檢查是否已存在相同名稱的科目
+                let isDuplicate = false;
+                for (let i = 0; i < subjectDropdown.options.length; i++) {
+                    if (subjectDropdown.options[i].text === subjectName) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                
+                if (isDuplicate) {
+                    alert('已存在相同名稱的科目！');
+                    return;
+                }
+                
+                // 在後端創建資料夾結構
+                createSubjectFolders(subjectName);
+                
+                // 在前端下拉選單中添加新科目
+                const newOption = document.createElement('option');
+                newOption.value = subjectName.toLowerCase().replace(/\s+/g, '_'); // 轉換為小寫並替換空格為下劃線
+                newOption.text = subjectName;
+                
+                // 插入到「新增科目」選項之前
+                const addNewOption = subjectDropdown.querySelector('option[value="add-new"]');
+                subjectDropdown.insertBefore(newOption, addNewOption);
+                
+                // 選擇新添加的科目
+                newOption.selected = true;
+                
+                // 清空輸入框並關閉模態窗口
+                subjectNameInput.value = '';
+                newSubjectModal.style.display = 'none';
+                
+                // 更新頁面標題以匹配新選擇的科目
+                updateUIForSelectedSubject(subjectName);
+            } else {
+                alert('請輸入科目名稱！');
+            }
+        });
+        
+        // 創建科目資料夾結構的函數
+        function createSubjectFolders(subjectName) {
+            fetch('/api/subjects/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ subject_name: subjectName })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('創建科目資料夾失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    console.log(`為科目 "${subjectName}" 創建資料夾成功`);
+                } else {
+                    console.error('創建科目資料夾失敗:', data.error);
+                    alert('創建科目資料夾失敗: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('創建科目資料夾錯誤:', error);
+                alert('創建科目資料夾錯誤: ' + error.message);
+            });
+        }
+        
+        // 更新UI以匹配選擇的科目
+        function updateUIForSelectedSubject(subjectName) {
+            // 更新面板標題
+            document.querySelector('#outline-panel h2').textContent = `${subjectName}學習大綱`;
+            document.querySelector('#quiz-panel h2').textContent = `${subjectName}學習測驗`;
+            
+            // 清空講義和筆記列表（之後會從後端重新加載）
+            document.querySelector('#upload-lecture-panel .file-list').innerHTML = '';
+            document.querySelector('#upload-notes-panel .file-list').innerHTML = '';
+            
+            // 更新關聯講義下拉選單（清空選項）
+            const relatedLectureSelect = document.getElementById('related-lecture');
+            while (relatedLectureSelect.options.length > 1) { // 保留第一個選項
+                relatedLectureSelect.remove(1);
+            }
+            
+            // 加載該科目的講義和筆記列表
+            loadLectureList(subjectName);
+            loadNoteList(subjectName);
+            
+            // 更新大綱和測驗內容
+            updateOutlineContent(subjectName);
+            updateQuizContent(subjectName);
+        }
+        
+        // 科目切換時更新UI
+        subjectDropdown.addEventListener('change', (e) => {
+            if (e.target.value !== 'add-new') {
+                const selectedSubject = e.target.options[e.target.selectedIndex].text;
+                updateUIForSelectedSubject(selectedSubject);
+            }
+        });
+        
+        // 頁面加載時初始化科目列表
+        window.addEventListener('DOMContentLoaded', () => {
+            // 從後端載入所有科目
+            loadAllSubjects();
+        });
+        
+        // 從後端載入所有科目
+        function loadAllSubjects() {
+            fetch('/api/subjects')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('獲取科目列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(subjects => {
+                    // 清空dropdown中除了「新增科目」以外的選項
+                    const addNewOption = subjectDropdown.querySelector('option[value="add-new"]');
+                    while (subjectDropdown.firstChild) {
+                        subjectDropdown.removeChild(subjectDropdown.firstChild);
+                    }
+                    subjectDropdown.appendChild(addNewOption);
+                    
+                    // 添加從後端獲取的科目
+                    subjects.forEach(subject => {
+                        const option = document.createElement('option');
+                        option.value = subject.toLowerCase().replace(/\s+/g, '_');
+                        option.text = subject;
+                        // 將選項插入到「新增科目」選項之前
+                        subjectDropdown.insertBefore(option, addNewOption);
+                    });
+                    
+                    // 如果有科目，選擇第一個科目並更新UI
+                    if (subjects.length > 0) {
+                        subjectDropdown.selectedIndex = 0;
+                        updateUIForSelectedSubject(subjects[0]);
+                    }
+                })
+                .catch(error => {
+                    console.error('載入科目列表錯誤:', error);
+                });
+        }
+
+        // 在模態窗口中添加刪除科目的按鈕
+        const modalBody = document.querySelector('#new-subject-modal .modal-body');
+        const deleteButtonContainer = document.createElement('div');
+        deleteButtonContainer.className = 'delete-subject-container';
+        deleteButtonContainer.style.marginTop = '20px';
+        deleteButtonContainer.style.borderTop = '1px solid var(--border-color)';
+        deleteButtonContainer.style.paddingTop = '15px';
+        deleteButtonContainer.innerHTML = `
+            <h4 style="margin-bottom: 10px;">刪除科目</h4>
+            <p style="margin-bottom: 10px; color: #777;">請選擇要刪除的科目：</p>
+            <select id="delete-subject-dropdown" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 10px;">
+                <option value="">請選擇科目</option>
+            </select>
+            <button id="delete-subject-btn" class="modal-btn" style="background-color: #ff4d4f; color: white; border: none; width: 100%;">刪除科目</button>
+        `;
+        modalBody.appendChild(deleteButtonContainer);
+        
+        // 當打開模態窗口時，更新可刪除的科目列表
+        newSubjectModal.addEventListener('show', () => {
+            updateDeleteSubjectDropdown();
+        });
+        
+        // 手動綁定模態窗口顯示事件
+        document.querySelectorAll('.modal-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                updateDeleteSubjectDropdown();
+            });
+        });
+        
+        // 每次點擊「+ 新增科目」選項時更新刪除科目下拉框
+        subjectDropdown.addEventListener('change', (e) => {
+            if (e.target.value === 'add-new') {
+                updateDeleteSubjectDropdown();
+            }
+        });
+        
+        // 更新刪除科目下拉列表
+        function updateDeleteSubjectDropdown() {
+            const deleteSubjectDropdown = document.getElementById('delete-subject-dropdown');
+            
+            // 清空現有選項
+            while (deleteSubjectDropdown.options.length > 1) {
+                deleteSubjectDropdown.remove(1);
+            }
+            
+            // 獲取當前科目列表
+            const subjects = [];
+            for (let i = 0; i < subjectDropdown.options.length; i++) {
+                const option = subjectDropdown.options[i];
+                if (option.value !== 'add-new') {
+                    subjects.push(option.text);
+                }
+            }
+            
+            // 添加科目到刪除下拉框
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.text = subject;
+                deleteSubjectDropdown.appendChild(option);
+            });
+        }
+        
+        // 綁定刪除科目按鈕點擊事件
+        const deleteSubjectBtn = document.getElementById('delete-subject-btn');
+        deleteSubjectBtn.addEventListener('click', () => {
+            const deleteSubjectDropdown = document.getElementById('delete-subject-dropdown');
+            const selectedSubject = deleteSubjectDropdown.value;
+            
+            if (!selectedSubject) {
+                alert('請選擇要刪除的科目');
+                return;
+            }
+            
+            // 確認是否要刪除
+            if (!confirm(`確定要刪除科目「${selectedSubject}」嗎？此操作將刪除所有相關數據且無法恢復！`)) {
+                return;
+            }
+            
+            // 發送刪除請求到後端
+            fetch('/api/subjects/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ subject_name: selectedSubject })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('刪除科目失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(`已成功刪除科目「${selectedSubject}」`);
+                    
+                    // 重新載入科目列表
+                    loadAllSubjects();
+                    
+                    // 關閉模態窗口
+                    newSubjectModal.style.display = 'none';
+                } else {
+                    alert('刪除科目失敗: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('刪除科目錯誤:', error);
+                alert('刪除科目時發生錯誤: ' + error.message);
+            });
+        });
+
+        // 加載講義列表
+        function loadLectureList(subjectName) {
+            fetch(`/api/lectures/${subjectName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('加載講義列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const lectureList = document.querySelector('#upload-lecture-panel .file-list');
+                    lectureList.innerHTML = '';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(lecture => {
+                            const listItem = document.createElement('div');
+                            listItem.className = 'file-list-item';
+                            
+                            // 根據檔案類型選擇圖標
+                            let iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />';
+                            if (lecture.filename.toLowerCase().endsWith('.pdf')) {
+                                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />';
+                            } else if (lecture.filename.toLowerCase().endsWith('.docx') || lecture.filename.toLowerCase().endsWith('.doc')) {
+                                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />';
+                            } else if (lecture.filename.toLowerCase().endsWith('.ppt') || lecture.filename.toLowerCase().endsWith('.pptx')) {
+                                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />';
+                            }
+                            
+                            listItem.innerHTML = `
+                                <div class="file-name">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        ${iconPath}
+                                    </svg>
+                                    ${lecture.filename}
+                                </div>
+                                <div class="file-actions">
+                                    <button class="file-action-btn" data-action="download" data-id="${lecture.id}" data-filename="${lecture.filename}" data-subject="${subjectName}" data-type="lectures">下載</button>
+                                    <button class="file-action-btn" data-action="delete" data-id="${lecture.id}" data-filename="${lecture.filename}" data-subject="${subjectName}" data-type="lectures">刪除</button>
+                                </div>
+                            `;
+                            lectureList.appendChild(listItem);
+                            
+                            // 同時更新筆記上傳頁面中的關聯講義下拉選單
+                            const relatedLectureSelect = document.getElementById('related-lecture');
+                            const option = document.createElement('option');
+                            option.value = lecture.id;
+                            option.text = lecture.filename;
+                            
+                            // 檢查是否已存在相同的選項
+                            let exists = false;
+                            for (let i = 0; i < relatedLectureSelect.options.length; i++) {
+                                if (relatedLectureSelect.options[i].value === lecture.id) {
+                                    exists = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (!exists) {
+                                relatedLectureSelect.appendChild(option);
+                            }
+                        });
+                    } else {
+                        lectureList.innerHTML = '<div class="file-list-item"><div class="file-name">尚無講義</div></div>';
+                    }
+                    
+                    // 綁定下載和刪除按鈕的事件
+                    bindFileActionButtons(lectureList);
+                })
+                .catch(error => {
+                    console.error('加載講義列表錯誤:', error);
+                    const lectureList = document.querySelector('#upload-lecture-panel .file-list');
+                    lectureList.innerHTML = '<div class="file-list-item"><div class="file-name">載入失敗，請重試</div></div>';
+                });
+        }
+        
+        // 加載筆記列表
+        function loadNoteList(subjectName) {
+            fetch(`/api/notes/${subjectName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('加載筆記列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const noteList = document.querySelector('#upload-notes-panel .file-list');
+                    noteList.innerHTML = '';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(note => {
+                            const listItem = document.createElement('div');
+                            listItem.className = 'file-list-item';
+                            
+                            // 根據檔案類型選擇圖標
+                            let iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />';
+                            if (note.filename.toLowerCase().endsWith('.pdf')) {
+                                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />';
+                            } else if (note.filename.toLowerCase().endsWith('.jpg') || note.filename.toLowerCase().endsWith('.jpeg') || note.filename.toLowerCase().endsWith('.png')) {
+                                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />';
+                            } else if (note.filename.toLowerCase().endsWith('.docx') || note.filename.toLowerCase().endsWith('.doc')) {
+                                iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />';
+                            }
+                            
+                            listItem.innerHTML = `
+                                <div class="file-name">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        ${iconPath}
+                                    </svg>
+                                    ${note.filename}
+                                </div>
+                                <div class="file-actions">
+                                    <button class="file-action-btn" data-action="download" data-id="${note.id}" data-filename="${note.filename}" data-subject="${subjectName}" data-type="notes">下載</button>
+                                    <button class="file-action-btn" data-action="delete" data-id="${note.id}" data-filename="${note.filename}" data-subject="${subjectName}" data-type="notes">刪除</button>
+                                </div>
+                            `;
+                            noteList.appendChild(listItem);
+                        });
+                    } else {
+                        noteList.innerHTML = '<div class="file-list-item"><div class="file-name">尚無筆記</div></div>';
+                    }
+                    
+                    // 綁定下載和刪除按鈕的事件
+                    bindFileActionButtons(noteList);
+                })
+                .catch(error => {
+                    console.error('加載筆記列表錯誤:', error);
+                    const noteList = document.querySelector('#upload-notes-panel .file-list');
+                    noteList.innerHTML = '<div class="file-list-item"><div class="file-name">載入失敗，請重試</div></div>';
+                });
+        }
+        
+        // 綁定檔案動作按鈕（下載和刪除）
+        function bindFileActionButtons(container) {
+            container.querySelectorAll('.file-action-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    const fileId = this.getAttribute('data-id');
+                    const filename = this.getAttribute('data-filename');
+                    const subject = this.getAttribute('data-subject');
+                    const type = this.getAttribute('data-type');
+                    
+                    if (action === 'download') {
+                        // 下載檔案
+                        window.open(`/api/upload/download/${type}/${subject}/${fileId}`, '_blank');
+                    } else if (action === 'delete') {
+                        // 確認刪除
+                        if (confirm(`確定要刪除 ${filename} 嗎？`)) {
+                            // 發送刪除請求
+                            fetch(`/api/upload/${type === 'lectures' ? 'lecture' : 'note'}/${fileId}`, {
+                                method: 'DELETE'
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('刪除失敗');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    alert(data.message || '檔案已成功刪除');
+                                    // 重新載入列表
+                                    if (type === 'lectures') {
+                                        loadLectureList(subject);
+                                        
+                                        // 當刪除講義時，更新筆記上傳區域的關聯講義下拉選單
+                                        const relatedLectureSelect = document.getElementById('related-lecture');
+                                        
+                                        // 移除所有與該講義ID相關的選項
+                                        for (let i = relatedLectureSelect.options.length - 1; i >= 0; i--) {
+                                            if (relatedLectureSelect.options[i].value === fileId) {
+                                                relatedLectureSelect.remove(i);
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        loadNoteList(subject);
+                                    }
+                                } else {
+                                    alert('刪除失敗: ' + (data.error || '未知錯誤'));
+                                }
+                            })
+                            .catch(error => {
+                                console.error('刪除檔案錯誤:', error);
+                                alert('刪除檔案時發生錯誤: ' + error.message);
+                            });
+                        }
+                    }
+                });
+            });
+        }
         
         // Close the modal when clicking outside of it
         window.addEventListener('click', (e) => {
@@ -1028,6 +1495,12 @@
                 panel.classList.remove('active');
             });
             outlinePanel.classList.add('active');
+            
+            // 獲取當前選擇的科目，並更新大綱內容
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                updateOutlineContent(selectedSubject);
+            }
         });
         
         quizBtn.addEventListener('click', () => {
@@ -1042,6 +1515,12 @@
                 panel.classList.remove('active');
             });
             quizPanel.classList.add('active');
+            
+            // 獲取當前選擇的科目，並更新測驗內容
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                updateQuizContent(selectedSubject);
+            }
         });
 
         // 檔案拖放上傳功能
@@ -1050,16 +1529,16 @@
         fileDropAreas.forEach(area => {
             area.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                area.classList.add('drag-over');
+                area.classList.add('active');
             });
             
             area.addEventListener('dragleave', () => {
-                area.classList.remove('drag-over');
+                area.classList.remove('active');
             });
             
             area.addEventListener('drop', (e) => {
                 e.preventDefault();
-                area.classList.remove('drag-over');
+                area.classList.remove('active');
                 const files = e.dataTransfer.files;
                 // 這裡處理檔案上傳邏輯
                 console.log('檔案已選擇：', files);
@@ -1073,38 +1552,202 @@
             });
         });
 
-        // 檔案選擇後更新顯示
-        document.querySelectorAll('.file-input').forEach(input => {
-            input.addEventListener('change', () => {
-                updateSelectedFilesList(input);
+        // 綁定檔案選擇事件
+        document.getElementById('lecture-file-upload').addEventListener('change', function() {
+            updateSelectedFilesList(this);
+        });
+        
+        document.getElementById('notes-file-upload').addEventListener('change', function() {
+            updateSelectedFilesList(this);
+        });
+
+        // 綁定上傳按鈕點擊事件
+        document.querySelector('#upload-lecture-panel .upload-btn[style="width: 100%;"]').addEventListener('click', function() {
+            const fileInput = document.getElementById('lecture-file-upload');
+            if (fileInput.files.length === 0) {
+                alert('請選擇要上傳的檔案');
+                return;
+            }
+            
+            // 獲取當前選中的科目
+            const subject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (subject === '+ 新增科目') {
+                alert('請先選擇一個科目');
+                return;
+            }
+            
+            // 創建FormData對象
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('subject', subject);
+            
+            // 發送上傳請求
+            fetch('/api/upload/lecture', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('上傳失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('講義上傳成功！');
+                    // 清空文件輸入框和顯示
+                    fileInput.value = '';
+                    const fileListDiv = document.getElementById('lecture-file-list');
+                    if (fileListDiv) {
+                        fileListDiv.innerHTML = '';
+                    }
+                    
+                    // 重新加載講義列表
+                    loadLectureList(subject);
+                } else {
+                    alert('上傳失敗: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('上傳錯誤:', error);
+                alert('上傳失敗: ' + error.message);
+            });
+        });
+        
+        document.querySelector('#upload-notes-panel .upload-btn[style="width: 100%;"]').addEventListener('click', function() {
+            const fileInput = document.getElementById('notes-file-upload');
+            if (fileInput.files.length === 0) {
+                alert('請選擇要上傳的檔案');
+                return;
+            }
+            
+            // 獲取當前選中的科目
+            const subject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (subject === '+ 新增科目') {
+                alert('請先選擇一個科目');
+                return;
+            }
+            
+            // 獲取選中的關聯講義
+            const relatedLectureSelect = document.getElementById('related-lecture');
+            const relatedLecture = relatedLectureSelect.value;
+            
+            // 創建FormData對象
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('subject', subject);
+            if (relatedLecture) {
+                formData.append('lecture_name', relatedLecture);
+            }
+            
+            // 發送上傳請求
+            fetch('/api/upload/note', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('上傳失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('筆記上傳成功！');
+                    // 清空文件輸入框和顯示
+                    fileInput.value = '';
+                    const fileListDiv = document.getElementById('notes-file-list');
+                    if (fileListDiv) {
+                        fileListDiv.innerHTML = '';
+                    }
+                    
+                    // 重新加載筆記列表
+                    loadNoteList(subject);
+                } else {
+                    alert('上傳失敗: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('上傳錯誤:', error);
+                alert('上傳失敗: ' + error.message);
             });
         });
 
         function updateSelectedFilesList(input) {
             const files = input.files;
-            const fileArea = input.closest('.file-drop-area');
+            if (files.length === 0) return;
             
-            if (files.length > 0) {
-                let fileNames = '';
-                for (let i = 0; i < files.length; i++) {
-                    fileNames += files[i].name + (i < files.length - 1 ? ', ' : '');
-                }
+            let listContainer;
+            if (input.id === 'lecture-file-upload') {
+                listContainer = document.getElementById('lecture-file-list');
+            } else if (input.id === 'notes-file-upload') {
+                listContainer = document.getElementById('notes-file-list');
+            }
+            
+            if (!listContainer) return;
+            
+            // 清空現有內容
+            listContainer.innerHTML = '';
+            
+            // 創建文件列表顯示
+            const fileListDiv = document.createElement('div');
+            fileListDiv.className = 'selected-files';
+            fileListDiv.style.padding = '10px';
+            fileListDiv.style.backgroundColor = '#f0f9ff';
+            fileListDiv.style.border = '1px solid #d0e8ff';
+            fileListDiv.style.borderRadius = '4px';
+            fileListDiv.style.marginBottom = '10px';
+            
+            const fileCountP = document.createElement('p');
+            fileCountP.style.marginBottom = '5px';
+            fileCountP.style.fontWeight = 'bold';
+            fileCountP.textContent = `已選擇 ${files.length} 個檔案:`;
+            fileListDiv.appendChild(fileCountP);
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileItem = document.createElement('div');
+                fileItem.style.display = 'flex';
+                fileItem.style.alignItems = 'center';
+                fileItem.style.marginBottom = '5px';
                 
-                const fileInfo = document.createElement('div');
-                fileInfo.className = 'selected-files';
-                fileInfo.innerHTML = `
-                    <p>已選擇 ${files.length} 個檔案:</p>
-                    <p class="file-names">${fileNames}</p>
+                // 文件圖標
+                const fileIcon = document.createElement('span');
+                fileIcon.style.marginRight = '8px';
+                fileIcon.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                    </svg>
                 `;
                 
-                // 移除已有的選擇檔案顯示
-                const existingInfo = fileArea.querySelector('.selected-files');
-                if (existingInfo) {
-                    existingInfo.remove();
-                }
+                // 文件名和大小
+                const fileName = document.createElement('span');
+                fileName.textContent = file.name;
+                fileName.style.marginRight = '10px';
                 
-                fileArea.appendChild(fileInfo);
+                const fileSize = document.createElement('span');
+                fileSize.textContent = formatFileSize(file.size);
+                fileSize.style.color = '#666';
+                fileSize.style.fontSize = '0.85em';
+                
+                fileItem.appendChild(fileIcon);
+                fileItem.appendChild(fileName);
+                fileItem.appendChild(fileSize);
+                fileListDiv.appendChild(fileItem);
             }
+            
+            listContainer.appendChild(fileListDiv);
+        }
+        
+        // 格式化文件大小顯示
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         // Initialize error distribution chart
@@ -1329,6 +1972,199 @@
 
         // 每30秒檢查一次新檔案
         setInterval(checkNewFiles, 30000);
+
+        // 更新大綱內容
+        function updateOutlineContent(subjectName) {
+            // 更新標題
+            document.querySelector('#outline-panel h2').textContent = `${subjectName}學習大綱`;
+            
+            // 清空現有內容
+            const outlineTree = document.querySelector('#outline-panel .outline-tree');
+            outlineTree.innerHTML = '';
+            
+            // 從後端獲取大綱內容，這裡先使用預設內容
+            fetch(`/api/subjects/${subjectName}/outline`)
+                .then(response => {
+                    if (!response.ok) {
+                        // 如果API不存在或出錯，顯示空白內容
+                        outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                        throw new Error('獲取大綱失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.outline && data.outline.length > 0) {
+                        // 如果有內容，顯示大綱
+                        data.outline.forEach(item => {
+                            // 創建大綱項目並添加到樹中
+                            const outlineItem = createOutlineItem(item);
+                            outlineTree.appendChild(outlineItem);
+                        });
+                    } else {
+                        // 如果沒有內容，顯示預設訊息
+                        outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('獲取大綱錯誤:', error);
+                    // 顯示預設訊息
+                    outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                });
+        }
+        
+        // 創建大綱項目的輔助函數
+        function createOutlineItem(item) {
+            const div = document.createElement('div');
+            div.className = 'outline-item';
+            
+            // 添加標題和描述
+            if (item.title) {
+                const title = document.createElement('h3');
+                title.textContent = item.title;
+                div.appendChild(title);
+            }
+            
+            if (item.description) {
+                const desc = document.createElement('p');
+                desc.textContent = item.description;
+                div.appendChild(desc);
+            }
+            
+            // 添加子項目
+            if (item.subitems && item.subitems.length > 0) {
+                item.subitems.forEach(subitem => {
+                    const subDiv = document.createElement('div');
+                    subDiv.className = 'outline-subitem';
+                    
+                    if (subitem.title) {
+                        const subtitle = document.createElement('h4');
+                        subtitle.textContent = subitem.title;
+                        subDiv.appendChild(subtitle);
+                    }
+                    
+                    if (subitem.description) {
+                        const subdesc = document.createElement('p');
+                        subdesc.textContent = subitem.description;
+                        subDiv.appendChild(subdesc);
+                    }
+                    
+                    div.appendChild(subDiv);
+                });
+            }
+            
+            return div;
+        }
+        
+        // 更新測驗內容
+        function updateQuizContent(subjectName) {
+            // 更新標題
+            document.querySelector('#quiz-panel h2').textContent = `${subjectName}學習測驗`;
+            
+            // 清空現有內容
+            const quizContainer = document.querySelector('#quiz-panel .quiz-container');
+            quizContainer.innerHTML = '';
+            
+            // 從後端獲取測驗內容，這裡先使用預設內容
+            fetch(`/api/subjects/${subjectName}/quizzes`)
+                .then(response => {
+                    if (!response.ok) {
+                        // 如果API不存在或出錯，顯示空白內容
+                        quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
+                        throw new Error('獲取測驗失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.quizzes && data.quizzes.length > 0) {
+                        // 如果有內容，顯示測驗題目
+                        data.quizzes.forEach((quiz, index) => {
+                            const quizQuestionDiv = document.createElement('div');
+                            quizQuestionDiv.className = 'quiz-question';
+                            
+                            const title = document.createElement('h3');
+                            title.textContent = `${index + 1}. ${quiz.question}`;
+                            quizQuestionDiv.appendChild(title);
+                            
+                            const optionsList = document.createElement('ul');
+                            optionsList.className = 'quiz-options';
+                            
+                            quiz.options.forEach((option, optIndex) => {
+                                const li = document.createElement('li');
+                                const label = document.createElement('label');
+                                const input = document.createElement('input');
+                                input.type = 'radio';
+                                input.name = `q${index + 1}`;
+                                input.value = String.fromCharCode(65 + optIndex); // A, B, C, D...
+                                
+                                label.appendChild(input);
+                                label.appendChild(document.createTextNode(` ${option}`));
+                                li.appendChild(label);
+                                optionsList.appendChild(li);
+                            });
+                            
+                            quizQuestionDiv.appendChild(optionsList);
+                            quizContainer.appendChild(quizQuestionDiv);
+                        });
+                        
+                        // 添加提交按鈕
+                        const submitBtn = document.createElement('button');
+                        submitBtn.className = 'submit-quiz';
+                        submitBtn.textContent = '提交答案';
+                        quizContainer.appendChild(submitBtn);
+                        
+                        // 添加結果區域
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'quiz-result';
+                        resultDiv.style.display = 'none';
+                        resultDiv.innerHTML = `
+                            <h4>測驗結果</h4>
+                            <p class="result-message"></p>
+                            <div class="quiz-explanation"></div>
+                        `;
+                        quizContainer.appendChild(resultDiv);
+                        
+                        // 綁定提交事件
+                        submitBtn.addEventListener('click', () => {
+                            resultDiv.style.display = 'block';
+                            resultDiv.classList.add('correct');
+                            resultDiv.querySelector('.result-message').textContent = `您答對了 ${data.quizzes.length}/${data.quizzes.length} 題！`;
+                            
+                            // 滾動到結果
+                            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        });
+                    } else {
+                        // 如果沒有內容，顯示生成測驗的按鈕
+                        quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
+                        
+                        // 綁定產生測驗的點擊事件
+                        const generateBtn = quizContainer.querySelector('.submit-quiz');
+                        generateBtn.addEventListener('click', () => {
+                            generateBtn.textContent = '產生中...';
+                            generateBtn.disabled = true;
+                            
+                            // 這裡可以加載示例測驗，實際上應該是請求後端生成
+                            setTimeout(() => {
+                                const exampleQuiz = [
+                                    {
+                                        question: '這是一個示例測驗問題？',
+                                        options: ['選項A', '選項B', '選項C', '選項D'],
+                                        answer: 'A',
+                                        explanation: '這是答案解釋'
+                                    }
+                                ];
+                                
+                                // 重新加載測驗
+                                updateQuizContent(subjectName);
+                            }, 1500);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('獲取測驗錯誤:', error);
+                    // 顯示預設訊息
+                    quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
+                });
+        }
     </script>
 </body>
 </html>
