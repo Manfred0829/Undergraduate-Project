@@ -33,3 +33,31 @@ def read_json(relative_path, default_content=None):
     with open(file_path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
+
+def extract_keypoints_hierarchy(nested_json: str, flated_json: str):
+    """
+    從巢狀講義 JSON 檔中提取所有 keypoint，並標註其所屬的章節 / 主題 / 頁面索引。
+    將結果儲存成新的 JSON 檔案。
+    """
+
+    keypoints_list = []
+
+    for c_idx, chapter in enumerate(nested_json):
+        sections = chapter.get('Sections', [])
+        for t_idx, topic in enumerate(sections):
+            pages = topic.get('Pages', [])
+            for p_idx, page in enumerate(pages):
+                keypoints = page.get('Keypoints', [])
+                for k_idx, k in keypoints:
+                    keypoints_list.append({
+                        "Title": k.get("Title", ""),
+                        "Content": k.get("Content", ""),
+                        "Hierarchy": [t_idx, p_idx,k_idx]
+                    })
+
+    # 儲存為新的 JSON 檔案
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(keypoints_list, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ Keypoints with hierarchy exported to {output_path}")
+

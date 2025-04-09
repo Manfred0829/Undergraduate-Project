@@ -1,121 +1,37 @@
 # app/services/file_service.py
 import os
-import json
+#import json
 import uuid
-import shutil
-from datetime import datetime
-from werkzeug.utils import secure_filename
-from flask import current_app
+#import shutil
+#from datetime import datetime
+#from werkzeug.utils import secure_filename
+#from flask import current_app
+from app.utils import text_processer
 
-# 確保數據目錄存在
-def ensure_data_directories():
-    """確保所有需要的數據目錄存在"""
-    # 確保上傳文件目錄存在
-    uploads_dir = os.path.join(current_app.root_path, 'data_upload')
-    if not os.path.exists(uploads_dir):
-        os.makedirs(uploads_dir)
-    
-    # 確保JSON數據目錄存在
-    json_dir = os.path.join(current_app.root_path, 'data_json')
-    if not os.path.exists(json_dir):
-        os.makedirs(json_dir)
-    
-    # 確保文字辨識結果目錄存在
-    ocr_dir = os.path.join(current_app.root_path, 'data', 'ocr')
-    if not os.path.exists(ocr_dir):
-        os.makedirs(ocr_dir)
-        
-    # 確保向量嵌入結果目錄存在
-    vectors_dir = os.path.join(current_app.root_path, 'data', 'vectors')
-    if not os.path.exists(vectors_dir):
-        os.makedirs(vectors_dir)
-    
-    return {
-        'uploads': uploads_dir,
-        'json': json_dir,
-        'ocr': ocr_dir,
-        'vectors': vectors_dir
-    }
 
-# 確保特定科目的目錄存在
-def ensure_subject_directories(subject):
-    """確保特定科目的所有需要目錄存在"""
-    dirs = ensure_data_directories()
-    
-    # 上傳目錄
-    upload_subject_dir = os.path.join(dirs['uploads'], subject)
-    if not os.path.exists(upload_subject_dir):
-        os.makedirs(upload_subject_dir)
-    
-    # 講義上傳目錄
-    upload_lectures_dir = os.path.join(upload_subject_dir, 'lectures')
-    if not os.path.exists(upload_lectures_dir):
-        os.makedirs(upload_lectures_dir)
-    
-    # 筆記上傳目錄
-    upload_notes_dir = os.path.join(upload_subject_dir, 'notes')
-    if not os.path.exists(upload_notes_dir):
-        os.makedirs(upload_notes_dir)
-    
-    # JSON數據目錄
-    json_subject_dir = os.path.join(dirs['json'], subject)
-    if not os.path.exists(json_subject_dir):
-        os.makedirs(json_subject_dir)
-    
-    # 講義JSON目錄
-    json_lectures_dir = os.path.join(json_subject_dir, 'lectures')
-    if not os.path.exists(json_lectures_dir):
-        os.makedirs(json_lectures_dir)
-    
-    # 筆記JSON目錄
-    json_notes_dir = os.path.join(json_subject_dir, 'notes')
-    if not os.path.exists(json_notes_dir):
-        os.makedirs(json_notes_dir)
-    
-    return {
-        'upload_subject': upload_subject_dir,
-        'upload_lectures': upload_lectures_dir,
-        'upload_notes': upload_notes_dir,
-        'json_subject': json_subject_dir,
-        'json_lectures': json_lectures_dir,
-        'json_notes': json_notes_dir
-    }
+def register_new_file(subject,type,filename,unique_id):
+    path = os.path.join("app", "data_upload", subject, type, 'index.json')
+    register = text_processer.read_json(path, default_content=[])
 
-# 讀取JSON數據
-def read_json(filepath, default_content=None):
-    """
-    從JSON檔案讀取數據，如果檔案不存在則返回指定的默認內容
-    
-    Args:
-        filepath: JSON檔案的完整路徑
-        default_content: 如果檔案不存在，返回的默認內容
-    
-    Returns:
-        讀取的JSON數據或默認內容
-    """
-    if not os.path.exists(filepath):
-        return default_content if default_content is not None else {}
-    
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except json.JSONDecodeError:
-        return default_content if default_content is not None else {}
+    entry = {"id": unique_id, "filename": filename}
+    register.append(entry)
 
-# 寫入JSON數據
-def write_json(data, filepath):
-    """
-    將數據寫入JSON檔案
+    text_processer.write_json(register, path)
+
+def get_file_name_from_id(subject, type, unique_id):
+    path = os.path.join("app", "data_upload", subject, type, 'index.json')
     
-    Args:
-        data: 要寫入的數據
-        filepath: JSON檔案的完整路徑
-    """
-    # 確保目錄存在
-    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    # 載入 index.json
+    register = text_processer.read_json(path, default_content=[])
     
-    with open(filepath, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    # 遍歷列表找對應的 id
+    for entry in register:
+        if entry.get("id") == unique_id:
+            return entry.get("filename")
+    
+    # 若未找到，回傳 None 或拋出錯誤
+    return None  # 或 raise ValueError(f"No file found for ID: {unique_id}")
+
 
 # 檢查檔案類型是否允許
 def allowed_file(filename, allowed_extensions):
@@ -140,72 +56,36 @@ def upload_lecture(file, subject):
         return {'success': False, 'error': '沒有選擇檔案'}
     
     # 檢查檔案類型
-    allowed_extensions = {'pdf', 'docx', 'ppt', 'pptx', 'txt'}
+    allowed_extensions = {'pdf'} # , 'docx', 'ppt', 'pptx', 'txt'
     if not allowed_file(file.filename, allowed_extensions):
-        return {'success': False, 'error': '不支援的檔案類型，請上傳 PDF、DOCX、PPT、PPTX 或 TXT 檔案'}
+        return {'success': False, 'error': '不支援的檔案類型，請上傳 PDF檔案'} # 、DOCX、PPT、PPTX 或 TXT 
     
-    # 確保目錄存在
-    dirs = ensure_subject_directories(subject)
-    
-    # 生成安全的檔名
-    original_filename = secure_filename(file.filename)
-    file_extension = original_filename.rsplit('.', 1)[1].lower()
+    # 生成id
     unique_id = str(uuid.uuid4())
-    unique_filename = f"{unique_id}.{file_extension}"
-    
+
+    # 註冊檔案
+    register_new_file(subject,"lectures",file.filename,unique_id)
+
     # 建立檔案儲存路徑
-    file_path = os.path.join(dirs['upload_lectures'], unique_filename)
+    file_path = os.path.join("app", "data_upload", subject, "lectures", file.filename)
     
     # 儲存檔案
     file.save(file_path)
     
-    # 獲取檔案大小
-    file_size = os.path.getsize(file_path)
-    
-    # 建立檔案記錄
-    lecture_data = {
-        'id': unique_id,
-        'original_filename': original_filename,
-        'filename': unique_filename,
-        'file_path': file_path,
-        'file_size': file_size,
-        'file_type': file_extension,
-        'subject': subject,
-        'upload_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'ocr_processed': False,
-        'ocr_text_path': None,
-        'vector_embeddings': None
-    }
-    
-    # 讀取和更新講義JSON
-    json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-    lectures = read_json(json_path, default_content={})
-    
-    # 確保存在subject鍵
-    if subject not in lectures:
-        lectures[subject] = []
-    
-    # 添加新講義
-    lectures[subject].append(lecture_data)
-    
-    # 儲存更新後的數據
-    write_json(lectures, json_path)
-    
-    return {
-        'success': True,
-        'lecture': lecture_data,
-        'file_id': unique_id
-    }
+    return {'success': True, 
+            'message': '檔案上傳成功',
+            'save_path': file_path,
+            'file_id': unique_id
+            }
 
 # 上傳筆記
-def upload_note(file, subject, lecture_id=None):
+def upload_note(file, subject):
     """
     上傳筆記檔案
     
     Args:
         file: 上傳的檔案物件
         subject: 科目名稱
-        lecture_id: 關聯的講義ID (可選)
         
     Returns:
         dict: 包含上傳結果的字典
@@ -215,61 +95,27 @@ def upload_note(file, subject, lecture_id=None):
         return {'success': False, 'error': '沒有選擇檔案'}
     
     # 檢查檔案類型
-    allowed_extensions = {'pdf', 'docx', 'txt', 'jpg', 'jpeg', 'png'}
+    allowed_extensions = {'pdf', 'jpg', 'jpeg', 'png'} # , 'docx', 'txt'
     if not allowed_file(file.filename, allowed_extensions):
-        return {'success': False, 'error': '不支援的檔案類型，請上傳 PDF、DOCX、TXT 或圖片檔案'}
+        return {'success': False, 'error': '不支援的檔案類型，請上傳 PDF或圖片檔案'} # 、DOCX、TXT 
     
-    # 確保目錄存在
-    dirs = ensure_subject_directories(subject)
-    
-    # 生成安全的檔名
-    original_filename = secure_filename(file.filename)
-    file_extension = original_filename.rsplit('.', 1)[1].lower()
+    # 生成id
     unique_id = str(uuid.uuid4())
-    unique_filename = f"{unique_id}.{file_extension}"
-    
+
+    # 註冊檔案
+    register_new_file(subject,"notes",file.filename,unique_id)
+
     # 建立檔案儲存路徑
-    file_path = os.path.join(dirs['upload_notes'], unique_filename)
+    file_path = os.path.join("app", "data_upload", subject, "notes", file.filename)
     
     # 儲存檔案
     file.save(file_path)
     
-    # 獲取檔案大小
-    file_size = os.path.getsize(file_path)
-    
-    # 建立檔案記錄
-    note_data = {
-        'id': unique_id,
-        'original_filename': original_filename,
-        'filename': unique_filename,
-        'file_path': file_path,
-        'file_size': file_size,
-        'file_type': file_extension,
-        'subject': subject,
-        'lecture_id': lecture_id,
-        'upload_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'ocr_processed': False,
-        'ocr_text_path': None,
-        'vector_embeddings': None
-    }
-    
-    # 讀取和更新筆記JSON
-    json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(json_path, default_content={})
-    
-    # 確保存在subject鍵
-    if subject not in notes:
-        notes[subject] = []
-    
-    # 添加新筆記
-    notes[subject].append(note_data)
-    
-    # 儲存更新後的數據
-    write_json(notes, json_path)
     
     return {
         'success': True,
-        'note': note_data,
+        'message': '檔案上傳成功',
+        'save_path': file_path,
         'file_id': unique_id
     }
 
@@ -277,74 +123,69 @@ def upload_note(file, subject, lecture_id=None):
 def get_subjects():
     """獲取所有科目列表"""
     subjects = []
-    
-    # 從講義數據獲取科目
-    lectures_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-    lectures = read_json(lectures_path, default_content={})
-    for subject in lectures.keys():
-        if subject not in subjects:
-            subjects.append(subject)
-    
-    # 從筆記數據獲取科目
-    notes_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(notes_path, default_content={})
-    for subject in notes.keys():
-        if subject not in subjects:
-            subjects.append(subject)
-    
+    path = os.path.join("app", "data_server")
+
+    for name in os.listdir(path):
+        full_path = os.path.join(path, name)
+        if os.path.isdir(full_path):
+            subjects.append(name)
+
     return subjects
 
 # 獲取講義列表
 def get_lectures(subject):
     """獲取指定科目的所有講義"""
-    json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-    lectures = read_json(json_path, default_content={})
-    
-    if subject not in lectures:
-        return []
-    
-    return lectures[subject]
+    path = os.path.join("app", "data_upload", subject, "lectures", 'index.json')
+    register = text_processer.read_json(path, default_content=[])
+
+    return register
 
 # 獲取筆記列表
 def get_notes(subject):
     """獲取指定科目的所有筆記"""
-    json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(json_path, default_content={})
-    
-    if subject not in notes:
-        return []
-    
-    return notes[subject]
+    path = os.path.join("app", "data_upload", subject, "notes", 'index.json')
+    register = text_processer.read_json(path, default_content=[])
+
+    return register
+
 
 # 獲取特定講義
-def get_lecture(lecture_id):
+def get_lecture(subject, lecture_id):
     """獲取指定ID的講義"""
-    json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-    lectures = read_json(json_path, default_content={})
-    
-    for subject in lectures:
-        for lecture in lectures[subject]:
-            if lecture['id'] == lecture_id:
-                return lecture
-    
-    return None
+
+    name = get_file_name_from_id(subject, "lectures", lecture_id)
+    if name is None:
+        return None  # 或者 raise ValueError("Lecture not found.")
+
+    path = os.path.join("app", "data_upload", subject, "lectures", name)
+
+    # 根據檔案類型讀取
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    return content
+
 
 # 獲取特定筆記
-def get_note(note_id):
+def get_note(subject,note_id):
     """獲取指定ID的筆記"""
-    json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(json_path, default_content={})
-    
-    for subject in notes:
-        for note in notes[subject]:
-            if note['id'] == note_id:
-                return note
-    
-    return None
+
+    name = get_file_name_from_id(subject, "lectures", note_id)
+    if name is None:
+        return None  # 或者 raise ValueError("Lecture not found.")
+
+    path = os.path.join("app", "data_upload", subject, "notes", name)
+
+    # 根據檔案類型讀取
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    return content
 
 # 刪除講義
 def delete_lecture(lecture_id):
     """刪除指定ID的講義"""
+    '''
     json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
     lectures = read_json(json_path, default_content={})
     lecture_to_delete = None
@@ -389,10 +230,13 @@ def delete_lecture(lecture_id):
     write_json(notes, notes_path)
     
     return {'success': True}
+    '''
+    return {'success': False}
 
 # 刪除筆記
 def delete_note(note_id):
     """刪除指定ID的筆記"""
+    '''
     json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
     notes = read_json(json_path, default_content={})
     note_to_delete = None
@@ -428,10 +272,13 @@ def delete_note(note_id):
     write_json(notes, json_path)
     
     return {'success': True}
+    '''
+    return {'success': False}
 
 # 獲取特定講義的所有相關筆記
 def get_notes_for_lecture(lecture_id):
     """獲取與特定講義相關的所有筆記"""
+    '''
     json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
     notes = read_json(json_path, default_content={})
     related_notes = []
@@ -442,151 +289,5 @@ def get_notes_for_lecture(lecture_id):
                 related_notes.append(note)
     
     return related_notes
-
-# 更新OCR處理狀態和結果
-def update_ocr_result(file_type, file_id, ocr_text_path):
-    """
-    更新文件的OCR處理狀態和結果
-    
-    Args:
-        file_type: 'lecture' 或 'note'
-        file_id: 文件ID
-        ocr_text_path: OCR文本文件路徑
-    
-    Returns:
-        bool: 是否成功更新
-    """
-    if file_type == 'lecture':
-        json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-        data = read_json(json_path, default_content={})
-        for subject in data:
-            for lecture in data[subject]:
-                if lecture['id'] == file_id:
-                    lecture['ocr_processed'] = True
-                    lecture['ocr_text_path'] = ocr_text_path
-                    write_json(data, json_path)
-                    return True
-    else:  # note
-        json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-        data = read_json(json_path, default_content={})
-        for subject in data:
-            for note in data[subject]:
-                if note['id'] == file_id:
-                    note['ocr_processed'] = True
-                    note['ocr_text_path'] = ocr_text_path
-                    write_json(data, json_path)
-                    return True
-    
-    return False
-
-# 更新向量嵌入結果
-def update_vector_embedding(file_type, file_id, embedding_data):
-    """
-    更新文件的向量嵌入結果
-    
-    Args:
-        file_type: 'lecture' 或 'note'
-        file_id: 文件ID
-        embedding_data: 向量嵌入數據或文件路徑
-    
-    Returns:
-        bool: 是否成功更新
-    """
-    if file_type == 'lecture':
-        json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-        data = read_json(json_path, default_content={})
-        for subject in data:
-            for lecture in data[subject]:
-                if lecture['id'] == file_id:
-                    lecture['vector_embeddings'] = embedding_data
-                    write_json(data, json_path)
-                    return True
-    else:  # note
-        json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-        data = read_json(json_path, default_content={})
-        for subject in data:
-            for note in data[subject]:
-                if note['id'] == file_id:
-                    note['vector_embeddings'] = embedding_data
-                    write_json(data, json_path)
-                    return True
-    
-    return False
-
-# 檢查處理狀態
-def check_processing_status(file_type, file_id):
-    """
-    檢查文件的處理狀態
-    
-    Args:
-        file_type: 'lecture' 或 'note'
-        file_id: 文件ID
-    
-    Returns:
-        dict: 包含處理狀態的字典
-    """
-    if file_type == 'lecture':
-        json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-        data = read_json(json_path, default_content={})
-        for subject in data:
-            for lecture in data[subject]:
-                if lecture['id'] == file_id:
-                    if lecture.get('error'):
-                        return {'status': 'error', 'error': lecture['error']}
-                    elif lecture.get('ocr_processed'):
-                        return {'status': 'completed'}
-                    else:
-                        return {'status': 'processing'}
-    else:  # note
-        json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-        data = read_json(json_path, default_content={})
-        for subject in data:
-            for note in data[subject]:
-                if note['id'] == file_id:
-                    if note.get('error'):
-                        return {'status': 'error', 'error': note['error']}
-                    elif note.get('ocr_processed'):
-                        return {'status': 'completed'}
-                    else:
-                        return {'status': 'processing'}
-    
-    return {'status': 'not_found', 'error': '找不到指定的文件'}
-
-# 檢查是否有新文件
-def check_new_files(subject):
-    """
-    檢查指定科目是否有新文件
-    
-    Args:
-        subject: 科目名稱
-    
-    Returns:
-        dict: 包含結果的字典
-    """
-    lectures_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-    lectures = read_json(lectures_path, default_content={})
-    
-    notes_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(notes_path, default_content={})
-    
-    # 檢查最近上傳的文件
-    has_new = False
-    current_time = datetime.now()
-    
-    if subject in lectures:
-        for lecture in lectures[subject]:
-            upload_time = datetime.strptime(lecture['upload_date'], '%Y-%m-%d %H:%M:%S')
-            # 檢查是否是60秒內上傳的
-            if (current_time - upload_time).total_seconds() < 60:
-                has_new = True
-                break
-    
-    if not has_new and subject in notes:
-        for note in notes[subject]:
-            upload_time = datetime.strptime(note['upload_date'], '%Y-%m-%d %H:%M:%S')
-            # 檢查是否是60秒內上傳的
-            if (current_time - upload_time).total_seconds() < 60:
-                has_new = True
-                break
-    
-    return {'has_new_files': has_new}
+    '''
+    return None
