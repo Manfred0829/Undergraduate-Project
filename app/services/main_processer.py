@@ -1,5 +1,5 @@
 from app.utils import media_processer as media, text_processer as text
-from modules.models_request.OCRspace_request import OCRspaceRequest
+from app.modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
 import os
@@ -43,11 +43,11 @@ def processing_note(subject, img_path):
     filename_without_ext = os.path.splitext(original_filename)[0]
     
     # 建立輸出路徑
-    output_dir = os.path.join("app", "data_json", subject, "notes")
+    output_dir = os.path.join("app", "data_server", subject, "notes")
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, f"{filename_without_ext}.json")
     
-    path = os.path.join("app", "data_json", subject, "notes", filename_without_ext + ".json")
+    path = os.path.join("app", "data_server", subject, "notes", filename_without_ext + ".json")
     notes_db = text.read_json(path, default_content=[])
     notes_db.extend(notes_json)
     # 儲存合併後的結果到原始位置
@@ -114,10 +114,50 @@ def processing_lecture(subject, pdf_path):
     chapter_json['Sections'] = sections_json
 
     # save
-    path = os.path.join("app", "data_json", subject, "lectures", filename_without_ext + ".json")
+    path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + ".json")
     text.write_json(chapter_json, path)
 
 
     # embedding process
+    keypoints_list = _extract_keypoints_hierarchy(chapter_json)
+    texts_for_embedding = [kp["Title"] + ":\n" + kp["Content"] for kp in keypoints_list]
+    vectors = OpenAI.generate_embedding(texts_for_embedding)
+
+    # 加入嵌入向量並移除文字欄位
+    for i, kp in enumerate(keypoints_list):
+        kp.pop("Title", None)
+        kp.pop("Content", None)
+        kp["Embedding"] = vectors[i]
+
+    # save
+    path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + "_keypoints.json")
+    text.write_json(keypoints_list, path)
+
     # tree diagram process
+
+
+def _extract_keypoints_hierarchy(chapter: dict):
+    """
+    從巢狀講義 JSON 檔中提取所有 keypoint，並標註其所屬的章節 / 主題 / 頁面索引。
+    將結果儲存成新的 JSON 檔案。
+    """
+
+    keypoints_list = []
+
+    sections = chapter.get('Sections', [])
+    for s_idx, section in enumerate(sections):
+        topics = section.get('Topics', [])
+        for t_idx, topic in enumerate(topics):
+            pages = topic.get('Pages', [])
+            for p_idx, page in enumerate(pages):
+                keypoints = page.get('Keypoints', [])
+                for k_idx, k in enumerate(keypoints):
+                    keypoints_list.append({
+                        "Title": k.get("Title", ""),
+                        "Content": k.get("Content", ""),
+                        "Index": [s_idx, t_idx, p_idx, k_idx]
+                    })
+
+    print(f"✅ Keypoints with hierarchy generated")
+    return keypoints_list
 

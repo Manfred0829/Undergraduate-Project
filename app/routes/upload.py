@@ -4,15 +4,10 @@ from app.services.file_service import (
     upload_lecture, upload_note, get_subjects, get_lectures, get_notes,
     get_lecture, get_note, delete_lecture, delete_note, get_notes_for_lecture
 )
+from app.services import main_processer
 
 # 創建藍圖
 upload_bp = Blueprint('upload', __name__, url_prefix='/api/upload')
-
-# 獲取所有科目
-@upload_bp.route('/subjects', methods=['GET'])
-def subjects():
-    """獲取所有科目列表"""
-    return jsonify(get_subjects())
 
 # 上傳講義
 @upload_bp.route('/lecture', methods=['POST'])
@@ -30,6 +25,7 @@ def upload_lecture_route():
     result = upload_lecture(file, subject)
     
     if result['success']:
+        #main_processer.processing_lecture(result['save_path'])
         return jsonify(result), 201
     else:
         return jsonify(result), 400
@@ -43,14 +39,15 @@ def upload_note_route():
     
     file = request.files['file']
     subject = request.form.get('subject')
-    lecture_id = request.form.get('lecture_id')
+    lecture_name = request.form.get('lecture_name')
     
     if not subject:
         return jsonify({'success': False, 'error': '請提供科目名稱'}), 400
     
-    result = upload_note(file, subject, lecture_id)
+    result = upload_note(file, subject)
     
     if result['success']:
+        # main_processer.processing_note(result['save_path'], lecture_name)
         return jsonify(result), 201
     else:
         return jsonify(result), 400
@@ -94,6 +91,8 @@ def delete_note_route(note_id):
         return jsonify(result), 200
     else:
         return jsonify(result), 404
+    
+
 
 
 @upload_bp.route('/test-lecture', methods=['POST'])
