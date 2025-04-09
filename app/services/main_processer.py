@@ -134,6 +134,8 @@ def processing_lecture(subject, pdf_path):
     text.write_json(keypoints_list, path)
 
     # tree diagram process
+    path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + "_tree.json")
+    media.generate_chapter_hierarchy_graph(chapter_json,path)
 
 
 def _extract_keypoints_hierarchy(chapter: dict):
