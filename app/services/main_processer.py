@@ -47,10 +47,6 @@ def processing_note(subject, img_path):
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, f"{filename_without_ext}.json")
     
-
-    original_filename = os.path.basename(img_path)
-    filename_without_ext = os.path.splitext(original_filename)[0]
-    
     path = os.path.join("app", "data_json", subject, "notes", filename_without_ext + ".json")
     notes_db = text.read_json(path, default_content=[])
     notes_db.extend(notes_json)
