@@ -2,7 +2,7 @@
 import os
 #import json
 import uuid
-#import shutil
+import shutil
 #from datetime import datetime
 #from werkzeug.utils import secure_filename
 #from flask import current_app
@@ -123,30 +123,96 @@ def upload_note(file, subject):
 def get_subjects():
     """獲取所有科目列表"""
     subjects = []
-    path = os.path.join("app", "data_server")
-
-    for name in os.listdir(path):
-        full_path = os.path.join(path, name)
-        if os.path.isdir(full_path):
-            subjects.append(name)
-
+    
+    # 檢查 data_upload 下的科目資料夾
+    upload_path = os.path.join("app", "data_upload")
+    server_path = os.path.join("app", "data_server")
+    
+    # 從 data_upload 獲取科目
+    if os.path.exists(upload_path):
+        for name in os.listdir(upload_path):
+            full_path = os.path.join(upload_path, name)
+            if os.path.isdir(full_path) and not name.startswith('.'):
+                if name not in subjects:
+                    subjects.append(name)
+    
+    # 從 data_server 獲取科目
+    if os.path.exists(server_path):
+        for name in os.listdir(server_path):
+            full_path = os.path.join(server_path, name)
+            if os.path.isdir(full_path) and not name.startswith('.'):
+                if name not in subjects:
+                    subjects.append(name)
+    
     return subjects
 
 # 獲取講義列表
 def get_lectures(subject):
     """獲取指定科目的所有講義"""
-    path = os.path.join("app", "data_upload", subject, "lectures", 'index.json')
-    register = text_processer.read_json(path, default_content=[])
-
-    return register
+    lectures = []
+    
+    # 檢查 index.json 是否存在
+    index_path = os.path.join("app", "data_upload", subject, "lectures", 'index.json')
+    if os.path.exists(index_path):
+        # 如果 index.json 存在，讀取其中的註冊信息
+        register = text_processer.read_json(index_path, default_content=[])
+        lectures.extend(register)
+    
+    # 檢查目錄中的實際檔案
+    directory_path = os.path.join("app", "data_upload", subject, "lectures")
+    if os.path.exists(directory_path):
+        # 獲取所有檔案
+        files = [f for f in os.listdir(directory_path) 
+                if os.path.isfile(os.path.join(directory_path, f)) 
+                and not f.startswith('.') 
+                and f != 'index.json']
+        
+        # 查找在目錄中但不在 index.json 中的檔案
+        registered_files = [entry.get('filename', '') for entry in lectures]
+        for filename in files:
+            if filename not in registered_files:
+                # 為找到的檔案生成一個唯一ID
+                unique_id = str(uuid.uuid4())
+                # 將檔案添加到列表
+                lectures.append({'id': unique_id, 'filename': filename})
+                # 同時更新 index.json
+                register_new_file(subject, "lectures", filename, unique_id)
+    
+    return lectures
 
 # 獲取筆記列表
 def get_notes(subject):
     """獲取指定科目的所有筆記"""
-    path = os.path.join("app", "data_upload", subject, "notes", 'index.json')
-    register = text_processer.read_json(path, default_content=[])
-
-    return register
+    notes = []
+    
+    # 檢查 index.json 是否存在
+    index_path = os.path.join("app", "data_upload", subject, "notes", 'index.json')
+    if os.path.exists(index_path):
+        # 如果 index.json 存在，讀取其中的註冊信息
+        register = text_processer.read_json(index_path, default_content=[])
+        notes.extend(register)
+    
+    # 檢查目錄中的實際檔案
+    directory_path = os.path.join("app", "data_upload", subject, "notes")
+    if os.path.exists(directory_path):
+        # 獲取所有檔案
+        files = [f for f in os.listdir(directory_path) 
+                if os.path.isfile(os.path.join(directory_path, f)) 
+                and not f.startswith('.') 
+                and f != 'index.json']
+        
+        # 查找在目錄中但不在 index.json 中的檔案
+        registered_files = [entry.get('filename', '') for entry in notes]
+        for filename in files:
+            if filename not in registered_files:
+                # 為找到的檔案生成一個唯一ID
+                unique_id = str(uuid.uuid4())
+                # 將檔案添加到列表
+                notes.append({'id': unique_id, 'filename': filename})
+                # 同時更新 index.json
+                register_new_file(subject, "notes", filename, unique_id)
+    
+    return notes
 
 
 # 獲取特定講義
@@ -185,95 +251,74 @@ def get_note(subject,note_id):
 # 刪除講義
 def delete_lecture(lecture_id):
     """刪除指定ID的講義"""
-    '''
-    json_path = os.path.join(current_app.root_path, 'data_json', 'lectures.json')
-    lectures = read_json(json_path, default_content={})
-    lecture_to_delete = None
-    subject_of_lecture = None
-    
-    # 尋找要刪除的講義
-    for subject in lectures:
-        for i, lecture in enumerate(lectures[subject]):
-            if lecture['id'] == lecture_id:
-                lecture_to_delete = lecture
-                subject_of_lecture = subject
-                lectures[subject].pop(i)
-                break
-        if lecture_to_delete:
-            break
-    
-    if not lecture_to_delete:
-        return {'success': False, 'error': '找不到指定的講義'}
-    
-    # 刪除關聯的筆記的講義ID
-    notes_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(notes_path, default_content={})
-    for subject in notes:
-        for note in notes[subject]:
-            if note.get('lecture_id') == lecture_id:
-                note['lecture_id'] = None
-    
-    # 刪除檔案
     try:
-        if os.path.exists(lecture_to_delete['file_path']):
-            os.remove(lecture_to_delete['file_path'])
+        # 遍歷所有科目，尋找匹配的講義ID
+        subjects = get_subjects()
+        for subject in subjects:
+            index_path = os.path.join("app", "data_upload", subject, "lectures", "index.json")
+            if not os.path.exists(index_path):
+                continue
+                
+            register = text_processer.read_json(index_path, default_content=[])
+            for i, entry in enumerate(register):
+                if entry.get("id") == lecture_id:
+                    # 找到匹配的講義
+                    filename = entry.get("filename")
+                    file_path = os.path.join("app", "data_upload", subject, "lectures", filename)
+                    
+                    # 刪除檔案（如果存在）
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                    
+                    # 從index.json中移除
+                    register.pop(i)
+                    text_processer.write_json(register, index_path)
+                    
+                    return {
+                        'success': True, 
+                        'message': f'已刪除講義：{filename}'
+                    }
         
-        # 如果存在OCR文本，也刪除
-        if lecture_to_delete.get('ocr_text_path') and os.path.exists(lecture_to_delete['ocr_text_path']):
-            os.remove(lecture_to_delete['ocr_text_path'])
+        # 如果未找到講義
+        return {'success': False, 'error': '找不到指定的講義'}
     except Exception as e:
-        # 即使刪除檔案失敗，仍繼續刪除記錄
-        print(f"刪除檔案時出錯: {str(e)}")
-    
-    # 更新JSON數據
-    write_json(lectures, json_path)
-    write_json(notes, notes_path)
-    
-    return {'success': True}
-    '''
-    return {'success': False}
+        return {'success': False, 'error': str(e)}
 
 # 刪除筆記
 def delete_note(note_id):
     """刪除指定ID的筆記"""
-    '''
-    json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(json_path, default_content={})
-    note_to_delete = None
-    subject_of_note = None
-    
-    # 尋找要刪除的筆記
-    for subject in notes:
-        for i, note in enumerate(notes[subject]):
-            if note['id'] == note_id:
-                note_to_delete = note
-                subject_of_note = subject
-                notes[subject].pop(i)
-                break
-        if note_to_delete:
-            break
-    
-    if not note_to_delete:
-        return {'success': False, 'error': '找不到指定的筆記'}
-    
-    # 刪除檔案
     try:
-        if os.path.exists(note_to_delete['file_path']):
-            os.remove(note_to_delete['file_path'])
+        # 遍歷所有科目，尋找匹配的筆記ID
+        subjects = get_subjects()
+        for subject in subjects:
+            index_path = os.path.join("app", "data_upload", subject, "notes", "index.json")
+            if not os.path.exists(index_path):
+                continue
+                
+            register = text_processer.read_json(index_path, default_content=[])
+            for i, entry in enumerate(register):
+                if entry.get("id") == note_id:
+                    # 找到匹配的筆記
+                    filename = entry.get("filename")
+                    file_path = os.path.join("app", "data_upload", subject, "notes", filename)
+                    
+                    # 刪除檔案（如果存在）
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                    
+                    # 從index.json中移除
+                    register.pop(i)
+                    text_processer.write_json(register, index_path)
+                    
+                    return {
+                        'success': True, 
+                        'message': f'已刪除筆記：{filename}'
+                    }
         
-        # 如果存在OCR文本，也刪除
-        if note_to_delete.get('ocr_text_path') and os.path.exists(note_to_delete['ocr_text_path']):
-            os.remove(note_to_delete['ocr_text_path'])
+        # 如果未找到筆記
+        return {'success': False, 'error': '找不到指定的筆記'}
     except Exception as e:
-        # 即使刪除檔案失敗，仍繼續刪除記錄
-        print(f"刪除檔案時出錯: {str(e)}")
-    
-    # 更新JSON數據
-    write_json(notes, json_path)
-    
-    return {'success': True}
-    '''
-    return {'success': False}
+        return {'success': False, 'error': str(e)}
 
 # 獲取特定講義的所有相關筆記
 def get_notes_for_lecture(lecture_id):
@@ -291,3 +336,85 @@ def get_notes_for_lecture(lecture_id):
     return related_notes
     '''
     return None
+
+# 創建科目資料夾
+def create_subject_folders(subject_name):
+    """
+    創建新科目所需的資料夾結構
+    
+    Args:
+        subject_name: 科目名稱
+        
+    Returns:
+        dict: 包含創建結果的字典
+    """
+    try:
+        # 創建主要資料夾
+        data_upload_path = os.path.join("app", "data_upload", subject_name)
+        data_server_path = os.path.join("app", "data_server", subject_name)
+        
+        # 檢查是否已存在
+        if os.path.exists(data_upload_path) or os.path.exists(data_server_path):
+            return {'success': False, 'error': '該科目資料夾已存在'}
+        
+        # 創建 data_upload 下的資料夾結構
+        os.makedirs(data_upload_path, exist_ok=True)
+        os.makedirs(os.path.join(data_upload_path, "lectures"), exist_ok=True)
+        os.makedirs(os.path.join(data_upload_path, "notes"), exist_ok=True)
+        
+        # 創建 data_server 下的資料夾
+        os.makedirs(data_server_path, exist_ok=True)
+        
+        # 創建 index.json 檔案
+        lectures_index_path = os.path.join(data_upload_path, "lectures", "index.json")
+        notes_index_path = os.path.join(data_upload_path, "notes", "index.json")
+        
+        # 初始化為空陣列
+        text_processer.write_json([], lectures_index_path)
+        text_processer.write_json([], notes_index_path)
+        
+        return {'success': True, 'message': '科目資料夾創建成功'}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+# 刪除科目資料夾及所有相關數據
+def delete_subject_folders(subject_name):
+    """
+    刪除指定科目的所有資料夾及檔案
+    
+    Args:
+        subject_name: 科目名稱
+        
+    Returns:
+        dict: 包含刪除結果的字典
+    """
+    try:
+        # 定義需要刪除的路徑
+        data_upload_path = os.path.join("app", "data_upload", subject_name)
+        data_server_path = os.path.join("app", "data_server", subject_name)
+        data_json_path = os.path.join("app", "data_json", subject_name)
+        
+        # 檢查路徑是否存在，存在則刪除
+        paths_to_delete = []
+        if os.path.exists(data_upload_path):
+            paths_to_delete.append(data_upload_path)
+        if os.path.exists(data_server_path):
+            paths_to_delete.append(data_server_path)
+        if os.path.exists(data_json_path):
+            paths_to_delete.append(data_json_path)
+        
+        # 如果沒有找到任何資料夾，返回錯誤
+        if not paths_to_delete:
+            return {'success': False, 'error': '找不到該科目的資料夾'}
+        
+        # 刪除所有找到的資料夾
+        for path in paths_to_delete:
+            shutil.rmtree(path)
+        
+        return {
+            'success': True, 
+            'message': f'已刪除科目 "{subject_name}" 的所有數據',
+            'deleted_paths': paths_to_delete
+        }
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
