@@ -26,7 +26,11 @@ def upload_lecture_route():
     result = upload_lecture(file, subject)
     
     if result['success']:
-        #main_processer.processing_lecture(result['save_path'])
+        # 處理講義文件
+        process_result = main_processer.processing_lecture(subject, result['save_path'])
+        if not process_result['success']:
+            # 如果處理失敗，仍返回成功上傳的消息，但附加處理錯誤信息
+            result['processing_error'] = process_result['error']
         return jsonify(result), 201
     else:
         return jsonify(result), 400
@@ -48,7 +52,11 @@ def upload_note_route():
     result = upload_note(file, subject)
     
     if result['success']:
-        # main_processer.processing_note(result['save_path'], lecture_name)
+        # 處理筆記文件
+        process_result = main_processer.processing_note(subject, result['save_path'])
+        if not process_result['success']:
+            # 如果處理失敗，仍返回成功上傳的消息，但附加處理錯誤信息
+            result['processing_error'] = process_result['error']
         return jsonify(result), 201
     else:
         return jsonify(result), 400

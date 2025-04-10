@@ -3,137 +3,182 @@ from app.modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
 import os
+import logging
 
+# 設置日誌
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def processing_note(subject, img_path):
-
-    # 從 img_path 中提取原始檔案名稱
-    original_filename = os.path.basename(img_path)
-    filename_without_ext = os.path.splitext(original_filename)[0]
-
-    # Img process
-    EasyOCR = EasyOCRLocal()
-    img_PIL = media.read_image_to_PIL(img_path)
-    cropped_images = EasyOCR.processing_lines_bounding_box(img_PIL,draw_result=True)
-
-    # OCR process
-    OpenAI = OpenAIRequest()
-
-    page_texts = ""
-    for cropped_img in cropped_images:
-        base64_img = media.convert_PIL_to_base64(cropped_img)
-        OCR_result_text = OpenAI.generate_img_OCR(base64_img)
-        #print(OCR_result_text)
-        page_texts += OCR_result_text + "\n"
-
-    # LLM process
-    repaired_page = OpenAI.processing_notes_repair(page_texts)
-    notes_json = OpenAI.processing_notes_extract_keypoints(repaired_page)
-    print(repaired_page)
-    print(notes_json)
-
-    # embedding process
-    notes_embedding = OpenAI.processing_notes_embedding(notes_json)
-    for i in range(len(notes_embedding)):
-        notes_json[i]['Embedding'] = notes_embedding[i]
-
-    # simularity process
-    # temp mocking
-    for note in notes_json:
-        note['Keypoint_id'] = -1
-
-    # 建立輸出路徑
-    output_dir = os.path.join("app", "data_server", subject, "notes")
-    os.makedirs(output_dir, exist_ok=True)
-    output_path = os.path.join(output_dir, f"{filename_without_ext}.json")
+    """
+    處理上傳的筆記圖片
     
-    notes_db = text.read_json(output_path, default_content=[])
-    notes_db.extend(notes_json)
-    text.write_json(notes_db, output_path)
+    Args:
+        subject: 科目名稱
+        img_path: 圖片路徑
+    
+    Returns:
+        dict: 處理結果
+    """
+    try:
+        logger.info(f"開始處理筆記: {img_path}, 科目: {subject}")
+        
+        # 從 img_path 中提取原始檔案名稱
+        original_filename = os.path.basename(img_path)
+        filename_without_ext = os.path.splitext(original_filename)[0]
 
+        # Img process
+        EasyOCR = EasyOCRLocal()
+        img_PIL = media.read_image_to_PIL(img_path)
+        if img_PIL is None:
+            logger.error(f"無法讀取圖片: {img_path}")
+            return {"success": False, "error": "無法讀取圖片檔案"}
+        
+        save_path = os.path.join("app", "data_server", subject, "notes", filename_without_ext + "_lines_bounding_box.png")
+        cropped_images = EasyOCR.processing_lines_bounding_box(img_PIL, draw_result=True, save_path=save_path)
+        logger.info(f"已處理圖片並分割成 {len(cropped_images)} 個文字區域")
+
+        # OCR process
+        OpenAI = OpenAIRequest()
+
+        page_texts = ""
+        for cropped_img in cropped_images:
+            base64_img = media.convert_PIL_to_base64(cropped_img)
+            OCR_result_text = OpenAI.generate_img_OCR(base64_img)
+            logger.info(f"OCR識別結果: {OCR_result_text[:30]}...")
+            page_texts += OCR_result_text + "\n"
+
+        # LLM process
+        repaired_page = OpenAI.processing_notes_repair(page_texts)
+        notes_json = OpenAI.processing_notes_extract_keypoints(repaired_page)
+        logger.info("筆記修復和重點提取完成")
+        
+        # embedding process
+        notes_embedding = OpenAI.processing_notes_embedding(notes_json)
+        for i in range(len(notes_embedding)):
+            notes_json[i]['Embedding'] = notes_embedding[i]
+        logger.info("嵌入向量處理完成")
+
+        # simularity process
+        # temp mocking
+        for note in notes_json:
+            note['Keypoint_id'] = -1
+
+        # 建立輸出路徑
+        output_dir = os.path.join("app", "data_server", subject, "notes")
+        os.makedirs(output_dir, exist_ok=True)
+        output_path = os.path.join(output_dir, f"{filename_without_ext}.json")
+        
+        # 讀取現有資料或建立新檔案
+        notes_db = text.read_json(output_path, default_content=[])
+        notes_db.extend(notes_json)
+        text.write_json(notes_db, output_path)
+        
+        logger.info(f"筆記處理完成，已保存到: {output_path}")
+        return {"success": True, "message": "筆記處理完成", "output_path": output_path}
+        
+    except Exception as e:
+        logger.error(f"處理筆記時發生錯誤: {str(e)}", exc_info=True)
+        return {"success": False, "error": str(e)}
 
 
 def processing_lecture(subject, pdf_path):
-
-    original_filename = os.path.basename(pdf_path)
-    filename_without_ext = os.path.splitext(original_filename)[0]
-
-    # using default data
-    OCR_result_list = text.read_json(pdf_path)
-
+    """
+    處理上傳的講義PDF
     
-    pages_list = OCRspaceRequest.merge_words_to_pages(OCR_result_list)
-
-    #test
-    pages_list = pages_list[0:8]
-
-
-    OpenAI = OpenAIRequest()
-
-    # extract keypoints process
-    pages_json = []
-    for page_text in pages_list:
-        page_json = {'Original_text': page_text}
-
-        page_json['Keypoints'] = OpenAI.processing_handouts_extract_keypoints(page_text)
-
-        page_json['Info'] = OpenAI.processing_handouts_page_info(page_text)
-        pages_json.append(page_json)
-
-
-    # extract topic process
-    topics_json = OpenAI.processing_handouts_extract_topic([page_json['Info'] for page_json in pages_json])
-    print(topics_json)
-
-    for i, topic in enumerate(topics_json):
-        start_page = topic['Starting_page'] -1
-        end_page = topics_json[i + 1]['Starting_page'] -1 if i + 1 < len(topics_json) else len(pages_json)
+    Args:
+        subject: 科目名稱
+        pdf_path: PDF路徑
     
-        # 加入 'Pages' 欄位，內含 pages_json 中對應的每一頁資料
-        topic['Pages'] = pages_json[start_page:end_page]
+    Returns:
+        dict: 處理結果
+    """
+    try:
+        logger.info(f"開始處理講義: {pdf_path}, 科目: {subject}")
+        
+        original_filename = os.path.basename(pdf_path)
+        filename_without_ext = os.path.splitext(original_filename)[0]
 
+        # using default data
+        OCR_result_list = text.read_json(pdf_path)
+        
+        pages_list = OCRspaceRequest.merge_words_to_pages(OCR_result_list)
 
-    # extract sections process
-    sections_json = OpenAI.processing_handouts_extract_section([topic['Topic'] for topic in topics_json])
-    print(sections_json)
+        # 僅用於測試 - 處理前8頁
+        pages_list = pages_list[0:min(8, len(pages_list))]
 
-    for i, section in enumerate(sections_json):
-        start_topic = section['Starting_topic'] -1
-        end_topic = sections_json[i + 1]['Starting_topic'] -1 if i + 1 < len(sections_json) else len(topics_json)
-    
-        # 加入 'Topics' 欄位，內含 topics_json 中對應的每一頁資料
-        section['Topics'] = topics_json[start_topic:end_topic]
+        OpenAI = OpenAIRequest()
 
-    
-    # extract chapter process
-    chapter_json = OpenAI.processing_handouts_extract_chapter(filename_without_ext,sections_json[0]['Topics'][0]['Pages'][0]['Original_text'])
-    print(chapter_json)
+        # extract keypoints process
+        pages_json = []
+        for page_text in pages_list:
+            page_json = {'Original_text': page_text}
+            page_json['Keypoints'] = OpenAI.processing_handouts_extract_keypoints(page_text)
+            page_json['Info'] = OpenAI.processing_handouts_page_info(page_text)
+            pages_json.append(page_json)
 
-    chapter_json['Sections'] = sections_json
+        logger.info(f"已處理 {len(pages_json)} 頁並提取重點")
 
-    # save
-    path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + ".json")
-    text.write_json(chapter_json, path)
+        # extract topic process
+        topics_json = OpenAI.processing_handouts_extract_topic([page_json['Info'] for page_json in pages_json])
+        logger.info(f"已提取 {len(topics_json)} 個主題")
 
+        for i, topic in enumerate(topics_json):
+            start_page = topic['Starting_page'] - 1
+            end_page = topics_json[i + 1]['Starting_page'] - 1 if i + 1 < len(topics_json) else len(pages_json)
+            # 加入 'Pages' 欄位，內含 pages_json 中對應的每一頁資料
+            topic['Pages'] = pages_json[start_page:end_page]
 
-    # embedding process
-    keypoints_list = _extract_keypoints_hierarchy(chapter_json)
-    texts_for_embedding = [kp["Title"] + ":\n" + kp["Content"] for kp in keypoints_list]
-    vectors = OpenAI.generate_embedding(texts_for_embedding)
+        # extract sections process
+        sections_json = OpenAI.processing_handouts_extract_section([topic['Topic'] for topic in topics_json])
+        logger.info(f"已提取 {len(sections_json)} 個章節")
 
-    # 加入嵌入向量並移除文字欄位
-    for i, kp in enumerate(keypoints_list):
-        kp.pop("Title", None)
-        kp.pop("Content", None)
-        kp["Embedding"] = vectors[i]
+        for i, section in enumerate(sections_json):
+            start_topic = section['Starting_topic'] - 1
+            end_topic = sections_json[i + 1]['Starting_topic'] - 1 if i + 1 < len(sections_json) else len(topics_json)
+            # 加入 'Topics' 欄位，內含 topics_json 中對應的每一頁資料
+            section['Topics'] = topics_json[start_topic:end_topic]
 
-    # save
-    path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + "_keypoints.json")
-    text.write_json(keypoints_list, path)
+        # extract chapter process
+        chapter_json = OpenAI.processing_handouts_extract_chapter(filename_without_ext,sections_json[0]['Topics'][0]['Pages'][0]['Original_text'])
+        logger.info("已提取章節信息")
 
-    # tree diagram process
-    path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + "_tree.json")
-    media.generate_chapter_hierarchy_graph(chapter_json,path)
+        chapter_json['Sections'] = sections_json
+
+        # 確保目標目錄存在
+        output_dir = os.path.join("app", "data_server", subject, "lectures")
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # save
+        path = os.path.join(output_dir, filename_without_ext + ".json")
+        text.write_json(chapter_json, path)
+        logger.info(f"講義結構已保存到: {path}")
+
+        # embedding process
+        keypoints_list = _extract_keypoints_hierarchy(chapter_json)
+        texts_for_embedding = [kp["Title"] + ":\n" + kp["Content"] for kp in keypoints_list]
+        vectors = OpenAI.generate_embedding(texts_for_embedding)
+
+        # 加入嵌入向量並移除文字欄位
+        for i, kp in enumerate(keypoints_list):
+            kp.pop("Title", None)
+            kp.pop("Content", None)
+            kp["Embedding"] = vectors[i]
+
+        # save
+        keypoints_path = os.path.join(output_dir, filename_without_ext + "_keypoints.json")
+        text.write_json(keypoints_list, keypoints_path)
+        logger.info(f"重點嵌入向量已保存到: {keypoints_path}")
+        
+        # tree diagram process
+        path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + "_tree.json")
+        media.generate_chapter_hierarchy_graph(chapter_json,path)
+        
+        return {"success": True, "message": "講義處理完成", "output_path": path, "keypoints_path": keypoints_path}
+        
+    except Exception as e:
+        logger.error(f"處理講義時發生錯誤: {str(e)}", exc_info=True)
+        return {"success": False, "error": str(e)}
 
 
 def _extract_keypoints_hierarchy(chapter: dict):
@@ -141,23 +186,27 @@ def _extract_keypoints_hierarchy(chapter: dict):
     從巢狀講義 JSON 檔中提取所有 keypoint，並標註其所屬的章節 / 主題 / 頁面索引。
     將結果儲存成新的 JSON 檔案。
     """
+    try:
+        keypoints_list = []
 
-    keypoints_list = []
+        sections = chapter.get('Sections', [])
+        for s_idx, section in enumerate(sections):
+            topics = section.get('Topics', [])
+            for t_idx, topic in enumerate(topics):
+                pages = topic.get('Pages', [])
+                for p_idx, page in enumerate(pages):
+                    keypoints = page.get('Keypoints', [])
+                    for k_idx, k in enumerate(keypoints):
+                        keypoints_list.append({
+                            "Title": k.get("Title", ""),
+                            "Content": k.get("Content", ""),
+                            "Index": [s_idx, t_idx, p_idx, k_idx]
+                        })
 
-    sections = chapter.get('Sections', [])
-    for s_idx, section in enumerate(sections):
-        topics = section.get('Topics', [])
-        for t_idx, topic in enumerate(topics):
-            pages = topic.get('Pages', [])
-            for p_idx, page in enumerate(pages):
-                keypoints = page.get('Keypoints', [])
-                for k_idx, k in enumerate(keypoints):
-                    keypoints_list.append({
-                        "Title": k.get("Title", ""),
-                        "Content": k.get("Content", ""),
-                        "Index": [s_idx, t_idx, p_idx, k_idx]
-                    })
-
-    print(f"✅ Keypoints with hierarchy generated")
-    return keypoints_list
+        logger.info(f"已從章節結構中提取 {len(keypoints_list)} 個重點")
+        return keypoints_list
+        
+    except Exception as e:
+        logger.error(f"提取重點層次結構時發生錯誤: {str(e)}", exc_info=True)
+        return []
 
