@@ -170,13 +170,9 @@ class EasyOCRLocal(LazySingleton):
 
         # 保存處理後的圖片
         saved_path = None
-        if save_path is not None:
-            # 確保保存目錄存在
+        if save_path is not None:  # 如果提供了保存路徑或默認保存
             import os
-            save_dir = os.path.dirname(save_path)
-            if save_dir:  # 如果路徑包含目錄部分
-                os.makedirs(save_dir, exist_ok=True)
-                  
+                
             pil_image.save(save_path)
             saved_path = save_path
             print(f"✅ 已保存處理後的圖片至: {saved_path}")
