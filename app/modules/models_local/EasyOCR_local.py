@@ -1,14 +1,4 @@
-'''
-import sys
-import os
 
-# 找到專案根目錄，並加入 sys.path
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-if PROJECT_ROOT not in sys.path:
-    sys.path.append(PROJECT_ROOT)
-# test
-# ==============================================================================
-'''
 
 import json
 import numpy as np
@@ -212,41 +202,13 @@ class EasyOCRLocal(LazySingleton):
         #print("Step 3")
         lines_box = self._get_lines_box(lines_boxes)
 
-        # 繪製行框但不顯示
-        processed_image = None
-        saved_path = None
+        # 繪製行框並保存
         if draw_result:
             #print("Step 3.5")
-            processed_image, saved_path = self._draw_lines_boxes(pil_image, lines_box, save_path)
+            self._draw_lines_boxes(pil_image, lines_box, save_path)
             # 如需保存處理後的圖像，可以在這裡添加保存代碼
 
         #print("Step 4")
         cropped_images = self._crop_lines_from_PIL(pil_image, lines_box)
-        
-        if draw_result:
-            return cropped_images, processed_image, saved_path
-        else:
-            return cropped_images
 
-
-
-
-
-
-# =====================
-
-'''
-def main():
-    # 創建 YourClass 類的實例
-    your_class_instance = EasyOCRLocal()
-
-    # 打開一個圖片檔案（你可以替換成你自己的圖片檔案）
-    pil_image = Image.open(r"self\handwritten_goodnotes_word.jpg")  # 替換為你的圖片路徑
-
-    # 執行處理並顯示結果
-    your_class_instance.processing_lines_bounding_box(pil_image)
-
-
-if __name__ == "__main__":
-    main()
-'''
+        return cropped_images
