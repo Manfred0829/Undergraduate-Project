@@ -54,9 +54,10 @@ def processing_note(subject, img_path):
         logger.info("筆記修復和重點提取完成")
         
         # embedding process
-        notes_embedding = OpenAI.processing_notes_embedding(notes_json)
-        for i in range(len(notes_embedding)):
-            notes_json[i]['Embedding'] = notes_embedding[i]
+        texts_for_embedding = [nt["Title"] + ":\n" + nt["Content"] for nt in notes_json]
+        vectors = OpenAI.generate_embedding(texts_for_embedding)
+        for i in range(len(vectors)):
+            notes_json[i]['Embedding'] = vectors[i]
         logger.info("嵌入向量處理完成")
 
         # simularity process
@@ -99,22 +100,25 @@ def processing_lecture(subject, pdf_path):
         original_filename = os.path.basename(pdf_path)
         filename_without_ext = os.path.splitext(original_filename)[0]
 
-        # using default data
-        OCR_result_list = text.read_json(pdf_path)
-        
-        pages_list = OCRspaceRequest.merge_words_to_pages(OCR_result_list)
-
         # 僅用於測試 - 處理前8頁
-        pages_list = pages_list[0:min(8, len(pages_list))]
+        #OCR_result_list = text.read_json(pdf_path)
+        #pages_list = pages_list[0:min(8, len(pages_list))]
 
+        # OCR procrss
+        img_list = media.read_pdf_to_images(pdf_path)
+        OCRspace = OCRspaceRequest()
+        pages_list = OCRspace.processing_handouts_OCR(img_list[0:8]) # 測試用，指定測試圖片範圍
+        print(pages_list)
+    
+        # extract keypoints process
         OpenAI = OpenAIRequest()
 
-        # extract keypoints process
         pages_json = []
-        for page_text in pages_list:
+        for i, page_text in enumerate(pages_list):
             page_json = {'Original_text': page_text}
             page_json['Keypoints'] = OpenAI.processing_handouts_extract_keypoints(page_text)
             page_json['Info'] = OpenAI.processing_handouts_page_info(page_text)
+            page_json['page_idx'] = i
             pages_json.append(page_json)
 
         logger.info(f"已處理 {len(pages_json)} 頁並提取重點")
@@ -154,16 +158,21 @@ def processing_lecture(subject, pdf_path):
         text.write_json(chapter_json, path)
         logger.info(f"講義結構已保存到: {path}")
 
+
         # embedding process
         keypoints_list = _extract_keypoints_hierarchy(chapter_json)
-        texts_for_embedding = [kp["Title"] + ":\n" + kp["Content"] for kp in keypoints_list]
-        vectors = OpenAI.generate_embedding(texts_for_embedding)
+        keypoints_flatten = [kp["Title"] + ":\n" + kp["Content"] for kp in keypoints_list]
+        vectors = OpenAI.generate_embedding(keypoints_flatten)
 
-        # 加入嵌入向量並移除文字欄位
+        # generate difficulity, importance process
+        weights = OpenAI.processing_handouts_weights(subject, keypoints_flatten)
+
+        # 加入info
         for i, kp in enumerate(keypoints_list):
-            kp.pop("Title", None)
-            kp.pop("Content", None)
             kp["Embedding"] = vectors[i]
+            kp["Difficulty"] = weights[i]["Difficulty"]
+            kp["Importance"] = weights[i]["Importance"]
+
 
         # save
         keypoints_path = os.path.join(output_dir, filename_without_ext + "_keypoints.json")
@@ -200,7 +209,8 @@ def _extract_keypoints_hierarchy(chapter: dict):
                         keypoints_list.append({
                             "Title": k.get("Title", ""),
                             "Content": k.get("Content", ""),
-                            "Index": [s_idx, t_idx, p_idx, k_idx]
+                            "Index": [s_idx, t_idx, p_idx, k_idx],
+                            "from_page": page["page_idx"]
                         })
 
         logger.info(f"已從章節結構中提取 {len(keypoints_list)} 個重點")

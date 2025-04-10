@@ -152,15 +152,7 @@ class OpenAIRequest(LazySingleton):
         """
 
         return self.generate_content(prompt_prefix+text,return_json=True)
-    
-    def processing_notes_embedding(self,notes_list):
-        texts_list = []
 
-        for note in notes_list:
-            text = note['Title'] + ": " + note['Content']
-            texts_list.append(text)
-
-        return self.generate_embedding(texts_list)
 
     def processing_handouts_extract_keypoints(self,text):
         prompt_prefix = """The content below is the text extracted from a page of lecture ppt.
@@ -289,3 +281,24 @@ class OpenAIRequest(LazySingleton):
         """
 
         return self.generate_content(prompt, max_retries=2, return_json=True)
+
+
+    def processing_handouts_weights(self, subject, keypoints_flatten):
+        prompt = f"""
+        You are given one of the keypoints in the subject {subject}, please complete below tesk:
+
+        1.Evaluate the difficulty of the keypoint (classified as simple, normal, or difficult), represented by a score from 1 to 3.
+        2.Evaluate the importance of the keypoint (classified as irrelevant, general, key point, or very important), represented by a score from 0 to 3.
+        3.Output the result in the following JSON format:
+        {
+        "Difficulty": int,
+        "Importance": int
+        }
+        Below is a keypoint about the subject {subject}:
+        """
+
+        weights = []
+        for keypoint in keypoints_flatten:
+            weight = self.generate_content(prompt + keypoint, return_json=True)
+
+        return weights
