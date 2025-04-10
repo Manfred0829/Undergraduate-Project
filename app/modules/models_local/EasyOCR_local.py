@@ -12,8 +12,9 @@ if PROJECT_ROOT not in sys.path:
 
 import json
 import numpy as np
-import matplotlib.pyplot as plt
+import time
 from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
 
 from app.modules.module_template import LazySingleton
 
@@ -141,20 +142,46 @@ class EasyOCRLocal(LazySingleton):
 
         return lines_box
 
-    def _draw_lines_boxes(self, pil_image, lines_boxes):
-        """根據行方框在圖片上繪製框並顯示"""
-        # 轉換 PIL 物件到可繪製的物件
+    def _draw_lines_boxes(self, pil_image, lines_boxes, save_path=None):
+        """
+        在原始圖片上畫出行框。
+
+        Args:
+            pil_image: PIL.Image
+                要處理的原始圖片。
+            lines_boxes: List[Tuple[int, int, int, int]]
+                包含每行框位置的座標 (x1, y1, x2, y2)。
+            save_path: str, optional
+                如果提供，處理後的圖片將保存到此路徑。如果為 None，不保存圖片。
+        
+        Returns:
+            PIL.Image: 處理後的圖片。
+            str: 保存的圖片路徑（如果有保存）。
+        """
+        # 複製一個新圖片，以免修改原始圖片
+        pil_image = pil_image.copy()
+        
+        # 使用 PIL 的 ImageDraw 進行繪製
         draw = ImageDraw.Draw(pil_image)
 
-        # 繪製每一個行框
         for box in lines_boxes:
             x1, y1, x2, y2 = box
             draw.rectangle([x1, y1, x2, y2], outline="red", width=3)  # 繪製紅色矩形框
 
-        # 顯示圖片（而非儲存）
-        plt.imshow(pil_image)
-        plt.axis('off')  # 不顯示軸線
-        plt.show(block=False)  # 顯示圖片
+        # 保存處理後的圖片
+        saved_path = None
+        if save_path is not None:
+            # 確保保存目錄存在
+            import os
+            save_dir = os.path.dirname(save_path)
+            if save_dir:  # 如果路徑包含目錄部分
+                os.makedirs(save_dir, exist_ok=True)
+                  
+            pil_image.save(save_path)
+            saved_path = save_path
+            print(f"✅ 已保存處理後的圖片至: {saved_path}")
+        
+        return pil_image, saved_path
 
     def _crop_lines_from_PIL(self, pil_image, lines_box):
         """
@@ -181,7 +208,7 @@ class EasyOCRLocal(LazySingleton):
         return cropped_images
 
 
-    def processing_lines_bounding_box(self, pil_image,draw_result=False):
+    def processing_lines_bounding_box(self, pil_image, draw_result=False, save_path=None):
         #print("Step 1")
         OCR_result = self.generate_img_OCR(pil_image)
         #print("Step 2")
@@ -189,15 +216,21 @@ class EasyOCRLocal(LazySingleton):
         #print("Step 3")
         lines_box = self._get_lines_box(lines_boxes)
 
-        # 繪製行框並顯示
+        # 繪製行框但不顯示
+        processed_image = None
+        saved_path = None
         if draw_result:
             #print("Step 3.5")
-            self._draw_lines_boxes(pil_image, lines_box)
+            processed_image, saved_path = self._draw_lines_boxes(pil_image, lines_box, save_path)
+            # 如需保存處理後的圖像，可以在這裡添加保存代碼
 
         #print("Step 4")
-        cropped_images = self._crop_lines_from_PIL(pil_image,lines_box)
+        cropped_images = self._crop_lines_from_PIL(pil_image, lines_box)
         
-        return cropped_images
+        if draw_result:
+            return cropped_images, processed_image, saved_path
+        else:
+            return cropped_images
 
 
 

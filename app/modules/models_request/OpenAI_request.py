@@ -86,29 +86,42 @@ class OpenAIRequest(LazySingleton):
 
 
 
-    def generate_img_OCR(self, base64_image, request_msg='What words are in the picture? Only give me the words.'):
+    def generate_img_OCR(self, base64_image, request_msg='What words are in the picture? Only give me the words.', max_retries=3):
+        for attempt in range(max_retries):
+            try:
+                response = self.model.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                        {
+                            "type": "text",
+                            "text": request_msg,
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                            "url":  f"data:image/jpeg;base64,{base64_image}"
+                            },
+                        },
+                        ],
+                    }
+                    ],
+                )
+                return response.choices[0].message.content
+            
+            except Exception as e:
+                if "rate_limit_exceeded" in str(e):
+                    wait_time = 2 if attempt < max_retries - 1 else 5
+                    print(f"速率限制錯誤，等待 {wait_time} 秒後重試 (第 {attempt + 1} 次)...")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    print(f"發生錯誤: {e} (第 {attempt + 1} 次重試)...")
+                    time.sleep(2)
 
-        response = self.model.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-            {
-                "role": "user",
-                "content": [
-                {
-                    "type": "text",
-                    "text": request_msg,
-                },
-                {
-                    "type": "image_url",
-                    "image_url": {
-                    "url":  f"data:image/jpeg;base64,{base64_image}"
-                    },
-                },
-                ],
-            }
-            ],
-        )
-        return response.choices[0].message.content
+        raise RuntimeError("⛔ 超過最大重試次數，請求失敗")
 
 
     def processing_data_example(self):
