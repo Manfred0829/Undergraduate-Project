@@ -38,7 +38,7 @@ def process_lecture_async(subject, file_path, file_id):
         # 處理過程中出現錯誤
         set_processing_status(file_id, 'error', str(e))
 
-def process_note_async(subject, file_path, file_id):
+def process_note_async(subject, lecture_name, file_path, file_id):
     """
     非同步處理筆記
     
@@ -52,7 +52,7 @@ def process_note_async(subject, file_path, file_id):
         set_processing_status(file_id, 'processing')
         
         # 進行實際處理
-        result = main_processer.processing_note(subject, file_path)
+        result = main_processer.processing_note(subject, lecture_name, file_path)
         
         # 根據處理結果設置狀態
         if result['success']:
@@ -112,7 +112,7 @@ def upload_note_route():
         # 非同步處理筆記文件
         thread = threading.Thread(
             target=process_note_async,
-            args=(subject, result['save_path'], result['file_id'])
+            args=(subject, lecture_name, result['save_path'], result['file_id'])
         )
         thread.daemon = True
         thread.start()
