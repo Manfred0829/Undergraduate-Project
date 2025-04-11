@@ -113,4 +113,34 @@ def subject_quizzes(subject):
     return jsonify({
         'success': True,
         'quizzes': []
+    })
+
+@main_bp.route('/api/subjects/<subject>/lecture_tree_images')
+def subject_lecture_tree_images(subject):
+    """API端點：獲取指定科目的講義樹狀結構圖"""
+    import os
+    from flask import current_app
+    
+    # 檢查科目是否存在
+    subjects = get_subjects()
+    if subject not in subjects:
+        return jsonify({'error': '科目不存在'}), 404
+    
+    # 查找該科目下所有以tree.json.png結尾的文件
+    tree_images = []
+    lectures_dir = os.path.join(current_app.config['DATA_SERVER_DIR'], subject, 'lectures')
+    
+    if os.path.exists(lectures_dir):
+        for file in os.listdir(lectures_dir):
+            if file.endswith('tree.json.png'):
+                # 生成文件的URL路徑
+                image_path = f'/data_server/{subject}/lectures/{file}'
+                tree_images.append(image_path)
+    
+    # 按文件名排序（通常包含數字，如w1, w2等）
+    tree_images.sort()
+    
+    return jsonify({
+        'success': True,
+        'images': tree_images
     }) 
