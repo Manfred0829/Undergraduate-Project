@@ -1,4 +1,4 @@
-from app.utils import media_processer as media, text_processer as text
+from app.utils import media_processer as media, text_processer as text, similarity_calculator as sim
 from app.modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
@@ -15,7 +15,7 @@ def ensure_directory_exists(directory_path):
         os.makedirs(directory_path, exist_ok=True)
         logger.info(f"創建目錄: {directory_path}")
 
-def processing_note(subject, img_path):
+def processing_note(subject, lecture_name, img_path):
     """
     處理上傳的筆記圖片
     
@@ -71,6 +71,7 @@ def processing_note(subject, img_path):
             result = OpenAI.processing_notes_correct(subject,note)
             note['isCorrected'] = result['isCorrected']
 
+            # 如果筆記觀念錯誤則將Content替換成更正後，並另外保留原始內容
             if result['isCorrected']:
                 note['Wrong_Content'] = note['Content']
                 note['Content'] = result['Corrected_Content']
@@ -84,18 +85,32 @@ def processing_note(subject, img_path):
             notes_json[i]['Embedding'] = vectors[i]
         logger.info("嵌入向量處理完成")
 
-        # simularity process
-        # temp mocking
-        for note in notes_json:
-            note['Keypoint_id'] = -1
 
-        # 建立輸出路徑
-        output_path = os.path.join(notes_output_dir, f"{filename_without_ext}.json")
+        # simularity process
+        keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecture_name) # 讀取keypoints資料
+        keypoints_json = text.read_json(keypoints_path)
+        keypoints_embedding = [k["Embedding"] for k in keypoints_json]
+
+        for n_idx, note in enumerate(notes_json):
+            # 筆記json中儲存k_idx
+            k_idx = sim.get_most_similar_index(note["Embedding"],keypoints_embedding)
+            note["Keypoint_Index"] = k_idx
+
+            # 講義json中儲存n_idx
+            note_info = {"Notes_File_Name":original_filename , "Note_Index":n_idx}
+            if "Notes" not in keypoints_json[k_idx]:
+                keypoints_json[k_idx]["Notes"] = [note_info]
+            else:
+                keypoints_json[k_idx]["Notes"].append(note_info)
         
-        # 讀取現有資料或建立新檔案
-        notes_db = text.read_json(output_path, default_content=[])
-        notes_db.extend(notes_json)
-        text.write_json(notes_db, output_path)
+        text.write_json(keypoints_json,keypoints_path) # 儲存更新後的keypoints資料
+        logger.info("相似度對應處理完成")
+        
+        # save
+        notes_save = {"Lecture_Name": lecture_name, "Notes": notes_json}
+        output_path = os.path.join(notes_output_dir, f"{filename_without_ext}.json")
+        text.write_json(notes_save, output_path)
+
         
         logger.info(f"筆記處理完成，已保存到: {output_path}")
         return {"success": True, "message": "筆記處理完成", "output_path": output_path}
@@ -276,7 +291,7 @@ def processing_lecture(subject, pdf_path):
         logger.info(f"重點嵌入向量已保存到: {keypoints_path}")
         
         # tree diagram process
-        tree_path = os.path.join(lectures_output_dir, filename_without_ext + "_tree.json")
+        tree_path = os.path.join(lectures_output_dir, filename_without_ext + "_tree")
         tree_img_path = tree_path + ".png"
         try:
             media.generate_chapter_hierarchy_graph(chapter_json, tree_path)
