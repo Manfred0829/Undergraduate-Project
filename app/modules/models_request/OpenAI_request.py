@@ -152,6 +152,18 @@ class OpenAIRequest(LazySingleton):
         """
 
         return self.generate_content(prompt_prefix+text,return_json=True)
+    
+    def processing_notes_correct(self,subject,note):
+        prompt_prefix = f"""The content below is a student note of the subject {subject}, complete the following task.
+
+        Task:
+        1. If the note contains conceptual errors, please correct the Content description and output as the json format: {{"isCorrected":True, "Corrected_Content":"the corrected content of the note"}}
+        2. If the note does not contains conceptual errors, please output as the json format: {{"isCorrected":False}}
+
+        text of a student note:
+        """
+        prompt_note = "Title: " + note['Title'] + "\nCnotent: " + note['Content']
+        return self.generate_content(prompt_prefix+prompt_note,return_json=True)
 
 
     def processing_handouts_extract_keypoints(self,text):
@@ -301,5 +313,6 @@ class OpenAIRequest(LazySingleton):
         for keypoint in keypoints_flatten:
             weight = self.generate_content(prompt + keypoint, return_json=True)
             weights.append(weight)
+            time.sleep(0.1)
 
         return weights
