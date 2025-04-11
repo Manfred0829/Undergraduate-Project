@@ -290,15 +290,16 @@ class OpenAIRequest(LazySingleton):
         1.Evaluate the difficulty of the keypoint (classified as simple, normal, or difficult), represented by a score from 1 to 3.
         2.Evaluate the importance of the keypoint (classified as irrelevant, general, key point, or very important), represented by a score from 0 to 3.
         3.Output the result in the following JSON format:
-        {
-        "Difficulty": int,
-        "Importance": int
-        }
+        {{
+        "Difficulty": 1,
+        "Importance": 1
+        }}
         Below is a keypoint about the subject {subject}:
         """
 
         weights = []
         for keypoint in keypoints_flatten:
             weight = self.generate_content(prompt + keypoint, return_json=True)
+            weights.append(weight)
 
         return weights
