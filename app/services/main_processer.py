@@ -9,6 +9,12 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+def ensure_directory_exists(directory_path):
+    """確保目錄存在，如果不存在則創建它"""
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path, exist_ok=True)
+        logger.info(f"創建目錄: {directory_path}")
+
 def processing_note(subject, img_path):
     """
     處理上傳的筆記圖片
@@ -27,6 +33,10 @@ def processing_note(subject, img_path):
         original_filename = os.path.basename(img_path)
         filename_without_ext = os.path.splitext(original_filename)[0]
 
+        # 確保目錄存在
+        notes_output_dir = os.path.join("app", "data_server", subject, "notes")
+        ensure_directory_exists(notes_output_dir)
+        
         # Img process
         EasyOCR = EasyOCRLocal()
         img_PIL = media.read_image_to_PIL(img_path)
@@ -66,9 +76,7 @@ def processing_note(subject, img_path):
             note['Keypoint_id'] = -1
 
         # 建立輸出路徑
-        output_dir = os.path.join("app", "data_server", subject, "notes")
-        os.makedirs(output_dir, exist_ok=True)
-        output_path = os.path.join(output_dir, f"{filename_without_ext}.json")
+        output_path = os.path.join(notes_output_dir, f"{filename_without_ext}.json")
         
         # 讀取現有資料或建立新檔案
         notes_db = text.read_json(output_path, default_content=[])
@@ -99,6 +107,10 @@ def processing_lecture(subject, pdf_path):
         
         original_filename = os.path.basename(pdf_path)
         filename_without_ext = os.path.splitext(original_filename)[0]
+        
+        # 確保目錄存在
+        lectures_output_dir = os.path.join("app", "data_server", subject, "lectures")
+        ensure_directory_exists(lectures_output_dir)
 
         # 僅用於測試 - 處理前8頁
         #OCR_result_list = text.read_json(pdf_path)
@@ -106,9 +118,16 @@ def processing_lecture(subject, pdf_path):
 
         # OCR procrss
         img_list = media.read_pdf_to_images(pdf_path)
+        if not img_list or len(img_list) == 0:
+            logger.error(f"無法讀取PDF: {pdf_path}")
+            return {"success": False, "error": "無法讀取PDF檔案"}
+            
         OCRspace = OCRspaceRequest()
-        pages_list = OCRspace.processing_handouts_OCR(img_list[0:8]) # 測試用，指定測試圖片範圍
-        print(pages_list)
+        
+        # 限制處理頁數，防止API成本過高 (測試用)
+        max_pages = min(8, len(img_list))
+        pages_list = OCRspace.processing_handouts_OCR(img_list[0:max_pages])
+        logger.info(f"OCR識別完成，共處理 {len(pages_list)} 頁")
     
         # extract keypoints process
         OpenAI = OpenAIRequest()
@@ -150,14 +169,9 @@ def processing_lecture(subject, pdf_path):
         chapter_json['Sections'] = sections_json
 
         # 確保目標目錄存在
-        output_dir = os.path.join("app", "data_server", subject, "lectures")
-        os.makedirs(output_dir, exist_ok=True)
-        
-        # save
-        path = os.path.join(output_dir, filename_without_ext + ".json")
+        path = os.path.join(lectures_output_dir, filename_without_ext + ".json")
         text.write_json(chapter_json, path)
         logger.info(f"講義結構已保存到: {path}")
-
 
         # embedding process
         keypoints_list = _extract_keypoints_hierarchy(chapter_json)
@@ -173,17 +187,22 @@ def processing_lecture(subject, pdf_path):
             kp["Difficulty"] = weights[i]["Difficulty"]
             kp["Importance"] = weights[i]["Importance"]
 
-
         # save
-        keypoints_path = os.path.join(output_dir, filename_without_ext + "_keypoints.json")
+        keypoints_path = os.path.join(lectures_output_dir, filename_without_ext + "_keypoints.json")
         text.write_json(keypoints_list, keypoints_path)
         logger.info(f"重點嵌入向量已保存到: {keypoints_path}")
         
         # tree diagram process
-        path = os.path.join("app", "data_server", subject, "lectures", filename_without_ext + "_tree.json")
-        media.generate_chapter_hierarchy_graph(chapter_json,path)
+        tree_path = os.path.join(lectures_output_dir, filename_without_ext + "_tree.json")
+        media.generate_chapter_hierarchy_graph(chapter_json, tree_path)
         
-        return {"success": True, "message": "講義處理完成", "output_path": path, "keypoints_path": keypoints_path}
+        return {
+            "success": True, 
+            "message": "講義處理完成", 
+            "output_path": path, 
+            "keypoints_path": keypoints_path,
+            "tree_path": tree_path
+        }
         
     except Exception as e:
         logger.error(f"處理講義時發生錯誤: {str(e)}", exc_info=True)

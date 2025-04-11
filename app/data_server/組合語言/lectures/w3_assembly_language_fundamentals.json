@@ -1,0 +1,255 @@
+{
+    "Chapter": "Chapter 3: Assembly Language Fundamentals",
+    "Sections": [
+        {
+            "Section": "Foundations of Assembly Language",
+            "Starting_topic": 1,
+            "Topics": [
+                {
+                    "Topic": "Introduction to Assembly Language",
+                    "Starting_page": 1,
+                    "Pages": [
+                        {
+                            "Original_text": "Assembly Language\nFundamentals\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Assembly Language Fundamentals"
+                            },
+                            "page_idx": 0
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Basic Elements and Syntax",
+                    "Starting_page": 2,
+                    "Pages": [
+                        {
+                            "Original_text": "Outline\nBasic Elements of Assembly Language\nExample: Adding and Subtracting Integers\nAssembling, Linking, and Running Programs\nDefining Data\nSymbolic Constants\nHomework\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Basic Elements of Assembly Language, Example: Adding and Subtracting Integers, Assembling, Linking, and Running Programs, Defining Data, Symbolic Constants, Homework"
+                            },
+                            "page_idx": 1
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Data Types and Representations",
+                    "Starting_page": 3,
+                    "Pages": [
+                        {
+                            "Original_text": "Integer Literals\nLiterals: also known as constant\nSyntax:\ndigits [radix]\nOptional leading + or — sign\nDigits can be binary, decimal, hexadecimal, or octal digits\nCommon radix characters:\nh — hexadecimal\no\nd — decimal\no\nb — binary\no\no r — encoded real\nExamples: 30d, 6Ah, 42, 1101b\nHexadecimal beginning with letter must have a leading zero, e.g.,\nTo prevent the assembler from interpreting it as an identifier\no\nOA5h\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Definition of Literals",
+                                    "Content": "Literals: also known as constant"
+                                },
+                                {
+                                    "Title": "Syntax Rules",
+                                    "Content": "digits [radix], optional signs"
+                                },
+                                {
+                                    "Title": "Digit Types",
+                                    "Content": "Binary, decimal, hexadecimal, octal"
+                                },
+                                {
+                                    "Title": "Common Radix Characters",
+                                    "Content": "h - hexadecimal, d - decimal, b - binary"
+                                },
+                                {
+                                    "Title": "Example Literals",
+                                    "Content": "Examples: 30d, 6Ah, 42, 1101b"
+                                },
+                                {
+                                    "Title": "Hexadecimal Format",
+                                    "Content": "Leading zero prevents misinterpretation"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Integer Literals and their Syntax"
+                            },
+                            "page_idx": 2
+                        },
+                        {
+                            "Original_text": "Integer Expressions\nOperators and precedence levels:\nOperator\nMOD\nName\nparentheses\nunary plus, minus\nmultiply, divide\nmodulus\nadd, subtract\nExamples:\nExpression\n16 / s\n2S mod 3\n1)\nPrecedence Level\n2\n3\n3\n4\nValue\n3\n-35\n20\n1\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operators and Precedence Levels",
+                                    "Content": "MOD, parentheses, unary plus, minus, multiply, divide, modulus, add, subtract"
+                                },
+                                {
+                                    "Title": "Precedence Levels",
+                                    "Content": "1: parentheses, 2: unary plus, minus, 3: multiply, divide, 4: add, subtract"
+                                },
+                                {
+                                    "Title": "Expression Examples",
+                                    "Content": "16 / s, 2S mod 3"
+                                },
+                                {
+                                    "Title": "Value of Expressions",
+                                    "Content": "3, -35, 20, 1"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Integer Expressions and Operators Precedence"
+                            },
+                            "page_idx": 3
+                        },
+                        {
+                            "Original_text": "Real Number Literals (Skip!)\nDecimal Real\n[sign] integer.[integer [exponent]]\nE.g., 2., +3.0, -44.2E+05, 26.E5\nNote, a real number constant must have a digit and a decimal point\nEncoded Real\nSpecify by IEEE standard\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Decimal Real Structure",
+                                    "Content": "[sign] integer.[integer [exponent]]"
+                                },
+                                {
+                                    "Title": "Decimal Real Examples",
+                                    "Content": "E.g., 2., +3.0, -44.2E+05, 26.E5"
+                                },
+                                {
+                                    "Title": "Real Number Constant Rule",
+                                    "Content": "Must have a digit and a decimal point"
+                                },
+                                {
+                                    "Title": "Encoded Real Standard",
+                                    "Content": "Specify by IEEE standard"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Real Number Literals and Representation"
+                            },
+                            "page_idx": 4
+                        },
+                        {
+                            "Original_text": "Character and String Literals\nCharacter literals: enclose character in single or double quotes\nASCII character = 1 byte\nString literals: enclose strings in single or double quotes\n\"ABC\"\n'xyz'\nEach character occupies a single byte\nEmbedded quotes:\n'Say \"Goodnight,\" Gracie'\nPractice: I don't \"listen\" to radio\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Character Literals Definition",
+                                    "Content": "Character literals: enclose character in single or double quotes"
+                                },
+                                {
+                                    "Title": "ASCII Character Size",
+                                    "Content": "ASCII character = 1 byte"
+                                },
+                                {
+                                    "Title": "String Literals Definition",
+                                    "Content": "String literals: enclose strings in single or double quotes"
+                                },
+                                {
+                                    "Title": "Example String Literals",
+                                    "Content": "\"ABC\" and 'xyz'"
+                                },
+                                {
+                                    "Title": "Character Byte Size",
+                                    "Content": "Each character occupies a single byte"
+                                },
+                                {
+                                    "Title": "Embedded Quotes Example",
+                                    "Content": "'Say \"Goodnight,\" Gracie'"
+                                },
+                                {
+                                    "Title": "Practice Example",
+                                    "Content": "I don't \"listen\" to radio"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Character and String Literals"
+                            },
+                            "page_idx": 5
+                        },
+                        {
+                            "Original_text": "Reserved Words\nReserved words cannot be used as identifiers\nInstruction mnemonics (ADD, MOV ... )\nDirectives (tell MASM how to assemble programs)\nType attributes (BYTE, WORD ...)\nOperators (+, -\nPredefined symbols (@data ... )\nsection . data\nmsg\nsection\nglobal\n_ start :\ndb 'Hello,\n. text\nstart\nworld!\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Reserved Words Definition",
+                                    "Content": "Reserved words cannot be used as identifiers."
+                                },
+                                {
+                                    "Title": "Instruction Mnemonics",
+                                    "Content": "Instruction mnemonics (ADD, MOV ...)"
+                                },
+                                {
+                                    "Title": "Directives Purpose",
+                                    "Content": "Directives tell MASM how to assemble programs."
+                                },
+                                {
+                                    "Title": "Type Attributes",
+                                    "Content": "Type attributes include BYTE, WORD ..."
+                                },
+                                {
+                                    "Title": "Operators Examples",
+                                    "Content": "Operators include +, -."
+                                },
+                                {
+                                    "Title": "Predefined Symbols",
+                                    "Content": "Predefined symbols such as @data ..."
+                                },
+                                {
+                                    "Title": "Data Section",
+                                    "Content": "section .data indicates the data section."
+                                },
+                                {
+                                    "Title": "Message Definition",
+                                    "Content": "msg is defined in the data."
+                                },
+                                {
+                                    "Title": "Code Section",
+                                    "Content": "section .text indicates the code section."
+                                },
+                                {
+                                    "Title": "Global Declaration",
+                                    "Content": "global is used for visibility."
+                                },
+                                {
+                                    "Title": "Start Marker",
+                                    "Content": "_start: indicates the entry point."
+                                },
+                                {
+                                    "Title": "Data Bytes",
+                                    "Content": "db 'Hello, world!' defines data."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Reserved words in programming languages"
+                            },
+                            "page_idx": 6
+                        },
+                        {
+                            "Original_text": "Identifiers\nIdentifiers: a programmer chosen name\n1-247 characters, including digits\nCase insensitive (assembler dependent)\nFirst character must be a letter, _, @, or $\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Definition of Identifiers",
+                                    "Content": "Identifiers: a programmer chosen name"
+                                },
+                                {
+                                    "Title": "Character Limit",
+                                    "Content": "1-247 characters, including digits"
+                                },
+                                {
+                                    "Title": "Case Sensitivity",
+                                    "Content": "Case insensitive (assembler dependent)"
+                                },
+                                {
+                                    "Title": "Starting Character Rules",
+                                    "Content": "First character must be a letter, _, @, or $"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Identifiers in programming"
+                            },
+                            "page_idx": 7
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

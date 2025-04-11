@@ -76,7 +76,7 @@ def check_environment():
     
     # 檢查是否已安裝為開發模式
     try:
-        import undergraduate_project
+        import Undergraduate_Project
         print("\n專案已正確安裝")
     except ImportError:
         print("\n建議：執行 'pip install -e .' 安裝專案")

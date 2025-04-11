@@ -15,12 +15,13 @@
                             "Info": {
                                 "Type": "Title",
                                 "Content": "x86 Processor Architecture"
-                            }
+                            },
+                            "page_idx": 0
                         }
                     ]
                 },
                 {
-                    "Topic": "Overview of x86 Processors",
+                    "Topic": "Overview and Characteristics of x86 Architecture",
                     "Starting_page": 2,
                     "Pages": [
                         {
@@ -29,7 +30,8 @@
                             "Info": {
                                 "Type": "Outline",
                                 "Content": "What is x86 Processors?, 32-bit x86 Processors, 64-bit x86-64 Processors"
-                            }
+                            },
+                            "page_idx": 1
                         },
                         {
                             "Original_text": "What is x86 Processors?\nThe x86 architecture is a widely used computer processor architecture,\noriginally launched by Intel in 1978\nThe name comes from the naming of Intel's early processors, such as 8086,\n80286, 80386 and 80486, among which \"86\" became the common identifier of\nthis series of processors\n",
@@ -39,29 +41,24 @@
                                     "Content": "The x86 architecture is a widely used computer processor architecture."
                                 },
                                 {
-                                    "Title": "Intel's Launch Year",
+                                    "Title": "Launch Year",
                                     "Content": "Originally launched by Intel in 1978."
                                 },
                                 {
                                     "Title": "Origin of the Name",
-                                    "Content": "The name comes from Intel's early processors."
+                                    "Content": "Name comes from early Intel processors."
                                 },
                                 {
                                     "Title": "Common Identifier",
-                                    "Content": "'86' became the common identifier of this series."
+                                    "Content": "\"86\" became the common identifier of this series."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "x86 processor architecture"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "Topic": "Characteristics of x86 Architecture",
-                    "Starting_page": 4,
-                    "Pages": [
+                                "Content": "x86 processors architecture overview"
+                            },
+                            "page_idx": 2
+                        },
                         {
                             "Original_text": "Characteristics of x86 architecture\nBackward compatibility: New x86 processors can run software designed for\nolder processors. This means that code written decades ago can still be run\non modern x86 systems.\nWidely supported: Due to the popularity of the x86 architecture, almost all\noperating systems and software support this architecture. This includes major\noperating systems such as Windows, Linux, and macOS.\n",
                             "Keypoints": [
@@ -70,96 +67,103 @@
                                     "Content": "New x86 processors can run software designed for older processors."
                                 },
                                 {
-                                    "Title": "Wide Support",
+                                    "Title": "Widely Supported",
                                     "Content": "Almost all operating systems and software support x86 architecture."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
                                 "Content": "Characteristics of x86 architecture"
-                            }
+                            },
+                            "page_idx": 3
                         },
                         {
                             "Original_text": "Characteristics of x86 architecture\nExtensive hardware and software support: There are a large number of\nhardware and software tools designed for the x86 architecture on the market,\nensuring a good ecosystem and user support.\nComplex instruction set: x86 is a complex instruction set computer (CISC)\nwhose instruction set contains a large number of instructions and features\ndesigned to complete complex tasks through a single instruction to reduce\nprogram code length and improve efficiency.\n",
                             "Keypoints": [
                                 {
                                     "Title": "Hardware and Software Support",
-                                    "Content": "There are a large number of hardware and software tools designed for the x86 architecture on the market, ensuring a good ecosystem and user support."
+                                    "Content": "Extensive hardware and software support: There are a large number of hardware and software tools designed for the x86 architecture on the market, ensuring a good ecosystem and user support."
                                 },
                                 {
                                     "Title": "Complex Instruction Set",
-                                    "Content": "x86 is a complex instruction set computer (CISC) whose instruction set contains a large number of instructions and features designed to complete complex tasks through a single instruction to reduce program code length and improve efficiency."
+                                    "Content": "Complex instruction set: x86 is a complex instruction set computer (CISC) whose instruction set contains a large number of instructions and features designed to complete complex tasks through a single instruction to reduce program code length and improve efficiency."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
                                 "Content": "Characteristics of x86 architecture"
-                            }
+                            },
+                            "page_idx": 4
                         }
                     ]
                 }
             ]
         },
         {
-            "Section": "Computer System Components",
-            "Starting_topic": 4,
+            "Section": "Components and Functions of CPU",
+            "Starting_topic": 3,
             "Topics": [
                 {
-                    "Topic": "Components of a Computer System",
+                    "Topic": "Detailed Components of Computer Architecture",
                     "Starting_page": 6,
                     "Pages": [
                         {
-                            "Original_text": "registers\nCentral Processor Unit\ndata bus\nMemory Storage\nDevice\nUnit\n#1\nDevice\n#2\nALU\n(CPU)\nCU\nclock\nconfrol bus\naddress bus\n",
+                            "Original_text": "registers\nCentral Processor Unit\ndata bus\nMemory Storage\nDevice\nUnit\n#1\nDevice\n#2\nALU\n(CPU)\nCU\nclock\nconÜol bus\naddress bus\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Registers Overview",
-                                    "Content": "Registers are small, fast storage locations."
+                                    "Title": "Registers in Computing",
+                                    "Content": "registers"
                                 },
                                 {
-                                    "Title": "Central Processor Unit",
-                                    "Content": "The core component for processing."
+                                    "Title": "Central Processing Unit",
+                                    "Content": "Central Processor Unit"
                                 },
                                 {
-                                    "Title": "Data Bus Functionality",
-                                    "Content": "Bus for transferring data."
+                                    "Title": "Data Transmission",
+                                    "Content": "data bus"
                                 },
                                 {
-                                    "Title": "Memory Storage Types",
-                                    "Content": "Different forms of data storage."
+                                    "Title": "Memory Management",
+                                    "Content": "Memory Storage"
                                 },
                                 {
-                                    "Title": "Device Unit #1 Role",
-                                    "Content": "First device unit in processing."
+                                    "Title": "Device Connections",
+                                    "Content": "Device Unit"
                                 },
                                 {
-                                    "Title": "Device Unit #2 Role",
-                                    "Content": "Second device unit in processing."
+                                    "Title": "Device #1 Details",
+                                    "Content": "Device #1"
                                 },
                                 {
-                                    "Title": "ALU Explanation",
-                                    "Content": "Arithmetic Logic Unit in CPU."
+                                    "Title": "Device #2 Details",
+                                    "Content": "Device #2"
                                 },
                                 {
-                                    "Title": "CU Functions",
-                                    "Content": "Control Unit coordinates operations."
+                                    "Title": "Arithmetic Logic Unit",
+                                    "Content": "ALU (CPU)"
                                 },
                                 {
-                                    "Title": "Clock Signal Importance",
-                                    "Content": "To synchronize system operations."
+                                    "Title": "Control Unit Functions",
+                                    "Content": "CU"
                                 },
                                 {
-                                    "Title": "Control Bus Purpose",
-                                    "Content": "Handles control signals transmission."
+                                    "Title": "Clock Signal",
+                                    "Content": "clock"
                                 },
                                 {
-                                    "Title": "Address Bus Function",
-                                    "Content": "Transmits memory addresses."
+                                    "Title": "Control Bus Functionality",
+                                    "Content": "conÜol bus"
+                                },
+                                {
+                                    "Title": "Address Bus Role",
+                                    "Content": "address bus"
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "Components of a Computer System"
-                            }
+                                "Content": "Components of a Computer Architecture"
+                            },
+                            "page_idx": 5
                         },
                         {
                             "Original_text": "Outline\nWhat is x86 Processors?\n32-bit x86 Processors\n64-bit x86-64 Processors\n",
@@ -167,40 +171,56 @@
                             "Info": {
                                 "Type": "Outline",
                                 "Content": "What is x86 Processors?, 32-bit x86 Processors, 64-bit x86-64 Processors"
-                            }
-                        },
+                            },
+                            "page_idx": 6
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Understanding CPU Registers",
+                    "Starting_page": 8,
+                    "Pages": [
                         {
-                            "Original_text": "Registers\nthe CPU\nRegisters are high-speed storage locations directly inside\nIntel basic program execution registers\no\no\no\no\n8 general-purpose registers\n6 segment registers\n32-bit General-Purpose Registers\nEFLAGS: processor status flag\nEIP: instruction pointer\nEBX\nECX\nEDX\nEFLAGS\nEIP\nEBP\nESP\nESI\nEDI\n16-bit Segment Registers\nss\nDS\nES\nFS\nGS\n",
+                            "Original_text": "Registers\nthe CPU\nRegisters are high-speed storage locations directly inside\nIntel basic program execution registers\no\no\no\no\n8 general-purpose registers\n6 segment registers\n32-bit General-Purpose Registers\nEFLAGS: processor status flag\nEIP: instruction pointer\nEBX\nECX\nEDX\nEFLAGS\nEIP\nEBP\nESP\nESI\nEDI\n16-bit Segment Registers\ncs\nss\nDS\nES\nFS\nGS\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Registers Overview",
-                                    "Content": "Registers are high-speed storage locations directly inside CPU."
+                                    "Title": "High-Speed Storage Locations",
+                                    "Content": "Registers are high-speed storage locations directly inside the CPU."
                                 },
                                 {
                                     "Title": "Intel Program Execution Registers",
-                                    "Content": "Includes 8 general-purpose registers and 6 segment registers."
+                                    "Content": "Intel basic program execution registers include several types."
                                 },
                                 {
-                                    "Title": "General-Purpose Registers",
-                                    "Content": "32-bit registers: EBX, ECX, EDX, EBP, ESP, ESI, EDI."
+                                    "Title": "General-Purpose Registers Count",
+                                    "Content": "8 general-purpose registers available."
                                 },
                                 {
-                                    "Title": "Processor Status Flag",
-                                    "Content": "EFLAGS indicates processor status."
+                                    "Title": "Segment Registers Count",
+                                    "Content": "6 segment registers available."
                                 },
                                 {
-                                    "Title": "Instruction Pointer",
-                                    "Content": "EIP: points to the next instruction."
+                                    "Title": "32-bit General-Purpose Registers",
+                                    "Content": "Registers include EFLAGS, EIP, EBX, ECX, EDX, EBP, ESP, ESI, EDI."
+                                },
+                                {
+                                    "Title": "EFLAGS Usage",
+                                    "Content": "EFLAGS is used for processor status flag."
+                                },
+                                {
+                                    "Title": "EIP Function",
+                                    "Content": "EIP acts as the instruction pointer."
                                 },
                                 {
                                     "Title": "16-bit Segment Registers",
-                                    "Content": "Includes ss, DS, ES, FS, GS."
+                                    "Content": "Includes cs, ss, DS, ES, FS, GS."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "CPU Registers and their Types"
-                            }
+                                "Content": "CPU Registers and their types"
+                            },
+                            "page_idx": 7
                         }
                     ]
                 }

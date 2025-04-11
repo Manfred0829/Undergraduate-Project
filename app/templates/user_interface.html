@@ -1903,7 +1903,7 @@
             let attempts = 0;
 
             const checkStatus = () => {
-                fetch(`/api/process/status/${fileType}/${fileId}`, {
+                fetch(`/api/process/status/${fileType}/${fileId}?subject=${encodeURIComponent(subject)}`, {
                     method: 'GET'
                 })
                 .then(response => {
