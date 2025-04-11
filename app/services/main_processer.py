@@ -58,11 +58,25 @@ def processing_note(subject, img_path):
             logger.info(f"OCR識別結果: {OCR_result_text[:30]}...")
             page_texts += OCR_result_text + "\n"
 
-        # LLM process
+        # repair process
         repaired_page = OpenAI.processing_notes_repair(page_texts)
-        notes_json = OpenAI.processing_notes_extract_keypoints(repaired_page)
-        logger.info("筆記修復和重點提取完成")
+        logger.info("筆記修復完成")
         
+        # extract process
+        notes_json = OpenAI.processing_notes_extract_keypoints(repaired_page)
+        logger.info("重點提取完成")
+
+        # correct process
+        for note in notes_json:
+            result = OpenAI.processing_notes_correct(subject,note)
+            note['isCorrected'] = result['isCorrected']
+
+            if result['isCorrected']:
+                note['Wrong_Content'] = note['Content']
+                note['Content'] = result['Corrected_Content']
+        logger.info("重點觀念修正完成")
+
+
         # embedding process
         texts_for_embedding = [nt["Title"] + ":\n" + nt["Content"] for nt in notes_json]
         vectors = OpenAI.generate_embedding(texts_for_embedding)
