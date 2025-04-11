@@ -75,27 +75,14 @@ class OpenAIRequest(LazySingleton):
         
     def generate_embedding(self, text_list):
 
-        # 過濾空字符串和無效值，並確保每個項目都是字符串
-        filtered_text_list = []
-        for text in text_list:
-            if text and isinstance(text, str) and len(text.strip()) > 5:  # 確保文字不為空且至少有5個字符
-                filtered_text_list.append(text.replace("\n", " "))
-            else:
-                # 對於無效文本，使用佔位符，以保持索引一致性
-                filtered_text_list.append("Empty content placeholder")
-        
-        try:
-            response = self.model.embeddings.create(
-                input=filtered_text_list,
-                model="text-embedding-3-small"
-            )
-            
-            return [response.data[i].embedding for i in range(len(response.data))]
-        
-        except Exception as e:
-            print(f"嵌入生成錯誤: {e}")
-            # 如果發生錯誤，返回空矩陣（維度1536，即text-embedding-3-small的向量維度）
-            return [[0.0] * 1536 for _ in range(len(filtered_text_list))]
+        # text_list = [text.replace("\n", " ") for text in text_list]
+
+        response = self.model.embeddings.create(
+            input=text_list,
+            model="text-embedding-3-small"
+        )
+
+        return [response.data[i].embedding for i in range(len(response.data))]
 
 
 
@@ -283,11 +270,6 @@ class OpenAIRequest(LazySingleton):
 
     def processing_handouts_extract_chapter(self, filename_without_ext, first_page):
 
-        # 檢查輸入參數
-        if not first_page or not isinstance(first_page, str) or len(first_page.strip()) < 5:
-            # 如果沒有有效的第一頁文本，則直接使用檔名作為章節名稱
-            return {"Chapter": filename_without_ext or "未命名章節"}
-
         prompt = f"""
         You are given the filename and the content of the first page of a lecture handout (usually the title slide). Based on these, extract the **name of the main chapter or unit** this lecture belongs to.
 
@@ -310,18 +292,7 @@ class OpenAIRequest(LazySingleton):
         {first_page.strip()}
         """
 
-        try:
-            result = self.generate_content(prompt, max_retries=2, return_json=True)
-            # 驗證返回結果
-            if isinstance(result, dict) and "Chapter" in result and result["Chapter"]:
-                return result
-            else:
-                # 如果返回格式不符合預期
-                return {"Chapter": filename_without_ext or "未命名章節"}
-        except Exception as e:
-            print(f"提取章節時發生錯誤: {e}")
-            # 發生異常時使用檔名
-            return {"Chapter": filename_without_ext or "未命名章節"}
+        return self.generate_content(prompt, max_retries=2, return_json=True)
 
 
     def processing_handouts_weights(self, subject, keypoints_flatten):
@@ -339,42 +310,9 @@ class OpenAIRequest(LazySingleton):
         """
 
         weights = []
-        default_weight = {"Difficulty": 2, "Importance": 2}  # 預設中等難度和重要性
-        
-        # 限制處理數量，避免API費用過高或超時
-        max_keypoints = min(len(keypoints_flatten), 100)
-        
-        for i, keypoint in enumerate(keypoints_flatten[:max_keypoints]):
-            try:
-                # 確保文本不為空
-                if not keypoint or not isinstance(keypoint, str) or len(keypoint.strip()) < 10:
-                    weights.append(default_weight)
-                    continue
-                
-                # 限制文本長度
-                if len(keypoint) > 1000:
-                    keypoint = keypoint[:1000] + "..."
-                
-                weight = self.generate_content(prompt + keypoint, return_json=True)
-                
-                # 驗證結果格式
-                if not isinstance(weight, dict) or "Difficulty" not in weight or "Importance" not in weight:
-                    weights.append(default_weight)
-                else:
-                    # 確保值在有效範圍內
-                    difficulty = min(max(weight.get("Difficulty", 2), 1), 3)
-                    importance = min(max(weight.get("Importance", 2), 0), 3)
-                    weights.append({"Difficulty": difficulty, "Importance": importance})
-                
-            except Exception as e:
-                print(f"處理第 {i+1} 個關鍵點權重時發生錯誤: {e}")
-                weights.append(default_weight)
-            
-            # 降低API呼叫頻率
-            time.sleep(0.2)
-        
-        # 如果實際關鍵點數量超過處理數量，使用預設權重填充
-        while len(weights) < len(keypoints_flatten):
-            weights.append(default_weight)
-            
+        for keypoint in keypoints_flatten:
+            weight = self.generate_content(prompt + keypoint, return_json=True)
+            weights.append(weight)
+            time.sleep(0.1)
+
         return weights

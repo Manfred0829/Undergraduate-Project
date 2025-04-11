@@ -571,6 +571,14 @@
                     </button>
                 </li>
                 <li>
+                    <button id="key-points-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        重點統合
+                    </button>
+                </li>
+                <li>
                     <button id="quiz-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -647,6 +655,14 @@
                             <p>學術英語、商業英語、專業術語</p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Key Points Panel -->
+            <div id="key-points-panel" class="content-panel">
+                <h2>重點統合</h2>
+                <div class="key-points-container">
+                    <!-- 此處將顯示重點統合內容 -->
                 </div>
             </div>
 
@@ -890,13 +906,17 @@
         const historyPanel = document.getElementById('history-panel');
         
         outlineBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
             outlineBtn.classList.add('active');
-            quizBtn.classList.remove('active');
-            historyBtn.classList.remove('active');
             
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
             outlinePanel.classList.add('active');
-            quizPanel.classList.remove('active');
-            historyPanel.classList.remove('active');
             
             // 獲取當前選擇的科目，並更新大綱內容
             const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
@@ -906,13 +926,17 @@
         });
         
         quizBtn.addEventListener('click', () => {
-            outlineBtn.classList.remove('active');
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
             quizBtn.classList.add('active');
-            historyBtn.classList.remove('active');
             
-            outlinePanel.classList.remove('active');
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
             quizPanel.classList.add('active');
-            historyPanel.classList.remove('active');
             
             // 獲取當前選擇的科目，並更新測驗內容
             const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
@@ -1503,6 +1527,24 @@
             }
         });
         
+        // 重點統合按鈕的事件處理器
+        const keyPointsBtn = document.getElementById('key-points-btn');
+        const keyPointsPanel = document.getElementById('key-points-panel');
+        
+        keyPointsBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            keyPointsBtn.classList.add('active');
+            
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            keyPointsPanel.classList.add('active');
+        });
+        
         quizBtn.addEventListener('click', () => {
             // 移除所有按鈕的active樣式
             document.querySelectorAll('.sidebar-menu button').forEach(btn => {
@@ -1982,12 +2024,43 @@
             const outlineTree = document.querySelector('#outline-panel .outline-tree');
             outlineTree.innerHTML = '';
             
-            // 從後端獲取大綱內容，這裡先使用預設內容
-            fetch(`/api/subjects/${subjectName}/outline`)
+            // 先嘗試加載樹狀結構圖
+            fetch(`/api/subjects/${subjectName}/lecture_tree_images`)
                 .then(response => {
                     if (!response.ok) {
-                        // 如果API不存在或出錯，顯示空白內容
-                        outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                        throw new Error('獲取樹狀結構圖失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.images && data.images.length > 0) {
+                        // 如果有樹狀結構圖，顯示它們
+                        data.images.forEach(imgPath => {
+                            const imgDiv = document.createElement('div');
+                            imgDiv.className = 'tree-image-container';
+                            
+                            const img = document.createElement('img');
+                            img.src = imgPath;
+                            img.alt = `${subjectName} 樹狀結構圖`;
+                            img.className = 'tree-image';
+                            img.style.width = '100%';
+                            img.style.maxWidth = '800px';
+                            img.style.marginBottom = '20px';
+                            
+                            imgDiv.appendChild(img);
+                            outlineTree.appendChild(imgDiv);
+                        });
+                    }
+                    
+                    // 然後再繼續加載文字大綱內容
+                    return fetch(`/api/subjects/${subjectName}/outline`);
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // 如果API不存在或出錯，且沒有圖片，則顯示空白內容
+                        if (outlineTree.childElementCount === 0) {
+                            outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                        }
                         throw new Error('獲取大綱失敗');
                     }
                     return response.json();
@@ -2000,15 +2073,17 @@
                             const outlineItem = createOutlineItem(item);
                             outlineTree.appendChild(outlineItem);
                         });
-                    } else {
-                        // 如果沒有內容，顯示預設訊息
+                    } else if (outlineTree.childElementCount === 0) {
+                        // 如果沒有內容且沒有圖片，顯示預設訊息
                         outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
                     }
                 })
                 .catch(error => {
                     console.error('獲取大綱錯誤:', error);
-                    // 顯示預設訊息
-                    outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                    // 如果沒有任何內容，顯示預設訊息
+                    if (outlineTree.childElementCount === 0) {
+                        outlineTree.innerHTML = '<div class="outline-item"><p>尚未有大綱內容</p></div>';
+                    }
                 });
         }
         

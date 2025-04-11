@@ -1,0 +1,113 @@
+{
+    "Chapter": "Unit 5: Artificial Intelligence",
+    "Sections": [
+        {
+            "Section": "Overview of Machine Learning Algorithms",
+            "Starting_topic": 1,
+            "Topics": [
+                {
+                    "Topic": "Introduction to Machine Learning Algorithms",
+                    "Starting_page": 1,
+                    "Pages": [
+                        {
+                            "Original_text": "111\n113-2\nweek 5\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Week 5"
+                            },
+                            "page_idx": 0
+                        },
+                        {
+                            "Original_text": "1.\n2.\n3.\n4.\nSVM\nKNN\nAdaBoost\n2\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "SVM, KNN, AdaBoost"
+                            },
+                            "page_idx": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Section": "Deep Dive into Support Vector Machines",
+            "Starting_topic": 2,
+            "Topics": [
+                {
+                    "Topic": "Support Vector Machines (SVM)",
+                    "Starting_page": 3,
+                    "Pages": [
+                        {
+                            "Original_text": "Support Vector Machine(SVM)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Support Vector Machine (SVM)"
+                            },
+                            "page_idx": 2
+                        },
+                        {
+                            "Original_text": "(support vector machine, SVM)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "support vector machine (SVM)"
+                            },
+                            "page_idx": 3
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Understanding SVM Concepts",
+                    "Starting_page": 5,
+                    "Pages": [
+                        {
+                            "Original_text": "( margins ) o\n, (support vector) o\nSupport\nVector\n: ithelp.ithome.com.tw/m/articles/10270447\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Support Vector concept"
+                            },
+                            "page_idx": 4
+                        },
+                        {
+                            "Original_text": "function) o\n: ithelp.ithome.com.tw/m/articles/10270447\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "function) o"
+                            },
+                            "page_idx": 5
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Feature and Input Space in SVM",
+                    "Starting_page": 7,
+                    "Pages": [
+                        {
+                            "Original_text": "SVM\nInput Space\nFeature Space\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Input Space, Feature Space"
+                            },
+                            "page_idx": 6
+                        },
+                        {
+                            "Original_text": "flfR±IæfRékJEæißHMargin\nco..ø' d\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Margin Formatting"
+                            },
+                            "page_idx": 7
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
