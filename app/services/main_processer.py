@@ -98,10 +98,15 @@ def processing_note(subject, lecture_name, img_path):
 
             # 講義json中儲存n_idx
             note_info = {"Notes_File_Name":original_filename , "Note_Index":n_idx}
-            if "Notes" not in keypoints_json[k_idx]:
+            if "Notes" not in keypoints_json[k_idx]: # 第一次加入筆記
                 keypoints_json[k_idx]["Notes"] = [note_info]
             else:
                 keypoints_json[k_idx]["Notes"].append(note_info)
+
+            if note['isCorrected']: # 筆記錯誤
+                keypoints_json[k_idx]['Learning_Progress'] -= 1
+            else: # 筆記正確
+                keypoints_json[k_idx]['Learning_Progress'] += 1
         
         text.write_json(keypoints_json,keypoints_path) # 儲存更新後的keypoints資料
         logger.info("相似度對應處理完成")
@@ -284,6 +289,7 @@ def processing_lecture(subject, pdf_path):
             kp["Embedding"] = vectors[i]
             kp["Difficulty"] = weights[i]["Difficulty"]
             kp["Importance"] = weights[i]["Importance"]
+            kp["Learning_Progress"] = 0
 
         # save
         keypoints_path = os.path.join(lectures_output_dir, filename_without_ext + "_keypoints.json")
