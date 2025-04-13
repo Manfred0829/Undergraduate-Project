@@ -404,4 +404,4 @@ class OpenAIRequest(LazySingleton):
                 keypoint_prompt += f"Note {i+1}: " + note[]
         """
 
-        retunr self.generate_content(prompt + keypoint_prompt, return_json=True)
+        return self.generate_content(prompt + keypoint_prompt, return_json=True)
