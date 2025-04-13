@@ -378,3 +378,30 @@ class OpenAIRequest(LazySingleton):
             weights.append(default_weight)
             
         return weights
+    
+
+    def generate_question(self,subject, keypoint_json):
+        prompt = f"""
+        You are given one of the keypoints in the subject {subject}, please complete below tesk:
+
+        Create a multiple-choice question with four options, numbered 1 to 4, and output it in the following JSON format:
+        {{
+            "question": "question text",
+            "options": ["1. option1", "2. option2", "3. option3", "4. option4"],
+            "answer": "correct answer number"
+        }}
+
+
+        Below is a keypoint about the subject {subject}:
+        """
+
+        keypoint_prompt = "Title: " + keypoint_json["Title"] + "\nContent: " + keypoint_json["Content"]+ "\n"
+
+        # 暫不實現將筆記加入prompt
+        """
+        if "Notes" in keypoint_json: # 如果有筆記
+            for i, note in keypoint_json['Notes']:
+                keypoint_prompt += f"Note {i+1}: " + note[]
+        """
+
+        retunr self.generate_content(prompt + keypoint_prompt, return_json=True)
