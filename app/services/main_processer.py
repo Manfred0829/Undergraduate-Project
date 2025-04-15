@@ -80,7 +80,7 @@ def processing_note(subject, lecture_name, img_path):
 
         # embedding process
         texts_for_embedding = [nt["Title"] + ":\n" + nt["Content"] for nt in notes_json]
-        vectors = OpenAI.generate_embedding(texts_for_embedding)
+        vectors = OpenAI.processing_embedding(texts_for_embedding)
         for i in range(len(vectors)):
             notes_json[i]['Embedding'] = vectors[i]
         logger.info("嵌入向量處理完成")
@@ -270,7 +270,7 @@ def processing_lecture(subject, pdf_path):
                 "from_page": 1
             }]
         
-        vectors = OpenAI.generate_embedding(keypoints_flatten)
+        vectors = OpenAI.processing_embedding(keypoints_flatten)
         
         # 確保向量和關鍵點列表長度匹配
         if len(vectors) != len(keypoints_list):
