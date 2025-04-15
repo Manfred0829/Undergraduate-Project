@@ -143,4 +143,53 @@ def subject_lecture_tree_images(subject):
     return jsonify({
         'success': True,
         'images': tree_images
+    })
+
+@main_bp.route('/api/subjects/<subject>/key_points')
+def subject_key_points(subject):
+    """API端點：獲取指定科目的重點列表"""
+    # 檢查科目是否存在
+    subjects = get_subjects()
+    if subject not in subjects:
+        return jsonify({'error': '科目不存在'}), 404
+        
+    # 這裡只是返回一個空的重點列表結構
+    # 實際應用中，應該從資料庫或檔案中讀取該科目的重點列表
+    return jsonify({
+        'success': True,
+        'key_points': []
+    })
+
+@main_bp.route('/api/lectures/<lecture_id>/preview/<page_num>')
+def lecture_preview(lecture_id, page_num):
+    """API端點：獲取指定講義特定頁的預覽圖"""
+    # 這個函數會返回講義特定頁的預覽圖
+    # 實際應用中，應該從資料庫或檔案系統中獲取預覽圖
+    # 這裡只返回一個空響應
+    return jsonify({
+        'success': True,
+        'message': '預覽圖API尚未實現'
+    })
+
+@main_bp.route('/api/lectures/<lecture_id>/integration/<page_num>')
+def lecture_integration(lecture_id, page_num):
+    """API端點：獲取指定講義特定頁的重點統合數據"""
+    # 這個函數會返回講義特定頁的重點統合數據，包括講義重點和筆記重點
+    # 實際應用中，應該從資料庫或檔案系統中獲取重點統合數據
+    # 這裡只返回一個空響應
+    return jsonify({
+        'success': True,
+        'lecture_points': [],
+        'note_points': []
+    })
+
+@main_bp.route('/api/lectures/<lecture_id>/pages')
+def lecture_pages(lecture_id):
+    """API端點：獲取指定講義的頁數信息"""
+    # 這個函數會返回講義的頁數信息
+    # 實際應用中，應該從資料庫或檔案系統中獲取頁數信息
+    # 這裡只返回一個示例響應
+    return jsonify({
+        'success': True,
+        'total_pages': 10  # 假設有10頁
     }) 

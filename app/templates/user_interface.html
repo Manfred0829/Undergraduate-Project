@@ -177,6 +177,107 @@
             font-size: 1.5rem;
         }
 
+        /* 重點列表樣式 */
+        .key-points-container {
+            padding: 15px 0;
+        }
+
+        .lecture-selector {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .lecture-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: white;
+        }
+
+        .key-point-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: #fdfdfd;
+            transition: all 0.2s;
+        }
+
+        .key-point-group:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .key-point-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .key-point-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .key-point-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .key-point-tag.difficulty {
+            background-color: #ff6b6b;
+        }
+
+        .key-point-tag.importance {
+            background-color: #4dabf7;
+        }
+
+        .key-point-tag.notes {
+            background-color: #69db7c;
+        }
+
+        .key-point-tag.progress {
+            background-color: #9775fa;
+        }
+
+        .key-point-tag svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 5px;
+        }
+
+        .key-points-scroll {
+            max-height: calc(100vh - 250px);
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* 自訂滾動條樣式 */
+        .key-points-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .key-points-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .key-points-scroll::-webkit-scrollbar-thumb {
+            background: #cecece;
+            border-radius: 10px;
+        }
+
+        .key-points-scroll::-webkit-scrollbar-thumb:hover {
+            background: #adadad;
+        }
+
         /* Outline Panel */
         .outline-tree {
             margin-left: 20px;
@@ -537,6 +638,170 @@
             height: 100%;
             width: 100%;
         }
+
+        /* 重點統合樣式 */
+        .key-points-integration {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .key-points-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-label {
+            font-weight: 500;
+            min-width: 80px;
+        }
+
+        .nav-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            min-width: 200px;
+            font-size: 1rem;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .nav-button svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-color);
+        }
+
+        .key-points-content {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 320px);
+        }
+
+        .content-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .column-header {
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .column-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .lecture-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .lecture-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .key-point-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .key-point-item:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .key-point-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .key-point-content {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* 出題頁面特定樣式 */
+        .nav-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 80px;
+            font-size: 1rem;
+        }
+
+        .generate-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            width: auto;
+            height: auto;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .generate-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .generate-btn svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -576,6 +841,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                         重點統合
+                    </button>
+                </li>
+                <li>
+                    <button id="key-points-list-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        重點列表
                     </button>
                 </li>
                 <li>
@@ -661,8 +934,118 @@
             <!-- Key Points Panel -->
             <div id="key-points-panel" class="content-panel">
                 <h2>重點統合</h2>
-                <div class="key-points-container">
-                    <!-- 此處將顯示重點統合內容 -->
+                <div class="key-points-integration">
+                    <!-- 頂部導覽欄 -->
+                    <div class="key-points-nav">
+                        <div class="nav-group">
+                            <span class="nav-label">講義名稱</span>
+                            <select id="integration-lecture-select" class="nav-select">
+                                <option value="">請選擇講義</option>
+                                <option value="1">英語語法講義.pdf</option>
+                                <option value="2">英語時態使用指南.docx</option>
+                                <option value="3">英文詞彙學習講義.pdf</option>
+                            </select>
+                        </div>
+                        <div class="nav-group">
+                            <button class="nav-button" id="prev-page-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <span class="nav-label">講義頁數</span>
+                            <select id="integration-page-select" class="nav-select">
+                                <option value="">請先選擇講義</option>
+                            </select>
+                            <button class="nav-button" id="next-page-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 三欄內容區域 -->
+                    <div class="key-points-content">
+                        <!-- 左側：講義預覽 -->
+                        <div class="content-column">
+                            <div class="column-header">原始講義頁面</div>
+                            <div class="column-content">
+                                <div class="lecture-preview">
+                                    <img src="/static/img/pdf-placeholder.png" id="lecture-preview-img" alt="講義預覽">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 中間：講義重點 -->
+                        <div class="content-column">
+                            <div class="column-header">講義重點</div>
+                            <div class="column-content">
+                                <!-- 示範內容 -->
+                                <div class="key-point-item">
+                                    <div class="key-point-title">英文句型基本結構</div>
+                                    <div class="key-point-content">
+                                        英語句子的基本結構通常是「主語 + 謂語 + 賓語」，理解這一基本架構有助於掌握英語語法和結構。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">五種基本句型</div>
+                                    <div class="key-point-content">
+                                        英語有五種基本句型：S+V、S+V+O、S+V+C、S+V+O+O、S+V+O+C，其中 S 代表主語、V 代表動詞、O 代表賓語、C 代表補語。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">主謂一致原則</div>
+                                    <div class="key-point-content">
+                                        英語的主語和謂語必須在人稱和數上保持一致，這是正確英語語法的重要原則。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">動詞時態與語態</div>
+                                    <div class="key-point-content">
+                                        英語有多種時態和語態，包括現在時、過去時、未來時、完成時、進行時以及主動語態和被動語態等。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">從句與複合句</div>
+                                    <div class="key-point-content">
+                                        英語中的從句包括名詞性從句、形容詞性從句（定語從句）和副詞性從句，它們是構成複雜句子的重要組成部分。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右側：筆記重點 -->
+                        <div class="content-column">
+                            <div class="column-header">筆記重點</div>
+                            <div class="column-content">
+                                <!-- 示範內容 -->
+                                <div class="key-point-item">
+                                    <div class="key-point-title">句型結構助記方法</div>
+                                    <div class="key-point-content">
+                                        記憶五種基本句型的好方法是通過實例來記忆，例如 S+V：Birds fly.（鳥兒飛）、S+V+O：I love you.（我愛你）等。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">常見時態錯誤</div>
+                                    <div class="key-point-content">
+                                        學習者常見的時態錯誤包括：現在完成時與過去時的混淆、進行時的誤用、條件句中的時態一致性問題等。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">從句練習技巧</div>
+                                    <div class="key-point-content">
+                                        掌握從句的好方法是先理解連接詞的作用，然後通過將簡單句合併成複雜句的練習來加強理解和應用。
+                                    </div>
+                                </div>
+                                <div class="key-point-item">
+                                    <div class="key-point-title">語法學習心得</div>
+                                    <div class="key-point-content">
+                                        學習英語語法不應死記規則，而是通過大量閱讀和實踐來內化語感，培養語言直覺。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -670,6 +1053,31 @@
             <div id="quiz-panel" class="content-panel">
                 <h2>英文學習測驗</h2>
                 <div class="quiz-container">
+                    <!-- 頂部導覽欄 -->
+                    <div class="key-points-nav">
+                        <div class="nav-group">
+                            <span class="nav-label">講義名稱</span>
+                            <select id="quiz-lecture-select" class="nav-select">
+                                <option value="">請選擇講義</option>
+                                <option value="1">英語語法講義.pdf</option>
+                                <option value="2">英語時態使用指南.docx</option>
+                                <option value="3">英文詞彙學習講義.pdf</option>
+                            </select>
+                        </div>
+                        <div class="nav-group">
+                            <span class="nav-label">題數</span>
+                            <input type="number" id="quiz-number-input" class="nav-input" min="1" max="20" value="5">
+                        </div>
+                        <div class="nav-group">
+                            <button id="generate-quiz-btn" class="nav-button generate-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                                產生測驗
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="quiz-question">
                         <h3>1. Which of the following is NOT a type of conditional sentence in English?</h3>
                         <ul class="quiz-options">
@@ -840,6 +1248,111 @@
                         </div>
                         <div id="notes-file-list" style="margin-top: 10px;"></div>
                         <button class="upload-btn" style="width: 100%;">上傳</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Points List Panel -->
+            <div id="key-points-list-panel" class="content-panel">
+                <h2>重點列表</h2>
+                <div class="key-points-container">
+                    <div class="lecture-selector">
+                        <select id="key-points-lecture-select">
+                            <option value="">請選擇講義</option>
+                            <option value="英語語法講義.pdf">英語語法講義.pdf</option>
+                            <option value="英語時態使用指南.docx">英語時態使用指南.docx</option>
+                            <option value="英文詞彙學習講義.pdf">英文詞彙學習講義.pdf</option>
+                        </select>
+                    </div>
+                    <div class="key-points-scroll">
+                        <!-- 示範內容 -->
+                        <div class="key-point-group">
+                            <div class="key-point-title">英文句型結構分析</div>
+                            <div class="key-point-meta">
+                                <span class="key-point-tag difficulty">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    困難度: 高
+                                </span>
+                                <span class="key-point-tag importance">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                    重要性: 非常重要
+                                </span>
+                                <span class="key-point-tag notes">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    筆記數量: 3
+                                </span>
+                                <span class="key-point-tag progress">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    進度: 85%
+                                </span>
+                            </div>
+                        </div>
+                        <div class="key-point-group">
+                            <div class="key-point-title">不規則動詞變化規則</div>
+                            <div class="key-point-meta">
+                                <span class="key-point-tag difficulty">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    困難度: 中等
+                                </span>
+                                <span class="key-point-tag importance">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                    重要性: 重要
+                                </span>
+                                <span class="key-point-tag notes">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    筆記數量: 5
+                                </span>
+                                <span class="key-point-tag progress">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    進度: 60%
+                                </span>
+                            </div>
+                        </div>
+                        <div class="key-point-group">
+                            <div class="key-point-title">形容詞和副詞的比較級用法</div>
+                            <div class="key-point-meta">
+                                <span class="key-point-tag difficulty">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    困難度: 低
+                                </span>
+                                <span class="key-point-tag importance">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                    </svg>
+                                    重要性: 中等
+                                </span>
+                                <span class="key-point-tag notes">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    筆記數量: 2
+                                </span>
+                                <span class="key-point-tag progress">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    進度: 95%
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2240,6 +2753,236 @@
                     quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
                 });
         }
+
+        keyPointsBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            keyPointsBtn.classList.add('active');
+            
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            keyPointsPanel.classList.add('active');
+        });
+        
+        // 重點列表按鈕的事件處理器
+        const keyPointsListBtn = document.getElementById('key-points-list-btn');
+        const keyPointsListPanel = document.getElementById('key-points-list-panel');
+        
+        keyPointsListBtn.addEventListener('click', () => {
+            // 移除所有按鈕的active樣式
+            document.querySelectorAll('.sidebar-menu button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            keyPointsListBtn.classList.add('active');
+            
+            // 隱藏所有面板
+            document.querySelectorAll('.content-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            keyPointsListPanel.classList.add('active');
+            
+            // 獲取當前選擇的科目，並更新講義下拉選單
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                updateKeyPointsLectureSelector(selectedSubject);
+            }
+        });
+        
+        // 更新重點列表中的講義選擇器
+        function updateKeyPointsLectureSelector(subjectName) {
+            fetch(`/api/lectures/${subjectName}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('加載講義列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const lectureSelect = document.getElementById('key-points-lecture-select');
+                    // 清空現有選項，只保留第一個
+                    while (lectureSelect.options.length > 1) {
+                        lectureSelect.remove(1);
+                    }
+                    
+                    // 添加講義選項
+                    if (data && data.length > 0) {
+                        data.forEach(lecture => {
+                            const option = document.createElement('option');
+                            option.value = lecture.id;
+                            option.text = lecture.filename;
+                            lectureSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('加載講義列表錯誤:', error);
+                });
+        }
+        
+        // 重點列表中講義選擇器的變更事件
+        document.getElementById('key-points-lecture-select').addEventListener('change', function() {
+            const lectureId = this.value;
+            if (lectureId) {
+                // 這裡應該根據選擇的講義獲取對應的重點列表
+                // 目前暫時使用示範數據
+                console.log('已選擇講義ID:', lectureId);
+                // loadKeyPointsForLecture(lectureId);
+            }
+        });
+
+        // 重點統合相關功能
+        const integrationLectureSelect = document.getElementById('integration-lecture-select');
+        const integrationPageSelect = document.getElementById('integration-page-select');
+        const prevPageBtn = document.getElementById('prev-page-btn');
+        const nextPageBtn = document.getElementById('next-page-btn');
+        const lecturePreviewImg = document.getElementById('lecture-preview-img');
+
+        // 講義選擇器的變更事件
+        integrationLectureSelect.addEventListener('change', function() {
+            const lectureId = this.value;
+            if (lectureId) {
+                // 更新頁碼選擇器
+                updatePageSelector(lectureId);
+                // 加載講義重點和筆記重點
+                loadKeyPointsIntegration(lectureId, 1); // 默認加載第一頁
+            } else {
+                // 清空頁碼選擇器
+                while (integrationPageSelect.options.length > 1) {
+                    integrationPageSelect.remove(1);
+                }
+                // 重置頁面預覽圖
+                lecturePreviewImg.src = '/static/img/pdf-placeholder.png';
+            }
+        });
+
+        // 出題相關功能
+        const quizLectureSelect = document.getElementById('quiz-lecture-select');
+        const quizNumberInput = document.getElementById('quiz-number-input');
+        const generateQuizBtn = document.getElementById('generate-quiz-btn');
+
+        // 產生測驗按鈕點擊事件
+        generateQuizBtn.addEventListener('click', function() {
+            const lectureId = quizLectureSelect.value;
+            const questionCount = quizNumberInput.value;
+            
+            if (!lectureId) {
+                alert('請選擇講義');
+                return;
+            }
+            
+            if (!questionCount || questionCount < 1) {
+                alert('請輸入有效的題數');
+                return;
+            }
+            
+            // 顯示生成中狀態
+            generateQuizBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="animate-spin">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                產生中...
+            `;
+            generateQuizBtn.disabled = true;
+            
+            // 實際應用中，這裡會發送請求到後端 API 來生成測驗
+            // 這裡使用 setTimeout 模擬請求過程
+            setTimeout(() => {
+                console.log(`生成測驗: 講義ID=${lectureId}, 題數=${questionCount}`);
+                
+                // 生成測驗後，重置按鈕狀態
+                generateQuizBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                    產生測驗
+                `;
+                generateQuizBtn.disabled = false;
+                
+                // 更新測驗內容
+                updateQuizContent();
+            }, 1500);
+        });
+        
+        // 頁碼選擇器的變更事件
+        integrationPageSelect.addEventListener('change', function() {
+            const pageNum = this.value;
+            const lectureId = integrationLectureSelect.value;
+            if (lectureId && pageNum) {
+                // 加載該頁的講義重點和筆記重點
+                loadKeyPointsIntegration(lectureId, pageNum);
+            }
+        });
+
+        // 上一頁按鈕點擊事件
+        prevPageBtn.addEventListener('click', function() {
+            if (integrationPageSelect.selectedIndex > 1) {
+                integrationPageSelect.selectedIndex = integrationPageSelect.selectedIndex - 1;
+                // 觸發 change 事件
+                const event = new Event('change');
+                integrationPageSelect.dispatchEvent(event);
+            }
+        });
+
+        // 下一頁按鈕點擊事件
+        nextPageBtn.addEventListener('click', function() {
+            if (integrationPageSelect.selectedIndex < integrationPageSelect.options.length - 1) {
+                integrationPageSelect.selectedIndex = integrationPageSelect.selectedIndex + 1;
+                // 觸發 change 事件
+                const event = new Event('change');
+                integrationPageSelect.dispatchEvent(event);
+            }
+        });
+
+        // 更新頁碼選擇器
+        function updatePageSelector(lectureId) {
+            // 這裡會從後端 API 獲取講義的頁數
+            // 目前使用示範數據
+            const totalPages = 10; // 假設有 10 頁
+            
+            // 清空現有選項，只保留第一個
+            while (integrationPageSelect.options.length > 1) {
+                integrationPageSelect.remove(1);
+            }
+            
+            // 添加頁碼選項
+            for (let i = 1; i <= totalPages; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.text = `第 ${i} 頁`;
+                integrationPageSelect.appendChild(option);
+            }
+            
+            // 默認選擇第一頁
+            integrationPageSelect.selectedIndex = 1;
+        }
+
+        // 加載重點統合數據
+        function loadKeyPointsIntegration(lectureId, pageNum) {
+            // 這裡會從後端 API 獲取數據
+            // 目前使用示範數據
+            console.log(`已加載講義 ID: ${lectureId}, 頁碼: ${pageNum} 的重點統合數據`);
+            // 更新頁面預覽圖
+            // 實際應用中，應該根據講義和頁碼加載對應的預覽圖
+            // lecturePreviewImg.src = `/api/lecture-preview/${lectureId}/${pageNum}`;
+            // fetch(`/api/key-points-integration/${lectureId}/${pageNum}`)
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         // 更新講義重點和筆記重點的內容
+            //     })
+            //     .catch(error => console.error('加載重點統合數據錯誤:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化操作
+            // 預設顯示大綱面板
+            document.getElementById('outline-panel').classList.add('active');
+            document.getElementById('outline-btn').classList.add('active');
+            
+        });
     </script>
 </body>
 </html>
