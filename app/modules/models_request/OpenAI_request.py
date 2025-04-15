@@ -386,9 +386,9 @@ class OpenAIRequest(LazySingleton):
 
         Create a multiple-choice question with four options, numbered 1 to 4, and output it in the following JSON format:
         {{
-            "question": "question text",
-            "options": ["1. option1", "2. option2", "3. option3", "4. option4"],
-            "answer": "correct answer number"
+            "Question": "question text",
+            "Options": ["1. option1", "2. option2", "3. option3", "4. option4"],
+            "Answer": int
         }}
 
 
