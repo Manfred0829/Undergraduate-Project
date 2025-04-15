@@ -405,3 +405,22 @@ class OpenAIRequest(LazySingleton):
         """
 
         return self.generate_content(prompt + keypoint_prompt, return_json=True)
+    
+
+
+    # 偵測是否包含中文的簡單方法
+    def _contains_chinese(self, text):
+        return re.search(r'[\u4e00-\u9fff]', text) is not None
+
+    # 主函數：對陣列中的字串處理
+    def processing_embedding(self, text_list):
+        text_list_trans = []
+        for text in text_list:
+            if self._contains_chinese(text):
+                translated = self.generate_content("將以下內容翻譯成英文：\n" + text)
+                text_list_trans.append(translated)
+            else:
+                text_list_trans.append(text)
+        
+        return self.generate_embedding(text_list_trans)
+
