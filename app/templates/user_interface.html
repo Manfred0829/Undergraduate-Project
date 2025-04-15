@@ -802,6 +802,51 @@
             height: 18px;
             color: white;
         }
+
+        /* 加載和錯誤狀態樣式 */
+        .loading, .no-data, .error {
+            text-align: center;
+            padding: 30px 15px;
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .loading:before {
+            content: "";
+            display: block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            color: #888;
+            font-style: italic;
+        }
+
+        .error {
+            background-color: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            color: #e53e3e;
+            font-weight: 500;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -941,9 +986,6 @@
                             <span class="nav-label">講義名稱</span>
                             <select id="integration-lecture-select" class="nav-select">
                                 <option value="">請選擇講義</option>
-                                <option value="1">英語語法講義.pdf</option>
-                                <option value="2">英語時態使用指南.docx</option>
-                                <option value="3">英文詞彙學習講義.pdf</option>
                             </select>
                         </div>
                         <div class="nav-group">
@@ -2827,10 +2869,10 @@
         document.getElementById('key-points-lecture-select').addEventListener('change', function() {
             const lectureId = this.value;
             if (lectureId) {
-                // 這裡應該根據選擇的講義獲取對應的重點列表
-                // 目前暫時使用示範數據
-                console.log('已選擇講義ID:', lectureId);
-                // loadKeyPointsForLecture(lectureId);
+                // 獲取選中的講義名稱
+                const lectureName = this.options[this.selectedIndex].text;
+                // 調用函數獲取該講義的重點列表
+                loadKeyPointsForLecture(lectureName);
             }
         });
 
@@ -2841,79 +2883,272 @@
         const nextPageBtn = document.getElementById('next-page-btn');
         const lecturePreviewImg = document.getElementById('lecture-preview-img');
 
+        // 將困難度數值轉換為文字描述
+        function getDifficultyText(difficulty) {
+            if (!difficulty && difficulty !== 0) return '普通';
+            
+            const difficultyMapping = {
+                1: '簡單',
+                2: '普通',
+                3: '困難'
+            };
+            
+            return difficultyMapping[difficulty] || '普通';
+        }
+        
+        // 將重要性數值轉換為文字描述
+        function getImportanceText(importance) {
+            if (!importance && importance !== 0) return '一般';
+            
+            const importanceMapping = {
+                0: '不相關',
+                1: '一般',
+                2: '重點',
+                3: '非常重要'
+            };
+            
+            return importanceMapping[importance] || '一般';
+        }
+        
+        // 將進度顯示為純數字
+        function getProgressText(progress) {
+            if (progress === undefined || progress === null) return '0';
+            
+            // 移除任何百分比符號，只保留數字
+            if (typeof progress === 'string') {
+                return progress.replace('%', '');
+            }
+            
+            return progress.toString();
+        }
+
+        // 加載特定講義的重點列表
+        function loadKeyPointsForLecture(lectureName) {
+            // 獲取當前選中的科目
+            const currentSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (currentSubject === '+ 新增科目') {
+                console.error('請先選擇有效的科目');
+                return;
+            }
+            
+            // 顯示加載中狀態
+            const keyPointsScroll = document.querySelector('.key-points-scroll');
+            keyPointsScroll.innerHTML = '<div class="loading">正在加載重點列表...</div>';
+            
+            // 發送請求到後端 API
+            fetch(`/api/subjects/${currentSubject}/key_points?lecture_name=${encodeURIComponent(lectureName)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('獲取重點列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('獲取到重點列表數據:', data);
+                    
+                    // 清空加載中狀態
+                    keyPointsScroll.innerHTML = '';
+                    
+                    // 顯示返回的重點列表
+                    if (data.success && data.key_points && data.key_points.length > 0) {
+                        data.key_points.forEach(point => {
+                            const pointElement = document.createElement('div');
+                            pointElement.className = 'key-point-group';
+                            pointElement.innerHTML = `
+                                <div class="key-point-title">${point.title || point.Title || '未命名重點'}</div>
+                                <div class="key-point-meta">
+                                    <span class="key-point-tag difficulty">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                        困難度: ${getDifficultyText(point.difficulty || point.Difficulty)}
+                                    </span>
+                                    <span class="key-point-tag importance">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                        </svg>
+                                        重要性: ${getImportanceText(point.importance || point.Importance)}
+                                    </span>
+                                    <span class="key-point-tag notes">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                        </svg>
+                                        筆記數量: ${point.notes_count || point.Notes_count || 0}
+                                    </span>
+                                    <span class="key-point-tag progress">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        進度: ${getProgressText(point.progress || point.Progress)}
+                                    </span>
+                                </div>
+                            `;
+                            keyPointsScroll.appendChild(pointElement);
+                        });
+                    } else {
+                        // 無數據提示
+                        keyPointsScroll.innerHTML = '<div class="no-data">該講義暫無重點數據</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('獲取重點列表錯誤:', error);
+                    keyPointsScroll.innerHTML = `<div class="error">獲取數據時出錯: ${error.message}</div>`;
+                });
+        }
+
         // 講義選擇器的變更事件
         integrationLectureSelect.addEventListener('change', function() {
             const lectureId = this.value;
             if (lectureId) {
+                // 獲取選中的講義名稱
+                const lectureName = this.options[this.selectedIndex].text;
                 // 更新頁碼選擇器
-                updatePageSelector(lectureId);
-                // 加載講義重點和筆記重點
-                loadKeyPointsIntegration(lectureId, 1); // 默認加載第一頁
+                updatePageSelector(lectureName);
+                // 默認加載第一頁
+                loadKeyPointsIntegration(lectureName, 0); // 使用從0開始的頁碼索引
             } else {
                 // 清空頁碼選擇器
                 while (integrationPageSelect.options.length > 1) {
                     integrationPageSelect.remove(1);
                 }
                 // 重置頁面預覽圖
-                lecturePreviewImg.src = '/static/img/pdf-placeholder.png';
+                document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+                // 清空講義重點和筆記重點
+                document.querySelector('.content-column:nth-child(2) .column-content').innerHTML = '';
+                document.querySelector('.content-column:nth-child(3) .column-content').innerHTML = '';
             }
         });
 
-        // 出題相關功能
-        const quizLectureSelect = document.getElementById('quiz-lecture-select');
-        const quizNumberInput = document.getElementById('quiz-number-input');
-        const generateQuizBtn = document.getElementById('generate-quiz-btn');
-
-        // 產生測驗按鈕點擊事件
-        generateQuizBtn.addEventListener('click', function() {
-            const lectureId = quizLectureSelect.value;
-            const questionCount = quizNumberInput.value;
-            
-            if (!lectureId) {
-                alert('請選擇講義');
-                return;
-            }
-            
-            if (!questionCount || questionCount < 1) {
-                alert('請輸入有效的題數');
-                return;
-            }
-            
-            // 顯示生成中狀態
-            generateQuizBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="animate-spin">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                產生中...
-            `;
-            generateQuizBtn.disabled = true;
-            
-            // 實際應用中，這裡會發送請求到後端 API 來生成測驗
-            // 這裡使用 setTimeout 模擬請求過程
-            setTimeout(() => {
-                console.log(`生成測驗: 講義ID=${lectureId}, 題數=${questionCount}`);
-                
-                // 生成測驗後，重置按鈕狀態
-                generateQuizBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                    </svg>
-                    產生測驗
-                `;
-                generateQuizBtn.disabled = false;
-                
-                // 更新測驗內容
-                updateQuizContent();
-            }, 1500);
-        });
-        
         // 頁碼選擇器的變更事件
         integrationPageSelect.addEventListener('change', function() {
-            const pageNum = this.value;
+            const pageNum = parseInt(this.value);
             const lectureId = integrationLectureSelect.value;
-            if (lectureId && pageNum) {
+            if (lectureId && !isNaN(pageNum)) {
+                // 獲取選中的講義名稱
+                const lectureName = integrationLectureSelect.options[integrationLectureSelect.selectedIndex].text;
                 // 加載該頁的講義重點和筆記重點
-                loadKeyPointsIntegration(lectureId, pageNum);
+                loadKeyPointsIntegration(lectureName, pageNum);
+            }
+        });
+
+        // 更新頁碼選擇器
+        function updatePageSelector(lectureName) {
+            // 獲取當前選中的科目名稱（而非值）
+            const subjectDropdown = document.getElementById('subject-dropdown');
+            const subjectName = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            
+            // 讀取PDF總頁數 (這裡簡化處理，實際中可能需要從後端獲取)
+            const totalPages = 10; // 默認值
+            
+            // 清空現有選項，只保留第一個
+            while (integrationPageSelect.options.length > 1) {
+                integrationPageSelect.remove(1);
+            }
+            
+            // 添加頁碼選項 (頁碼從0開始)
+            for (let i = 0; i < totalPages; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.text = `第 ${i+1} 頁`; // 顯示給用戶的頁碼從1開始
+                integrationPageSelect.appendChild(option);
+            }
+            
+            // 默認選擇第一頁
+            integrationPageSelect.selectedIndex = 1;
+        }
+
+        // 加載重點統合數據
+        function loadKeyPointsIntegration(lectureName, pageNum) {
+            // 顯示載入中的提示
+            const lectureKeypoints = document.querySelector('.content-column:nth-child(2) .column-content');
+            const notesKeypoints = document.querySelector('.content-column:nth-child(3) .column-content');
+            
+            lectureKeypoints.innerHTML = '<div class="loading">載入中...</div>';
+            notesKeypoints.innerHTML = '<div class="loading">載入中...</div>';
+            
+            // 獲取當前選中的科目名稱（而非值）
+            const subjectDropdown = document.getElementById('subject-dropdown');
+            const subjectName = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            
+            // 從後端 API 獲取數據
+            fetch(`/api/subjects/${subjectName}/integration?lecture_name=${encodeURIComponent(lectureName)}&page_num=${pageNum}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('獲取重點統合數據失敗');
+                    }
+                    return response.json();
+                })
+                .then(response => {
+                    if (response.success && response.data) {
+                        console.log('獲取到重點統合數據:', response.data);
+                        
+                        // 1. 更新頁面預覽圖 (Base64 格式的圖片)
+                        if (response.data.Image) {
+                            document.getElementById('lecture-preview-img').src = 'data:image/png;base64,' + response.data.Image;
+                        } else {
+                            document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+                        }
+                        
+                        // 2. 更新講義重點內容
+                        lectureKeypoints.innerHTML = '';
+                        if (response.data.Keypoints && response.data.Keypoints.length > 0) {
+                            response.data.Keypoints.forEach(keypoint => {
+                                const keypointElement = document.createElement('div');
+                                keypointElement.className = 'key-point-item';
+                                keypointElement.innerHTML = `
+                                    <div class="key-point-title">${keypoint.Title || '未命名重點'}</div>
+                                    <div class="key-point-content">${keypoint.Content || '無內容'}</div>
+                                `;
+                                lectureKeypoints.appendChild(keypointElement);
+                            });
+                        } else {
+                            lectureKeypoints.innerHTML = '<div class="no-data">該頁無講義重點</div>';
+                        }
+                        
+                        // 3. 更新筆記重點內容
+                        notesKeypoints.innerHTML = '';
+                        if (response.data.Notes && response.data.Notes.length > 0) {
+                            response.data.Notes.forEach(note => {
+                                const noteElement = document.createElement('div');
+                                noteElement.className = 'key-point-item';
+                                noteElement.innerHTML = `
+                                    <div class="key-point-title">${note.Title || '未命名筆記'}</div>
+                                    <div class="key-point-content">${note.Content || '無內容'}</div>
+                                `;
+                                notesKeypoints.appendChild(noteElement);
+                            });
+                        } else {
+                            notesKeypoints.innerHTML = '<div class="no-data">該頁無相關筆記</div>';
+                        }
+                    } else {
+                        // 顯示錯誤信息
+                        lectureKeypoints.innerHTML = '<div class="error">獲取講義重點失敗</div>';
+                        notesKeypoints.innerHTML = '<div class="error">獲取筆記重點失敗</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('加載重點統合數據錯誤:', error);
+                    lectureKeypoints.innerHTML = `<div class="error">獲取數據時出錯: ${error.message}</div>`;
+                    notesKeypoints.innerHTML = `<div class="error">獲取數據時出錯: ${error.message}</div>`;
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化操作
+            // 預設顯示大綱面板
+            document.getElementById('outline-panel').classList.add('active');
+            document.getElementById('outline-btn').classList.add('active');
+            
+            // 初始化科目下拉選單
+            const subjectDropdown = document.getElementById('subject-dropdown');
+            if (subjectDropdown && subjectDropdown.options.length > 1) {
+                // 選擇第一個實際科目（跳過"請選擇科目"選項）
+                subjectDropdown.selectedIndex = 1;
+                // 獲取科目名稱
+                const subjectName = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+                
+                // 加載該科目的講義列表
+                loadLecturesForSubject(subjectName);
             }
         });
 
@@ -2937,51 +3172,67 @@
             }
         });
 
-        // 更新頁碼選擇器
-        function updatePageSelector(lectureId) {
-            // 這裡會從後端 API 獲取講義的頁數
-            // 目前使用示範數據
-            const totalPages = 10; // 假設有 10 頁
-            
-            // 清空現有選項，只保留第一個
-            while (integrationPageSelect.options.length > 1) {
-                integrationPageSelect.remove(1);
+        // 加載科目的講義列表
+        function loadLecturesForSubject(subject) {
+            // 清空重點統合講義選擇器
+            while (integrationLectureSelect.options.length > 1) {
+                integrationLectureSelect.remove(1);
             }
             
-            // 添加頁碼選項
-            for (let i = 1; i <= totalPages; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.text = `第 ${i} 頁`;
-                integrationPageSelect.appendChild(option);
-            }
+            if (!subject) return;
             
-            // 默認選擇第一頁
-            integrationPageSelect.selectedIndex = 1;
+            // 顯示載入中的提示
+            const option = document.createElement('option');
+            option.text = '載入中...';
+            option.disabled = true;
+            integrationLectureSelect.appendChild(option);
+            
+            // 從後端 API 獲取該科目的講義列表
+            fetch(`/api/lectures/${subject}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('獲取講義列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 移除載入中提示
+                    integrationLectureSelect.remove(1);
+                    
+                    // 添加講義選項
+                    if (data && data.length > 0) {
+                        data.forEach(lecture => {
+                            const option = document.createElement('option');
+                            option.value = lecture.id; // 使用講義的ID作為值
+                            option.text = lecture.filename; // 顯示講義的文件名
+                            integrationLectureSelect.appendChild(option);
+                        });
+                    } else {
+                        // 無講義時的提示
+                        const option = document.createElement('option');
+                        option.text = '未找到講義';
+                        option.disabled = true;
+                        integrationLectureSelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('加載講義列表錯誤:', error);
+                    // 移除載入中提示
+                    if (integrationLectureSelect.options.length > 1) {
+                        integrationLectureSelect.remove(1);
+                    }
+                    // 添加錯誤提示
+                    const option = document.createElement('option');
+                    option.text = '加載失敗';
+                    option.disabled = true;
+                    integrationLectureSelect.appendChild(option);
+                });
         }
 
-        // 加載重點統合數據
-        function loadKeyPointsIntegration(lectureId, pageNum) {
-            // 這裡會從後端 API 獲取數據
-            // 目前使用示範數據
-            console.log(`已加載講義 ID: ${lectureId}, 頁碼: ${pageNum} 的重點統合數據`);
-            // 更新頁面預覽圖
-            // 實際應用中，應該根據講義和頁碼加載對應的預覽圖
-            // lecturePreviewImg.src = `/api/lecture-preview/${lectureId}/${pageNum}`;
-            // fetch(`/api/key-points-integration/${lectureId}/${pageNum}`)
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         // 更新講義重點和筆記重點的內容
-            //     })
-            //     .catch(error => console.error('加載重點統合數據錯誤:', error));
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // 初始化操作
-            // 預設顯示大綱面板
-            document.getElementById('outline-panel').classList.add('active');
-            document.getElementById('outline-btn').classList.add('active');
-            
+        // 科目切換時更新講義列表
+        document.getElementById('subject-dropdown').addEventListener('change', function() {
+            const subject = this.value;
+            loadLecturesForSubject(subject);
         });
     </script>
 </body>

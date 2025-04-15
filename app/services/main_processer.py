@@ -2,7 +2,7 @@ from app.utils import media_processer as media, text_processer as text, similari
 from app.modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
-from modules.questioning_manager import QuestioningManager
+from app.modules.questioning_manager import QuestioningManager
 import os
 import logging
 
@@ -397,7 +397,8 @@ def _extract_keypoints_hierarchy(chapter: dict):
 def processing_get_keypoints(subject, lecture_name):
     # 讀取 json
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
-    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
+    # print(keypoints_path)
     keypoints_json = text.read_json(keypoints_path, default_content=[])
 
     for keypoint in keypoints_json:
@@ -420,7 +421,7 @@ def processing_get_keypoints(subject, lecture_name):
 def processing_get_questions(subject, lecture_name, num_questions):
     # 讀取 json
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
-    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
     keypoints_json = text.read_json(keypoints_path, default_content=[])
 
     if not keypoints_json:
@@ -438,7 +439,7 @@ def processing_get_questions(subject, lecture_name, num_questions):
 def processing_update_weights(subject, lecture_name, answer_results):
     # 讀取 json
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
-    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
     keypoints_json = text.read_json(keypoints_path, default_content=[])
 
     if not keypoints_json:
@@ -471,10 +472,12 @@ def processing_get_page_info(subject, lecture_name, page_index):
     pdf_path = os.path.join("app", "data_upload", subject, "lectures", lecture_name)
     imgs = media.read_pdf_to_images(pdf_path)
     result_img = imgs[page_index]
+    # 將PIL圖像轉換為base64字串
+    result_img_base64 = media.convert_PIL_to_base64(result_img)
 
     # 讀取 json
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
-    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
     keypoints_json = text.read_json(keypoints_path, default_content=[])
     target_keypoints = list(filter(lambda x: x["from_page"] == page_index, keypoints_json))
 
@@ -493,7 +496,7 @@ def processing_get_page_info(subject, lecture_name, page_index):
                 temp = {"Title": note["Title"], "Content": note["Content"]}
                 result_notes.append(temp)
 
-    result = {"Image": result_img,
+    result = {"Image": result_img_base64,
               "Keypoints": result_keypoints,
               "Notes": result_notes}
     return result
