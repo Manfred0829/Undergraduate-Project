@@ -4,9 +4,9 @@ from app.utils import text_processer as text
 from app.modules.models_request.OpenAI_request import OpenAIRequest
 
 class QuestioningManager():
-    def __init__(self, file_path):
-        self.keypoints_path = file_path
-        self.keypoints = text.read_json(file_path)
+    def __init__(self, subject, keypoints):
+        self.subject = subject
+        self.keypoints = keypoints
         self.model = OpenAIRequest()
 
         self.N = len(self.keypoints)
@@ -64,30 +64,36 @@ class QuestioningManager():
 
 
     """ 主流程函數 """
-    def processing_get_question(self,subject):
+    def get_question(self):
         k_idx = self._select_index_from_softmax()
         keypoint_json = self.keypoints[k_idx]
-        question_json = self.model.generate_question(subject, keypoint_json)
+        question_json = self.model.generate_question(self.subject, keypoint_json)
         return question_json
     
-    def processing_update_weight(self,k_idx, is_Correct):
-        # update keypoint progress
-        score  = 3 if is_Correct else -3
-        self.keypoints[k_idx]['Learning_Progress'] += score
+    def update_weights(self,answer_results):
 
-        # update overall lr, lr based on progress
-        new_lr = self._calculate_learning_rate(self.keypoints[k_idx]['Learning_Progress'], self.keypoints[k_idx]['Difficulity'])
-        self.overall_lr += (new_lr - self.lrs[k_idx]) / self.N
-        self.lrs[k_idx] = new_lr
+        for result in answer_results:
+            k_idx = result["Keypoints_Index"]
+            is_Correct = result["is_Correct"]
 
-        # update prob based on progress
-        self.probabilitys[k_idx] = self._calculate_probability(self.keypoints[k_idx]['Learning_Progress'], self.keypoints[k_idx]['Difficulity'])
+            # update keypoint progress
+            score  = 3 if is_Correct else -3
+            self.keypoints[k_idx]['Learning_Progress'] += score
+
+            # update overall lr, lr based on progress
+            new_lr = self._calculate_learning_rate(self.keypoints[k_idx]['Learning_Progress'], self.keypoints[k_idx]['Difficulity'])
+            self.overall_lr += (new_lr - self.lrs[k_idx]) / self.N
+            self.lrs[k_idx] = new_lr
+
+            # update prob based on progress
+            self.probabilitys[k_idx] = self._calculate_probability(self.keypoints[k_idx]['Learning_Progress'], self.keypoints[k_idx]['Difficulity'])
 
         # update T based on overall_lr
         self._calculate_T()
 
-        # save change to keypoints_json
-        text.write_json(self.keypoints, self.keypoints_path)
-
         print("T: " + str(self.T))
         print("Overall lr: " + str(self.overall_lr))
+
+        # return edited keypoints_json
+        return self.keypoints
+

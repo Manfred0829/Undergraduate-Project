@@ -2,6 +2,7 @@ from app.utils import media_processer as media, text_processer as text, similari
 from app.modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
+from modules.questioning_manager import QuestioningManager
 import os
 import logging
 
@@ -392,3 +393,109 @@ def _extract_keypoints_hierarchy(chapter: dict):
         logger.error(f"提取重點層次結構時發生錯誤: {str(e)}", exc_info=True)
         return []
 
+
+def processing_get_keypoints(subject, lecture_name):
+    # 讀取 json
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+
+    for keypoint in keypoints_json:
+        # 刪除不需要的欄位（安全 pop）
+        for field in ["Index", "from_page", "Embedding"]:
+            keypoint.pop(field, None)
+
+        # 處理 Notes
+        notes = keypoint.pop("Notes", None)
+        if notes is not None:
+            keypoint["Notes_count"] = len(notes)
+
+        # 重命名進度欄位
+        if "Learning_Progress" in keypoint:
+            keypoint["Progress"] = keypoint.pop("Learning_Progress")
+
+    return keypoints_json
+
+
+def processing_get_questions(subject, lecture_name, num_questions):
+    # 讀取 json
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+
+    if not keypoints_json:
+        raise ValueError("無法讀取講義重點，請確認檔案是否存在且非空")
+    
+    QM = QuestioningManager(subject, keypoints_json)
+
+    questions = []
+    for i in range(num_questions):
+        questions.append(QM.get_question())
+
+    return questions
+
+
+def processing_update_weights(subject, lecture_name, answer_results):
+    # 讀取 json
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+
+    if not keypoints_json:
+        raise ValueError("無法讀取講義重點，請確認檔案是否存在且非空")
+    
+    QM = QuestioningManager(subject, keypoints_json)
+
+    edited_keypoints = QM.update_weights(answer_results)
+    text.write_json(edited_keypoints, keypoints_path)
+
+    return
+
+
+def _get_notes_from_keypoint(subject, keypoint_json):
+    result_notes = []
+    for note in keypoint_json["Notes"]:
+        notes_path = os.path.join("app", "data_server", subject, "notes", note["Notes_File_Name"])
+        try:
+            notes_json = text.read_json(notes_path)
+            result_notes.append(notes_json[note["Note_Index"]])
+        except Exception as e:
+            print(f"Error reading notes file {notes_path}: {e}")
+            continue  # 讀取錯誤則跳過此筆資料
+
+    return result_notes  # 確保有返回結果
+
+
+def processing_get_page_info(subject, lecture_name, page_index):
+    # 1. page image
+    pdf_path = os.path.join("app", "data_upload", subject, "lectures", lecture_name)
+    imgs = media.read_pdf_to_images(pdf_path)
+    result_img = imgs[page_index]
+
+    # 讀取 json
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+    target_keypoints = list(filter(lambda x: x["from_page"] == page_index, keypoints_json))
+
+    # 2. keypoints
+    result_keypoints = []
+    for keypoint in target_keypoints:
+        temp = {"Title": keypoint["Title"], "Content": keypoint["Content"]}
+        result_keypoints.append(temp)
+
+    # 3. notes
+    result_notes = []
+    for keypoint in target_keypoints:
+        if "Notes" in keypoint:
+            notes = _get_notes_from_keypoint(subject, keypoint)
+            for note in notes:
+                temp = {"Title": note["Title"], "Content": note["Content"]}
+                result_notes.append(temp)
+
+    result = {"Image": result_img,
+              "Keypoints": result_keypoints,
+              "Notes": result_notes}
+    return result
+
+    
