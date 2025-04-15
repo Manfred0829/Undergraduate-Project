@@ -87,7 +87,8 @@ def processing_note(subject, lecture_name, img_path):
 
 
         # simularity process
-        keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecture_name) # 讀取keypoints資料
+        lecturename_without_ext = os.path.splitext(lecture_name)[0]
+        keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json") # 讀取keypoints資料
         keypoints_json = text.read_json(keypoints_path)
         keypoints_embedding = [k["Embedding"] for k in keypoints_json]
 
