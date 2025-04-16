@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request
 from app.services.file_service import get_subjects, get_lectures, get_notes, create_subject_folders, delete_subject_folders
-from app.services.main_processer import processing_get_keypoints, processing_get_page_info
+from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/user_interface')
@@ -100,20 +100,28 @@ def subject_outline(subject):
 @main_bp.route('/api/subjects/<subject>/quizzes')
 def subject_quizzes(subject):
     """API端點：獲取指定科目的測驗題目"""
-    # 目前返回空內容，實際應該從資料庫或檔案中讀取測驗
-    # 如果該科目沒有測驗，返回404
-    
     # 檢查科目是否存在
     subjects = get_subjects()
     if subject not in subjects:
         return jsonify({'error': '科目不存在'}), 404
+    
+    # 從請求中獲取講義名稱和題目數量
+    lecture_name = request.args.get('lecture_name')
+    num_questions = request.args.get('num_questions', 5, type=int)
+    
+    if not lecture_name:
+        return jsonify({'success': False, 'error': '缺少講義名稱參數'}), 400
+    
+    try:
+        # 調用處理函數獲取測驗題目
+        quizzes = processing_get_questions(subject, lecture_name, num_questions)
         
-    # 這裡只是返回一個空的測驗結構
-    # 實際應用中，應該從資料庫或檔案中讀取該科目的測驗
-    return jsonify({
-        'success': True,
-        'quizzes': []
-    })
+        return jsonify({
+            'success': True,
+            'quizzes': quizzes
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @main_bp.route('/api/subjects/<subject>/lecture_tree_images')
 def subject_lecture_tree_images(subject):

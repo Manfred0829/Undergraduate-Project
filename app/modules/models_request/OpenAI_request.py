@@ -234,7 +234,8 @@ class OpenAIRequest(LazySingleton):
         """
         
         for i, page in enumerate(pages_info_json):
-            temp = f"Page {i+1}, Type: {page['Type']}, Description: {page['Content'].replace('\n','    ')}\n"
+            content = page['Content'].replace("\n", " ")
+            temp = f"Page {i+1}, Type: {page['Type']}, Description: {content}\n"
             prompt += temp
             #print(temp)
 
@@ -386,11 +387,10 @@ class OpenAIRequest(LazySingleton):
 
         Create a multiple-choice question with four options, numbered 1 to 4, and output it in the following JSON format:
         {{
-            "Question": "question text",
-            "Options": ["1. option1", "2. option2", "3. option3", "4. option4"],
-            "Answer": int
+            "question": "question text",
+            "options": ["option1", "option2", "option3", "option4"],
+            "correct_answer": int (from 0 to 3 representing the index of the correct option)
         }}
-
 
         Below is a keypoint about the subject {subject}:
         """
@@ -404,7 +404,33 @@ class OpenAIRequest(LazySingleton):
                 keypoint_prompt += f"Note {i+1}: " + note[]
         """
 
-        return self.generate_content(prompt + keypoint_prompt, return_json=True)
+        response = self.generate_content(prompt + keypoint_prompt, return_json=True)
+        
+        # 格式化並轉換返回的數據以匹配前端期望
+        if isinstance(response, dict) and "correct_answer" in response:
+            # 將數字索引 (0-3) 轉換為字母 (A-D)
+            correct_index = response["correct_answer"]
+            if isinstance(correct_index, int) and 0 <= correct_index <= 3:
+                answer_letter = chr(65 + correct_index)  # A, B, C, D
+                
+                # 創建新的返回對象
+                formatted_response = {
+                    "question": response.get("question", ""),
+                    "options": response.get("options", []),
+                    "answer": answer_letter,  # 前端期望的是 A, B, C, D
+                    "explanation": response.get("explanation", ""),  # 包含解釋，如果有的話
+                    "Keypoints_Index": keypoint_json.get("Keypoints_Index", 0)  # 包含重點索引
+                }
+                return formatted_response
+            
+        # 如果返回的數據格式不正確或沒有正確答案，創建一個預設返回
+        return {
+            "question": "無法生成有效的問題。請重試或選擇不同的重點。",
+            "options": ["選項1", "選項2", "選項3", "選項4"],
+            "answer": "A",
+            "explanation": "系統生成問題時出錯",
+            "Keypoints_Index": keypoint_json.get("Keypoints_Index", 0)
+        }
     
 
 
