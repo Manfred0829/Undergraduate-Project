@@ -304,87 +304,115 @@
 
         /* Quiz Panel */
         .quiz-container {
-            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
         .quiz-question {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
-
         .quiz-question h3 {
             font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 15px;
+            color: #333;
         }
-
         .quiz-options {
-            list-style: none;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
-
         .quiz-options li {
             margin-bottom: 10px;
         }
-
         .quiz-options label {
             display: flex;
             align-items: center;
-            padding: 10px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background-color 0.2s;
+            gap: 8px;
         }
-
         .quiz-options label:hover {
-            background-color: var(--hover-color);
+            background-color: #f5f8ff;
         }
-
-        .quiz-options input[type="radio"] {
-            margin-right: 10px;
+        .quiz-options input[type="checkbox"] {
+            margin-right: 8px;
         }
-
+        .quiz-answer {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f5f8ff;
+            border-radius: 5px;
+            border-left: 4px solid #4a6cf7;
+        }
+        .quiz-answer p {
+            margin: 5px 0;
+        }
+        .quiz-submit-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
         .submit-quiz {
-            background-color: var(--primary-color);
+            padding: 10px 20px;
+            background-color: #4a6cf7;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 1rem;
-            margin-top: 20px;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition: background-color 0.2s;
         }
-
         .submit-quiz:hover {
-            background-color: var(--primary-dark);
+            background-color: #3a5cde;
         }
-
+        .submit-quiz:disabled {
+            background-color: #B0BEC5;
+            cursor: not-allowed;
+        }
         .quiz-result {
             margin-top: 20px;
             padding: 15px;
-            border-radius: 4px;
+            border-radius: 8px;
             display: none;
         }
-
         .quiz-result.correct {
-            background-color: #e7f7ed;
-            border: 1px solid #b7e1c1;
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
         }
-
         .quiz-result.incorrect {
-            background-color: #fee7e7;
-            border: 1px solid #e1b7b7;
+            background-color: #fbe9e7;
+            border-left: 4px solid #ff5722;
         }
-
         .quiz-result h4 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            margin-top: 0;
+            font-weight: 600;
+            color: #333;
         }
-
         .quiz-explanation {
             margin-top: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* 選項正確/錯誤樣式 */
+        .quiz-options label.correct {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        .quiz-options label.incorrect {
+            background-color: #fbe9e7;
+            border-left: 4px solid #ff5722;
+        }
+        .quiz-options label.highlight-correct {
+            background-color: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-left: 4px solid #4caf50;
         }
 
         /* History Panel */
@@ -847,6 +875,156 @@
             font-weight: 500;
             border-radius: 4px;
         }
+
+        /* 出題介面特定樣式 */
+        .key-points-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-label {
+            font-weight: 500;
+            min-width: 70px;
+        }
+
+        .nav-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            min-width: 200px;
+            font-size: 1rem;
+        }
+
+        .nav-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            width: 80px;
+            font-size: 1rem;
+        }
+
+        .generate-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .generate-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .generate-btn svg {
+            width: 18px;
+            height: 18px;
+            color: white;
+        }
+
+        .quiz-questions-container {
+            margin: 20px 0;
+        }
+
+        .quiz-placeholder {
+            padding: 30px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
+            color: #666;
+        }
+
+        .quiz-question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .quiz-options {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options li {
+            margin-bottom: 10px;
+        }
+
+        .quiz-options label {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-options label:hover {
+            background-color: var(--hover-color);
+        }
+
+        .quiz-options input[type="checkbox"] {
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+
+        .quiz-answer {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f0f7ff;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .quiz-submit-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .submit-quiz {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 50px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .submit-quiz:hover {
+            background-color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
@@ -1093,7 +1271,7 @@
 
             <!-- Quiz Panel -->
             <div id="quiz-panel" class="content-panel">
-                <h2>英文學習測驗</h2>
+                <h2>出題介面</h2>
                 <div class="quiz-container">
                     <!-- 頂部導覽欄 -->
                     <div class="key-points-nav">
@@ -1101,9 +1279,6 @@
                             <span class="nav-label">講義名稱</span>
                             <select id="quiz-lecture-select" class="nav-select">
                                 <option value="">請選擇講義</option>
-                                <option value="1">英語語法講義.pdf</option>
-                                <option value="2">英語時態使用指南.docx</option>
-                                <option value="3">英文詞彙學習講義.pdf</option>
                             </select>
                         </div>
                         <div class="nav-group">
@@ -1111,7 +1286,7 @@
                             <input type="number" id="quiz-number-input" class="nav-input" min="1" max="20" value="5">
                         </div>
                         <div class="nav-group">
-                            <button id="generate-quiz-btn" class="nav-button generate-btn">
+                            <button id="generate-quiz-btn" class="generate-btn">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                                 </svg>
@@ -1120,75 +1295,17 @@
                         </div>
                     </div>
                     
-                    <div class="quiz-question">
-                        <h3>1. Which of the following is NOT a type of conditional sentence in English?</h3>
-                        <ul class="quiz-options">
-                            <li>
-                                <label>
-                                    <input type="radio" name="q1" value="A">
-                                    Zero conditional
-                                </label>
-                            </li>
-                            <li>
-                                <label>
-                                    <input type="radio" name="q1" value="B">
-                                    First conditional
-                                </label>
-                            </li>
-                            <li>
-                                <label>
-                                    <input type="radio" name="q1" value="C">
-                                    Third conditional
-                                </label>
-                            </li>
-                            <li>
-                                <label>
-                                    <input type="radio" name="q1" value="D">
-                                    Fifth conditional
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="quiz-question">
-                        <h3>2. Choose the correct tense for the blank: "By the time I arrived, they __________ already for two hours."</h3>
-                        <ul class="quiz-options">
-                            <li>
-                                <label>
-                                    <input type="radio" name="q2" value="A">
-                                    were waiting
-                                </label>
-                            </li>
-                            <li>
-                                <label>
-                                    <input type="radio" name="q2" value="B">
-                                    had been waiting
-                                </label>
-                            </li>
-                            <li>
-                                <label>
-                                    <input type="radio" name="q2" value="C">
-                                    have been waiting
-                                </label>
-                            </li>
-                            <li>
-                                <label>
-                                    <input type="radio" name="q2" value="D">
-                                    are waiting
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button class="submit-quiz">提交答案</button>
-
-                    <div class="quiz-result">
-                        <h4>測驗結果</h4>
-                        <p class="result-message">您答對了 2/2 題！</p>
-                        <div class="quiz-explanation">
-                            <p><strong>問題 1:</strong> 正確答案是 D - Fifth conditional。英語中只有零、一、二、三條件句，沒有第五條件句。</p>
-                            <p><strong>問題 2:</strong> 正確答案是 B - had been waiting。這是過去完成進行時，表示過去某一時間點之前已經持續進行的動作。</p>
+                    <!-- 測驗區域 -->
+                    <div id="quiz-questions-container" class="quiz-questions-container">
+                        <!-- 這裡將由JavaScript動態填充題目 -->
+                        <div class="quiz-placeholder">
+                            <p>請選擇講義並設定題數，然後點擊「產生測驗」按鈕來生成題目</p>
                         </div>
+                    </div>
+
+                    <!-- 提交答案按鈕 -->
+                    <div class="quiz-submit-container">
+                        <button id="check-answers-btn" class="submit-quiz">對答案</button>
                     </div>
                 </div>
             </div>
@@ -2702,110 +2819,236 @@
             // 更新標題
             document.querySelector('#quiz-panel h2').textContent = `${subjectName}學習測驗`;
             
-            // 清空現有內容
-            const quizContainer = document.querySelector('#quiz-panel .quiz-container');
-            quizContainer.innerHTML = '';
+            // 清空測驗問題容器
+            const quizQuestionsContainer = document.getElementById('quiz-questions-container');
+            quizQuestionsContainer.innerHTML = '<div class="quiz-placeholder"><p>請選擇講義並設定題數，然後點擊「產生測驗」按鈕來生成題目</p></div>';
             
-            // 從後端獲取測驗內容，這裡先使用預設內容
-            fetch(`/api/subjects/${subjectName}/quizzes`)
+            // 更新講義下拉選單
+            const quizLectureSelect = document.getElementById('quiz-lecture-select');
+            // 清空現有選項，只保留第一個
+            while (quizLectureSelect.options.length > 1) {
+                quizLectureSelect.remove(1);
+            }
+            
+            // 添加載入中提示
+            const loadingOption = document.createElement('option');
+            loadingOption.text = '載入中...';
+            loadingOption.disabled = true;
+            quizLectureSelect.appendChild(loadingOption);
+            
+            // 從後端獲取講義列表
+            fetch(`/api/lectures/${subjectName}`)
                 .then(response => {
                     if (!response.ok) {
-                        // 如果API不存在或出錯，顯示空白內容
-                        quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
-                        throw new Error('獲取測驗失敗');
+                        throw new Error('加載講義列表失敗');
                     }
                     return response.json();
                 })
                 .then(data => {
-                    if (data && data.quizzes && data.quizzes.length > 0) {
-                        // 如果有內容，顯示測驗題目
-                        data.quizzes.forEach((quiz, index) => {
-                            const quizQuestionDiv = document.createElement('div');
-                            quizQuestionDiv.className = 'quiz-question';
-                            
-                            const title = document.createElement('h3');
-                            title.textContent = `${index + 1}. ${quiz.question}`;
-                            quizQuestionDiv.appendChild(title);
-                            
-                            const optionsList = document.createElement('ul');
-                            optionsList.className = 'quiz-options';
-                            
-                            quiz.options.forEach((option, optIndex) => {
-                                const li = document.createElement('li');
-                                const label = document.createElement('label');
-                                const input = document.createElement('input');
-                                input.type = 'radio';
-                                input.name = `q${index + 1}`;
-                                input.value = String.fromCharCode(65 + optIndex); // A, B, C, D...
-                                
-                                label.appendChild(input);
-                                label.appendChild(document.createTextNode(` ${option}`));
-                                li.appendChild(label);
-                                optionsList.appendChild(li);
-                            });
-                            
-                            quizQuestionDiv.appendChild(optionsList);
-                            quizContainer.appendChild(quizQuestionDiv);
+                    // 移除載入中提示
+                    quizLectureSelect.remove(1);
+                    
+                    // 添加講義選項
+                    if (data && data.length > 0) {
+                        data.forEach(lecture => {
+                            const option = document.createElement('option');
+                            option.value = lecture.filename;
+                            option.text = lecture.filename;
+                            quizLectureSelect.appendChild(option);
                         });
-                        
-                        // 添加提交按鈕
-                        const submitBtn = document.createElement('button');
-                        submitBtn.className = 'submit-quiz';
-                        submitBtn.textContent = '提交答案';
-                        quizContainer.appendChild(submitBtn);
-                        
-                        // 添加結果區域
-                        const resultDiv = document.createElement('div');
-                        resultDiv.className = 'quiz-result';
-                        resultDiv.style.display = 'none';
-                        resultDiv.innerHTML = `
-                            <h4>測驗結果</h4>
-                            <p class="result-message"></p>
-                            <div class="quiz-explanation"></div>
-                        `;
-                        quizContainer.appendChild(resultDiv);
-                        
-                        // 綁定提交事件
-                        submitBtn.addEventListener('click', () => {
-                            resultDiv.style.display = 'block';
-                            resultDiv.classList.add('correct');
-                            resultDiv.querySelector('.result-message').textContent = `您答對了 ${data.quizzes.length}/${data.quizzes.length} 題！`;
-                            
-                            // 滾動到結果
-                            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        });
-                    } else {
-                        // 如果沒有內容，顯示生成測驗的按鈕
-                        quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
-                        
-                        // 綁定產生測驗的點擊事件
-                        const generateBtn = quizContainer.querySelector('.submit-quiz');
-                        generateBtn.addEventListener('click', () => {
-                            generateBtn.textContent = '產生中...';
-                            generateBtn.disabled = true;
-                            
-                            // 這裡可以加載示例測驗，實際上應該是請求後端生成
-                            setTimeout(() => {
-                                const exampleQuiz = [
-                                    {
-                                        question: '這是一個示例測驗問題？',
-                                        options: ['選項A', '選項B', '選項C', '選項D'],
-                                        answer: 'A',
-                                        explanation: '這是答案解釋'
-                                    }
-                                ];
-                                
-                                // 重新加載測驗
-                                updateQuizContent(subjectName);
-                            }, 1500);
-                        });
+                    } 
+                    else {
+                        // 無講義時添加提示
+                        const emptyOption = document.createElement('option');
+                        emptyOption.text = '未找到講義';
+                        emptyOption.disabled = true;
+                        quizLectureSelect.appendChild(emptyOption);
                     }
                 })
                 .catch(error => {
-                    console.error('獲取測驗錯誤:', error);
-                    // 顯示預設訊息
-                    quizContainer.innerHTML = '<p>尚未有測驗內容</p><button class="submit-quiz">產生測驗</button>';
+                    console.error('加載講義列表錯誤:', error);
+                    // 移除載入中提示
+                    quizLectureSelect.remove(1);
+                    // 添加錯誤提示
+                    const errorOption = document.createElement('option');
+                    errorOption.text = '載入失敗';
+                    errorOption.disabled = true;
+                    quizLectureSelect.appendChild(errorOption);
                 });
+                
+            // 初始化產生測驗按鈕的事件監聽
+            const generateQuizBtn = document.getElementById('generate-quiz-btn');
+            generateQuizBtn.removeEventListener('click', generateQuiz);
+            generateQuizBtn.addEventListener('click', generateQuiz);
+            
+            // 初始化對答案按鈕的事件監聽
+            const checkAnswersBtn = document.getElementById('check-answers-btn');
+            checkAnswersBtn.removeEventListener('click', checkAnswers);
+            checkAnswersBtn.addEventListener('click', checkAnswers);
+        }
+        
+        // 產生測驗函數
+        function generateQuiz() {
+            // 獲取當前選定的科目
+            const currentSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (currentSubject === '+ 新增科目') {
+                alert('請先選擇有效的科目');
+                return;
+            }
+            
+            // 獲取選定的講義
+            const lectureSelect = document.getElementById('quiz-lecture-select');
+            const lectureName = lectureSelect.value;
+            if (!lectureName) {
+                alert('請選擇講義');
+                return;
+            }
+            
+            // 獲取題數
+            const numQuestionsInput = document.getElementById('quiz-number-input');
+            const numQuestions = parseInt(numQuestionsInput.value);
+            if (isNaN(numQuestions) || numQuestions < 1) {
+                alert('請輸入有效的題數');
+                return;
+            }
+            
+            // 顯示載入中狀態
+            const quizQuestionsContainer = document.getElementById('quiz-questions-container');
+            quizQuestionsContainer.innerHTML = '<div class="quiz-placeholder"><p>正在生成測驗題目，請稍候...</p></div>';
+            
+            // 禁用產生按鈕
+            const generateQuizBtn = document.getElementById('generate-quiz-btn');
+            generateQuizBtn.disabled = true;
+            generateQuizBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>產生中...';
+            
+            // 發送API請求
+            fetch(`/api/subjects/${currentSubject}/quizzes?lecture_name=${encodeURIComponent(lectureName)}&num_questions=${numQuestions}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('生成測驗失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 恢復按鈕狀態
+                    generateQuizBtn.disabled = false;
+                    generateQuizBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>產生測驗';
+                    
+                    // 清空容器
+                    quizQuestionsContainer.innerHTML = '';
+                    
+                    // 檢查是否有測驗數據
+                    if (!data.success || !data.quizzes || data.quizzes.length === 0) {
+                        quizQuestionsContainer.innerHTML = '<div class="quiz-placeholder"><p>無法生成測驗題目，請稍後再試</p></div>';
+                        return;
+                    }
+                    
+                    // 生成測驗題目
+                    data.quizzes.forEach((quiz, index) => {
+                        const questionDiv = document.createElement('div');
+                        questionDiv.className = 'quiz-question';
+                        questionDiv.setAttribute('data-question-index', index);
+                        questionDiv.setAttribute('data-correct-answer', quiz.answer); // 儲存正確答案
+                        
+                        // 添加題目敘述
+                        const questionTitle = document.createElement('h3');
+                        questionTitle.textContent = quiz.question;
+                        questionDiv.appendChild(questionTitle);
+                        
+                        // 添加選項
+                        const optionsList = document.createElement('ul');
+                        optionsList.className = 'quiz-options';
+                        
+                        quiz.options.forEach((option, optIndex) => {
+                            const li = document.createElement('li');
+                            const label = document.createElement('label');
+                            const input = document.createElement('input');
+                            input.type = 'checkbox';
+                            input.name = `q${index}`;
+                            input.value = String.fromCharCode(65 + optIndex); // A, B, C, D...
+                            
+                            label.appendChild(input);
+                            label.appendChild(document.createTextNode(` ${optIndex + 1}. ${option}`));
+                            li.appendChild(label);
+                            optionsList.appendChild(li);
+                        });
+                        
+                        questionDiv.appendChild(optionsList);
+                        
+                        // 添加答案區域（初始隱藏）
+                        const answerDiv = document.createElement('div');
+                        answerDiv.className = 'quiz-answer';
+                        answerDiv.style.display = 'none';
+                        answerDiv.innerHTML = `<p>正確答案: ${quiz.answer}</p>`;
+                        if (quiz.explanation) {
+                            answerDiv.innerHTML += `<p>解釋: ${quiz.explanation}</p>`;
+                        }
+                        questionDiv.appendChild(answerDiv);
+                        
+                        quizQuestionsContainer.appendChild(questionDiv);
+                    });
+                    
+                    // 確保對答案按鈕可見
+                    document.querySelector('.quiz-submit-container').style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('生成測驗錯誤:', error);
+                    // 恢復按鈕狀態
+                    generateQuizBtn.disabled = false;
+                    generateQuizBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>產生測驗';
+                    
+                    // 顯示錯誤消息
+                    quizQuestionsContainer.innerHTML = `<div class="quiz-placeholder"><p>生成測驗時出錯: ${error.message}</p></div>`;
+                });
+        }
+        
+        // 對答案函數
+        function checkAnswers() {
+            // 獲取所有問題
+            const questions = document.querySelectorAll('.quiz-question');
+            if (questions.length === 0) {
+                alert('請先生成測驗題目');
+                return;
+            }
+            
+            // 顯示所有答案
+            questions.forEach(question => {
+                const answerDiv = question.querySelector('.quiz-answer');
+                if (answerDiv) {
+                    answerDiv.style.display = 'block';
+                }
+                
+                // 檢查用戶選擇
+                const correctAnswer = question.getAttribute('data-correct-answer');
+                const selectedInputs = question.querySelectorAll('input[type="checkbox"]:checked');
+                
+                // 禁用所有選項
+                question.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                    input.disabled = true;
+                });
+                
+                // 標記用戶選擇的答案
+                selectedInputs.forEach(input => {
+                    const label = input.parentElement;
+                    if (input.value === correctAnswer) {
+                        label.classList.add('correct');
+                    } else {
+                        label.classList.add('incorrect');
+                    }
+                });
+                
+                // 標記正確答案
+                question.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                    if (input.value === correctAnswer && !input.checked) {
+                        input.parentElement.classList.add('highlight-correct');
+                    }
+                });
+            });
+            
+            // 禁用對答案按鈕
+            const checkAnswersBtn = document.getElementById('check-answers-btn');
+            checkAnswersBtn.disabled = true;
+            checkAnswersBtn.textContent = '已顯示答案';
         }
 
         keyPointsBtn.addEventListener('click', () => {
@@ -3305,6 +3548,175 @@
             // 只有當不是「新增科目」選項時才載入
             if (selectedSubject !== '+ 新增科目') {
                 loadLecturesForSubject(selectedSubject);
+            }
+        });
+
+        // 產生測驗按鈕點擊事件
+        document.getElementById('generate-quiz-btn').addEventListener('click', function() {
+            const lectureSelect = document.getElementById('quiz-lecture-select');
+            const numQuestions = document.getElementById('quiz-number-input').value;
+            
+            if (!lectureSelect.value) {
+                alert('請選擇一個講義');
+                return;
+            }
+            
+            if (!numQuestions || numQuestions < 1) {
+                alert('請輸入有效的題數');
+                return;
+            }
+            
+            // 顯示加載中狀態
+            const questionsContainer = document.getElementById('quiz-questions-container');
+            questionsContainer.innerHTML = '<div class="loading">正在生成題目，請稍候...</div>';
+            
+            // 發送請求到後端API
+            const currentSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            
+            fetch(`/api/subjects/${currentSubject}/quizzes?lecture_name=${lectureSelect.value}&num_questions=${numQuestions}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('生成測驗失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        renderQuizQuestions(data.quizzes);
+                    } else {
+                        questionsContainer.innerHTML = '<div class="error">生成測驗失敗: ' + data.error + '</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('生成測驗錯誤:', error);
+                    questionsContainer.innerHTML = '<div class="error">生成測驗時發生錯誤: ' + error.message + '</div>';
+                });
+        });
+        
+        // 渲染測驗題目
+        function renderQuizQuestions(quizzes) {
+            const questionsContainer = document.getElementById('quiz-questions-container');
+            questionsContainer.innerHTML = '';
+            
+            if (!quizzes || quizzes.length === 0) {
+                questionsContainer.innerHTML = '<div class="no-data">未能生成測驗題目，請嘗試其他講義或調整題數。</div>';
+                return;
+            }
+            
+            quizzes.forEach((quiz, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'quiz-question';
+                
+                const questionTitle = document.createElement('h3');
+                questionTitle.textContent = `${index + 1}. ${quiz.question}`;
+                questionDiv.appendChild(questionTitle);
+                
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'quiz-options';
+                
+                quiz.options.forEach((option, optIndex) => {
+                    const optionItem = document.createElement('li');
+                    const label = document.createElement('label');
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = `q${index}`;
+                    checkbox.value = optIndex;
+                    
+                    const optionText = document.createTextNode(`${optIndex + 1}. ${option}`);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(optionText);
+                    optionItem.appendChild(label);
+                    optionsList.appendChild(optionItem);
+                });
+                
+                questionDiv.appendChild(optionsList);
+                
+                // 正確答案區域（初始隱藏）
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'quiz-answer';
+                answerDiv.id = `answer-${index}`;
+                if (quiz.correct_answer !== undefined) {
+                    answerDiv.textContent = `正確答案: ${quiz.correct_answer + 1}. ${quiz.options[quiz.correct_answer]}`;
+                } else {
+                    answerDiv.textContent = '未提供答案';
+                }
+                questionDiv.appendChild(answerDiv);
+                
+                questionsContainer.appendChild(questionDiv);
+            });
+            
+            // 顯示對答案按鈕
+            document.getElementById('check-answers-btn').style.display = 'block';
+        }
+        
+        // 對答案按鈕點擊事件
+        document.getElementById('check-answers-btn').addEventListener('click', function() {
+            // 顯示所有答案
+            const answerDivs = document.querySelectorAll('.quiz-answer');
+            answerDivs.forEach(div => {
+                div.style.display = 'block';
+            });
+            
+            // 禁用所有選項
+            const checkboxes = document.querySelectorAll('.quiz-options input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.disabled = true;
+            });
+            
+            // 隱藏對答案按鈕
+            this.style.display = 'none';
+        });
+        
+        // 監聽科目變化，更新講義列表
+        subjectDropdown.addEventListener('change', function() {
+            const selectedSubject = this.options[this.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                updateQuizLectureOptions(selectedSubject);
+            }
+        });
+        
+        // 更新出題頁面的講義選項
+        function updateQuizLectureOptions(subject) {
+            const quizLectureSelect = document.getElementById('quiz-lecture-select');
+            
+            // 清空現有選項
+            while (quizLectureSelect.options.length > 1) {
+                quizLectureSelect.remove(1);
+            }
+            
+            // 獲取該科目的講義列表
+            fetch(`/api/lectures/${subject}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('獲取講義列表失敗');
+                    }
+                    return response.json();
+                })
+                .then(lectures => {
+                    if (lectures && lectures.length > 0) {
+                        lectures.forEach(lecture => {
+                            const option = document.createElement('option');
+                            option.value = lecture.filename;
+                            option.text = lecture.filename;
+                            quizLectureSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('載入講義列表錯誤:', error);
+                });
+        }
+        
+        // 頁面加載時初始化
+        window.addEventListener('DOMContentLoaded', function() {
+            // 其他初始化代碼...
+            
+            // 初始隱藏對答案按鈕
+            const checkAnswersBtn = document.getElementById('check-answers-btn');
+            if (checkAnswersBtn) {
+                checkAnswersBtn.style.display = 'none';
             }
         });
     </script>
