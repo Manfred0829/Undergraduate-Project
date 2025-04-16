@@ -1653,6 +1653,12 @@
             if (e.target.value !== 'add-new') {
                 const selectedSubject = e.target.options[e.target.selectedIndex].text;
                 updateUIForSelectedSubject(selectedSubject);
+                
+                // 同時更新重點列表中的講義選擇器
+                updateKeyPointsLectureSelector(selectedSubject);
+                
+                // 更新重點統合中的講義列表
+                loadLecturesForSubject(selectedSubject);
             }
         });
         
@@ -2098,6 +2104,12 @@
                 panel.classList.remove('active');
             });
             keyPointsPanel.classList.add('active');
+            
+            // 獲取當前選擇的科目，並更新講義下拉選單
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                loadLecturesForSubject(selectedSubject);
+            }
         });
         
         quizBtn.addEventListener('click', () => {
@@ -2808,6 +2820,12 @@
                 panel.classList.remove('active');
             });
             keyPointsPanel.classList.add('active');
+            
+            // 獲取當前選擇的科目，並更新講義下拉選單
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject !== '+ 新增科目') {
+                loadLecturesForSubject(selectedSubject);
+            }
         });
         
         // 重點列表按鈕的事件處理器
@@ -2836,6 +2854,18 @@
         
         // 更新重點列表中的講義選擇器
         function updateKeyPointsLectureSelector(subjectName) {
+            const lectureSelect = document.getElementById('key-points-lecture-select');
+            // 清空現有選項，只保留第一個
+            while (lectureSelect.options.length > 1) {
+                lectureSelect.remove(1);
+            }
+            
+            // 添加載入中提示
+            const loadingOption = document.createElement('option');
+            loadingOption.text = '載入中...';
+            loadingOption.disabled = true;
+            lectureSelect.appendChild(loadingOption);
+            
             fetch(`/api/lectures/${subjectName}`)
                 .then(response => {
                     if (!response.ok) {
@@ -2844,11 +2874,8 @@
                     return response.json();
                 })
                 .then(data => {
-                    const lectureSelect = document.getElementById('key-points-lecture-select');
-                    // 清空現有選項，只保留第一個
-                    while (lectureSelect.options.length > 1) {
-                        lectureSelect.remove(1);
-                    }
+                    // 移除載入中提示
+                    lectureSelect.remove(1);
                     
                     // 添加講義選項
                     if (data && data.length > 0) {
@@ -2858,10 +2885,27 @@
                             option.text = lecture.filename;
                             lectureSelect.appendChild(option);
                         });
+                    } 
+                    else {
+                        // 無講義時添加提示
+                        const emptyOption = document.createElement('option');
+                        emptyOption.text = '未找到講義';
+                        emptyOption.disabled = true;
+                        lectureSelect.appendChild(emptyOption);
                     }
                 })
                 .catch(error => {
                     console.error('加載講義列表錯誤:', error);
+                    // 移除載入中提示
+                    if (lectureSelect.options.length > 1) {
+                        lectureSelect.remove(1);
+                    }
+                    
+                    // 加載失敗時添加提示
+                    const errorOption = document.createElement('option');
+                    errorOption.text = '加載失敗';
+                    errorOption.disabled = true;
+                    lectureSelect.appendChild(errorOption);
                 });
         }
         
@@ -3149,6 +3193,8 @@
                 
                 // 加載該科目的講義列表
                 loadLecturesForSubject(subjectName);
+                // 同時更新重點列表中的講義選擇器
+                updateKeyPointsLectureSelector(subjectName);
             }
         });
 
@@ -3182,10 +3228,10 @@
             if (!subject) return;
             
             // 顯示載入中的提示
-            const option = document.createElement('option');
-            option.text = '載入中...';
-            option.disabled = true;
-            integrationLectureSelect.appendChild(option);
+            const loadingOption = document.createElement('option');
+            loadingOption.text = '載入中...';
+            loadingOption.disabled = true;
+            integrationLectureSelect.appendChild(loadingOption);
             
             // 從後端 API 獲取該科目的講義列表
             fetch(`/api/lectures/${subject}`)
@@ -3201,18 +3247,40 @@
                     
                     // 添加講義選項
                     if (data && data.length > 0) {
+                        // 用於記錄已添加的檔案名稱和對應的ID，使用Map結構
+                        const filenameMap = new Map();
+                        
+                        // 首先將所有檔案名稱和ID存入Map
                         data.forEach(lecture => {
+                            // 只存儲第一次遇到的檔案名稱和對應ID
+                            if (!filenameMap.has(lecture.filename)) {
+                                filenameMap.set(lecture.filename, lecture.id);
+                            }
+                        });
+                        
+                        // 根據Map創建選項
+                        filenameMap.forEach((id, filename) => {
                             const option = document.createElement('option');
-                            option.value = lecture.id; // 使用講義的ID作為值
-                            option.text = lecture.filename; // 顯示講義的文件名
+                            option.value = id;
+                            option.text = filename;
                             integrationLectureSelect.appendChild(option);
                         });
-                    } else {
-                        // 無講義時的提示
-                        const option = document.createElement('option');
-                        option.text = '未找到講義';
-                        option.disabled = true;
-                        integrationLectureSelect.appendChild(option);
+                        
+                        // 如果重點統合面板是當前活動的面板，自動載入第一個講義的內容
+                        if (document.getElementById('key-points-panel').classList.contains('active') && integrationLectureSelect.options.length > 1) {
+                            // 選擇第一個講義（索引為1，因為第0個是預設選項）
+                            integrationLectureSelect.selectedIndex = 1;
+                            // 觸發change事件
+                            const event = new Event('change');
+                            integrationLectureSelect.dispatchEvent(event);
+                        }
+                    } 
+                    else {
+                        // 無講義時添加提示
+                        const emptyOption = document.createElement('option');
+                        emptyOption.text = '未找到講義';
+                        emptyOption.disabled = true;
+                        integrationLectureSelect.appendChild(emptyOption);
                     }
                 })
                 .catch(error => {
@@ -3221,18 +3289,23 @@
                     if (integrationLectureSelect.options.length > 1) {
                         integrationLectureSelect.remove(1);
                     }
-                    // 添加錯誤提示
-                    const option = document.createElement('option');
-                    option.text = '加載失敗';
-                    option.disabled = true;
-                    integrationLectureSelect.appendChild(option);
+                    
+                    // 加載失敗時添加提示
+                    const errorOption = document.createElement('option');
+                    errorOption.text = '加載失敗';
+                    errorOption.disabled = true;
+                    integrationLectureSelect.appendChild(errorOption);
                 });
         }
 
         // 科目切換時更新講義列表
         document.getElementById('subject-dropdown').addEventListener('change', function() {
-            const subject = this.value;
-            loadLecturesForSubject(subject);
+            // 使用科目的文本而非值，確保與其他地方保持一致
+            const selectedSubject = this.options[this.selectedIndex].text;
+            // 只有當不是「新增科目」選項時才載入
+            if (selectedSubject !== '+ 新增科目') {
+                loadLecturesForSubject(selectedSubject);
+            }
         });
     </script>
 </body>
