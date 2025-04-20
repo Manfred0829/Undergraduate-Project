@@ -392,6 +392,8 @@ def create_subject_folders(subject_name):
         
         # 創建 data_server 下的資料夾
         os.makedirs(data_server_path, exist_ok=True)
+        os.makedirs(os.path.join(data_server_path, "lectures"), exist_ok=True)
+        os.makedirs(os.path.join(data_server_path, "notes"), exist_ok=True)
         
         # 創建 index.json 檔案
         lectures_index_path = os.path.join(data_upload_path, "lectures", "index.json")
@@ -420,7 +422,6 @@ def delete_subject_folders(subject_name):
         # 定義需要刪除的路徑
         data_upload_path = os.path.join("app", "data_upload", subject_name)
         data_server_path = os.path.join("app", "data_server", subject_name)
-        data_json_path = os.path.join("app", "data_json", subject_name)
         
         # 檢查路徑是否存在，存在則刪除
         paths_to_delete = []
@@ -428,8 +429,6 @@ def delete_subject_folders(subject_name):
             paths_to_delete.append(data_upload_path)
         if os.path.exists(data_server_path):
             paths_to_delete.append(data_server_path)
-        if os.path.exists(data_json_path):
-            paths_to_delete.append(data_json_path)
         
         # 如果沒有找到任何資料夾，返回錯誤
         if not paths_to_delete:

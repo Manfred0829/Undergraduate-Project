@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, send_file, redirect
 import os
 import json
-from app.services.file_service import get_subjects, get_lectures, get_notes, get_notes_for_lecture
+from app.services.file_service import get_subjects, get_lectures, get_notes, get_notes_for_lecture, create_subject_folders, delete_subject_folders
 from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions, processing_update_weights, processing_get_notes, processing_get_history, processing_update_topics
 from app.utils.media_processer import get_num_pages
 # 創建 Blueprint
@@ -269,4 +269,52 @@ def get_history(subject, lecture_name):
         print('error:', e)
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@htmx_bp.route('/subjects/create', methods=['POST'])
+def htmx_create_subject():
+    """API端點：創建新科目"""
+    data = request.get_json()
+    
+    if not data or 'subject_name' not in data:
+        return jsonify({'success': False, 'error': '缺少科目名稱參數'}), 400
+    
+    subject_name = data['subject_name']
+    
+    # 驗證科目名稱
+    if not subject_name or len(subject_name.strip()) == 0:
+        return jsonify({'success': False, 'error': '科目名稱不能為空'}), 400
+    
+    # 創建科目資料夾結構
+    result = create_subject_folders(subject_name)
+    
+    if result['success']:
+        return jsonify(result), 200
+    else:
+        return jsonify(result), 500
+
+@htmx_bp.route('/subjects/delete', methods=['POST'])
+def htmx_delete_subject():
+    """API端點：刪除科目"""
+    data = request.get_json()
+    
+    if not data or 'subject_name' not in data:
+        return jsonify({'success': False, 'error': '缺少科目名稱參數'}), 400
+    
+    subject_name = data['subject_name']
+    
+    # 驗證科目名稱
+    if not subject_name or len(subject_name.strip()) == 0:
+        return jsonify({'success': False, 'error': '科目名稱不能為空'}), 400
+    
+    # 檢查科目名稱是否存在
+    subjects = get_subjects()
+    if subject_name not in subjects:
+        return jsonify({'success': False, 'error': '該科目不存在'}), 404
+    
+    # 刪除科目資料夾
+    result = delete_subject_folders(subject_name)
+    
+    if result['success']:
+        return jsonify(result), 200
+    else:
+        return jsonify(result), 500
 
