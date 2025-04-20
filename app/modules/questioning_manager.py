@@ -21,14 +21,17 @@ class QuestioningManager():
                 kp["Importance"] = 2  # 設置默認重要性為一般
             if "Learning_Progress" not in kp:
                 kp["Learning_Progress"] = 0  # 設置默認學習進度為0
+            if "Learning_Rate" not in kp:
+                kp["Learning_Rate"] = 0.0  # 設置默認學習率為0
         
         self.alpha = 1.0
         
         self.bases = [self._calculate_base(kp["Difficulty"], kp["Importance"]) for kp in self.keypoints]
         self.probabilitys = [self._calculate_probability(kp["Learning_Progress"], kp["Difficulty"]) for kp in self.keypoints]
-        self.lrs = [self._calculate_learning_rate(kp["Learning_Progress"], kp["Difficulty"]) for kp in self.keypoints]
+        # self.lrs = [self._calculate_learning_rate(kp["Learning_Progress"], kp["Difficulty"]) for kp in self.keypoints]
 
-        self.overall_lr = sum(self.lrs)/self.N  # 完成比例,0-100% (progress: 學習進度, 無上限)
+        # 計算總體學習率：所有關鍵點的學習率平均值
+        self.overall_lr = sum(kp.get("Learning_Rate", 0.0) for kp in self.keypoints) / self.N if self.N > 0 else 0.0
         self.T = self._calculate_T()
 
     """ 抽選重點 """
@@ -83,6 +86,7 @@ class QuestioningManager():
         return question_json
     
     def update_weights(self,answer_results):
+
         for result in answer_results:
             k_idx = result["Keypoints_Index"]
             is_Correct = result["is_Correct"]
@@ -96,11 +100,12 @@ class QuestioningManager():
             
             # update overall lr, lr based on progress
             new_lr = self._calculate_learning_rate(self.keypoints[k_idx]['Learning_Progress'], difficulty)
-            self.overall_lr += (new_lr - self.lrs[k_idx]) / self.N
-            self.lrs[k_idx] = new_lr
+            self.overall_lr += (new_lr - self.keypoints[k_idx]['Learning_Rate']) / self.N
+            self.keypoints[k_idx]['Learning_Rate'] = new_lr
 
             # update prob based on progress
             self.probabilitys[k_idx] = self._calculate_probability(self.keypoints[k_idx]['Learning_Progress'], difficulty)
+     
 
         # update T based on overall_lr
         self.T = self._calculate_T()
@@ -109,5 +114,5 @@ class QuestioningManager():
         print("Overall lr: " + str(self.overall_lr))
 
         # return edited keypoints_json
-        return self.keypoints
+        return self.keypoints, self.overall_lr
 

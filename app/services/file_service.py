@@ -433,3 +433,108 @@ def delete_subject_folders(subject_name):
         }
     except Exception as e:
         return {'success': False, 'error': str(e)}
+
+
+# 刪除講義
+def delete_lecture_htmx(subject, lecture_id):
+    """刪除指定ID的講義"""
+
+    # set 
+    directory_upload_path = os.path.join("app", "data_upload", subject, "lectures")
+    directory_server_path = os.path.join("app", "data_server", subject, "lectures")
+
+    index_path = os.path.join(directory_upload_path, "index.json")
+    register = text_processer.read_json(index_path, default_content=[])
+
+    filename = None
+    i = -1
+    for idx, entry in enumerate(register):
+        if entry.get("id") == lecture_id:
+            filename = entry.get("filename")
+            i = idx
+            break
+    
+    if filename is None:
+        return {'success': False, 'error': '找不到指定的講義'}
+    
+    file_name_without_ext = filename.split('.')[0]
+
+    # 安全刪除函數
+    def safe_remove(file_path):
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"刪除檔案時發生錯誤: {file_path}, 錯誤: {str(e)}")
+
+    # 安全刪除目錄
+    def safe_remove_dir(dir_path):
+        try:
+            if os.path.exists(dir_path):
+                shutil.rmtree(dir_path)
+        except Exception as e:
+            print(f"刪除目錄時發生錯誤: {dir_path}, 錯誤: {str(e)}")
+
+    # delete upload
+    imgs_dir_path = os.path.join(directory_upload_path, file_name_without_ext + '_imgs')
+    safe_remove_dir(imgs_dir_path)
+    safe_remove(os.path.join(directory_upload_path, filename))
+
+    # delete server
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '.json'))
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_keypoints.json'))
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_topics.json'))
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_overall_lr.json'))
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_tree.png'))
+
+    # delete index
+    if i >= 0:
+        register.pop(i)
+        text_processer.write_json(register, index_path)
+
+    return {'success': True, 'message': '已刪除講義'}
+
+# 刪除筆記
+def delete_note_htmx(subject, note_id):
+    """刪除指定ID的筆記"""
+
+    # set
+    directory_upload_path = os.path.join("app", "data_upload", subject, "notes")
+    directory_server_path = os.path.join("app", "data_server", subject, "notes")
+    index_path = os.path.join(directory_upload_path, "index.json")
+    register = text_processer.read_json(index_path, default_content=[])
+
+    filename = None
+    i = -1
+    for idx, entry in enumerate(register):
+        if entry.get("id") == note_id:
+            filename = entry.get("filename")
+            i = idx
+            break
+    
+    if filename is None:
+        return {'success': False, 'error': '找不到指定的筆記'}
+    
+    file_name_without_ext = filename.split('.')[0]
+
+    # 安全刪除函數
+    def safe_remove(file_path):
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"刪除檔案時發生錯誤: {file_path}, 錯誤: {str(e)}")
+
+    # delete upload
+    safe_remove(os.path.join(directory_upload_path, filename))
+
+    # delete server
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '.json'))
+
+    # delete index
+    if i >= 0:
+        register.pop(i)
+        text_processer.write_json(register, index_path)
+
+    return {'success': True, 'message': '已刪除筆記'}
+

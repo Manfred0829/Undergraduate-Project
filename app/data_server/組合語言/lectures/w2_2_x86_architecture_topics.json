@@ -1,0 +1,26 @@
+[
+    {
+        "Topic": "Introduction to x86 Processor Architecture",
+        "k_start": 0,
+        "k_end": 0,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Overview and Characteristics of x86 Architecture",
+        "k_start": 0,
+        "k_end": 8,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Detailed Components of Computer Architecture",
+        "k_start": 8,
+        "k_end": 20,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Understanding CPU Registers",
+        "k_start": 20,
+        "k_end": 28,
+        "Wrong_count": 0
+    }
+]

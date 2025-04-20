@@ -579,7 +579,7 @@
         // 確保參數正確編碼
         const encodedSubject = encodeURIComponent(subject);
         const encodedLectureName = encodeURIComponent(lectureName);
-        const url = `/htmx/quiz/update_weights/${encodedSubject}/${encodedLectureName}`;
+        const url = `/htmx/quiz/post_result/${encodedSubject}/${encodedLectureName}`;
         
         console.log('發送請求到URL:', url);
         
