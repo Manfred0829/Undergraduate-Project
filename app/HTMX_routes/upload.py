@@ -82,15 +82,15 @@ def upload_lecture_route(subject):
     
     if result['success']:
         # 非同步處理講義文件
-        print("skip 非同步處理講義文件")
-        '''
+        #print("skip 非同步處理講義文件")
+        print("非同步處理講義文件")
         thread = threading.Thread(
             target=process_lecture_async,
             args=(subject, result['save_path'], result['file_id'])
         )
         thread.daemon = True
         thread.start()
-        '''
+        
         return jsonify(result), 201
     else:
         return jsonify(result), 400
@@ -113,15 +113,16 @@ def upload_note_route():
     
     if result['success']:
         # 非同步處理筆記文件
-        print("skip 非同步處理筆記文件")
-        '''
+        #print("skip 非同步處理筆記文件")
+        print("非同步處理筆記文件")
+        
         thread = threading.Thread(
             target=process_note_async,
             args=(subject, lecture_name, result['save_path'], result['file_id'])
         )
         thread.daemon = True
         thread.start()
-        '''
+        
         return jsonify(result), 201
     else:
         return jsonify(result), 400
