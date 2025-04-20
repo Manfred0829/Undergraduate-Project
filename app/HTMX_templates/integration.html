@@ -368,16 +368,24 @@
             return;
         }
         
-        // 清空現有選項，只保留第一個
-        while (lectureSelect.options.length > 1) {
-            lectureSelect.remove(1);
-        }
+        // 完全清空選擇器，包括第一個選項
+        lectureSelect.innerHTML = '';
+        
+        // 添加默認選項
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.text = "請選擇講義";
+        lectureSelect.add(defaultOption);
         
         // 清空頁碼選擇器
         const pageSelect = document.getElementById('integration-page-select');
-        while (pageSelect.options.length > 1) {
-            pageSelect.remove(1);
-        }
+        pageSelect.innerHTML = '';
+        
+        // 添加默認頁碼選項
+        const defaultPageOption = document.createElement('option');
+        defaultPageOption.value = "";
+        defaultPageOption.text = "請先選擇講義";
+        pageSelect.add(defaultPageOption);
         
         // 重置內容區域
         document.getElementById('lecture-key-points').innerHTML = '<div class="loading">請選擇講義...</div>';
@@ -401,8 +409,10 @@
             .then(lectures => {
                 console.log(`獲取到科目 "${subjectName}" 的講義:`, lectures);
                 
-                // 移除載入中選項
-                lectureSelect.remove(1);
+                // 清空選擇器，只保留第一個默認選項
+                while (lectureSelect.options.length > 1) {
+                    lectureSelect.remove(1);
+                }
                 
                 if (lectures && lectures.length > 0) {
                     // 添加講義選項
@@ -437,8 +447,10 @@
             })
             .catch(error => {
                 console.error(`獲取科目 "${subjectName}" 的講義時出錯:`, error);
-                // 移除載入中選項
-                lectureSelect.remove(1);
+                // 清空選擇器，只保留第一個默認選項
+                while (lectureSelect.options.length > 1) {
+                    lectureSelect.remove(1);
+                }
                 // 加入錯誤提示
                 const errorOption = document.createElement('option');
                 errorOption.text = '加載失敗，請重試';

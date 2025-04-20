@@ -20,11 +20,12 @@
                 <div class="drag-drop-area" id="note-drag-area">
                     <p>拖放檔案至此處或點擊選擇檔案</p>
                     <p>僅支援 JPG、JPEG、PNG 等圖片格式</p>
-                    <input type="file" id="note-file-upload" name="file" accept=".jpg,.jpeg,.png" style="display: none;">
+                    <input type="file" id="note-file-upload" name="file" accept=".jpg,.jpeg,.png" multiple style="display: none;">
                     <button type="button" class="upload-btn" id="select-note-btn">選擇檔案</button>
                 </div>
                 <div id="selected-note-info" class="selected-file-info" style="margin-top: 10px; display: none;">
-                    <p>已選擇檔案：<span id="selected-note-filename"></span></p>
+                    <p>已選擇檔案：<span id="selected-note-count">0</span> 個</p>
+                    <div id="selected-note-list" style="max-height: 150px; overflow-y: auto; margin-top: 5px;"></div>
                     <button type="button" class="cancel-btn" id="cancel-note-selection-btn">取消選擇</button>
                 </div>
                 <button type="submit" class="upload-btn" style="width: 100%; margin-top: 15px;">上傳</button>
@@ -267,20 +268,52 @@
     }
     
     // 顯示選擇的檔案
-    function showSelectedNoteFile(file) {
-        const selectedFilename = document.getElementById('selected-note-filename');
+    function showSelectedNoteFile(files) {
         const selectedFileInfo = document.getElementById('selected-note-info');
+        const selectedNoteCount = document.getElementById('selected-note-count');
+        const selectedNoteList = document.getElementById('selected-note-list');
         const dragArea = document.getElementById('note-drag-area');
         
-        if (!file.name.toLowerCase().endsWith('.jpg') && 
-            !file.name.toLowerCase().endsWith('.jpeg') && 
-            !file.name.toLowerCase().endsWith('.png')) {
+        // 清空之前的檔案列表
+        selectedNoteList.innerHTML = '';
+        
+        // 檢查是否有選擇檔案
+        if (!files || files.length === 0) {
+            resetNoteFileSelection();
+            return;
+        }
+        
+        // 檢查每個檔案格式是否正確
+        let validFiles = 0;
+        const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (allowedExtensions.includes(fileExt)) {
+                // 建立檔案項目
+                const fileItem = document.createElement('div');
+                fileItem.style.padding = '5px';
+                fileItem.style.borderBottom = '1px solid #eee';
+                fileItem.textContent = file.name;
+                selectedNoteList.appendChild(fileItem);
+                validFiles++;
+            } else {
+                console.log(`檔案 ${file.name} 格式不支援`);
+            }
+        }
+        
+        if (validFiles === 0) {
             showNoteUploadStatus('只支援JPG、JPEG或PNG圖片格式', 'alert-danger');
             resetNoteFileSelection();
             return;
         }
         
-        if (selectedFilename) selectedFilename.textContent = file.name;
+        // 更新檔案數量顯示
+        selectedNoteCount.textContent = validFiles;
+        
+        // 顯示檔案信息區域並隱藏拖放區域
         if (selectedFileInfo) selectedFileInfo.style.display = 'block';
         if (dragArea) dragArea.style.display = 'none';
     }
@@ -727,7 +760,7 @@
             fileInput.addEventListener('change', function() {
                 console.log('筆記檔案選擇變更', this.files);
                 if (this.files.length > 0) {
-                    showSelectedNoteFile(this.files[0]);
+                    showSelectedNoteFile(this.files);  // 傳遞整個FileList
                 } else {
                     resetNoteFileSelection();
                 }
@@ -761,7 +794,7 @@
                     const files = e.dataTransfer.files;
                     if (files.length > 0) {
                         fileInput.files = files;
-                        showSelectedNoteFile(files[0]);
+                        showSelectedNoteFile(files);  // 傳遞整個FileList
                     }
                 });
             }
@@ -782,37 +815,76 @@
                         return;
                     }
                     
-                    // 創建表單數據
-                    const formData = new FormData(this);
-                    formData.append('subject', currentSubject);
+                    const files = document.getElementById('note-file-upload').files;
+                    const lecture_name = document.getElementById('related-lecture').value;
                     
                     // 顯示上傳中狀態
                     showNoteUploadStatus('上傳中，請稍候...', 'alert-info');
                     
-                    // 發送上傳請求
-                    fetch('/htmx/upload/note', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('上傳失敗');
+                    // 計算總檔案數
+                    const totalFiles = files.length;
+                    let successCount = 0;
+                    let errorCount = 0;
+                    
+                    // 逐個上傳檔案
+                    for (let i = 0; i < files.length; i++) {
+                        const formData = new FormData();
+                        formData.append('file', files[i]);
+                        formData.append('subject', currentSubject);
+                        if (lecture_name) {
+                            formData.append('lecture_name', lecture_name);
                         }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            showNoteUploadStatus('筆記上傳成功！系統將自動處理檔案...', 'alert-success');
-                            resetNoteFileSelection();
-                            loadNotesList();
-                        } else {
-                            showNoteUploadStatus(`上傳失敗: ${data.error || '未知錯誤'}`, 'alert-danger');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('上傳筆記錯誤:', error);
-                        showNoteUploadStatus(`上傳錯誤: ${error.message}`, 'alert-danger');
-                    });
+                        
+                        // 發送上傳請求
+                        fetch('/htmx/upload/note', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('上傳失敗');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                successCount++;
+                            } else {
+                                errorCount++;
+                                console.error(`檔案 ${files[i].name} 上傳失敗: ${data.error || '未知錯誤'}`);
+                            }
+                            
+                            // 檢查是否所有檔案都已處理完畢
+                            if (successCount + errorCount === totalFiles) {
+                                if (errorCount === 0) {
+                                    showNoteUploadStatus(`所有 ${successCount} 個筆記上傳成功！系統將自動處理檔案...`, 'alert-success');
+                                } else if (successCount === 0) {
+                                    showNoteUploadStatus(`所有檔案上傳失敗`, 'alert-danger');
+                                } else {
+                                    showNoteUploadStatus(`${successCount} 個檔案上傳成功，${errorCount} 個檔案上傳失敗`, 'alert-warning');
+                                }
+                                
+                                resetNoteFileSelection();
+                                loadNotesList();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('上傳筆記錯誤:', error);
+                            errorCount++;
+                            
+                            // 檢查是否所有檔案都已處理完畢
+                            if (successCount + errorCount === totalFiles) {
+                                if (successCount === 0) {
+                                    showNoteUploadStatus(`所有檔案上傳失敗: ${error.message}`, 'alert-danger');
+                                } else {
+                                    showNoteUploadStatus(`${successCount} 個檔案上傳成功，${errorCount} 個檔案上傳失敗`, 'alert-warning');
+                                }
+                                
+                                resetNoteFileSelection();
+                                loadNotesList();
+                            }
+                        });
+                    }
                 });
             }
             

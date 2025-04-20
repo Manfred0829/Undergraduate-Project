@@ -7,6 +7,7 @@ import shutil
 #from werkzeug.utils import secure_filename
 #from flask import current_app
 from app.utils import text_processer
+import time
 
 
 def register_new_file(subject,type,filename,unique_id):
@@ -110,28 +111,40 @@ def upload_note(file, subject):
         return {'success': False, 'error': '沒有選擇檔案'}
     
     # 檢查檔案類型
-    allowed_extensions = {'pdf', 'jpg', 'jpeg', 'png'} # , 'docx', 'txt'
+    allowed_extensions = {'jpg', 'jpeg', 'png'} # , 'docx', 'txt', 'pdf', 
     if not allowed_file(file.filename, allowed_extensions):
-        return {'success': False, 'error': '不支援的檔案類型，請上傳 PDF或圖片檔案'} # 、DOCX、TXT 
+        return {'success': False, 'error': f'不支援的檔案類型：{file.filename}，請上傳圖片檔案'} # 、DOCX、TXT 
+    
+    # 確保目標目錄存在
+    target_dir = os.path.join("app", "data_upload", subject, "notes")
+    os.makedirs(target_dir, exist_ok=True)
+    
+    # 檢查是否有同名檔案，如果有則加上時間戳
+    original_filename = file.filename
+    filename = original_filename
+    if os.path.exists(os.path.join(target_dir, filename)):
+        name, ext = os.path.splitext(original_filename)
+        timestamp = int(time.time())
+        filename = f"{name}_{timestamp}{ext}"
     
     # 生成id
     unique_id = str(uuid.uuid4())
 
     # 註冊檔案
-    register_new_file(subject,"notes",file.filename,unique_id)
+    register_new_file(subject, "notes", filename, unique_id)
 
     # 建立檔案儲存路徑
-    file_path = os.path.join("app", "data_upload", subject, "notes", file.filename)
+    file_path = os.path.join(target_dir, filename)
     
     # 儲存檔案
     file.save(file_path)
-    
     
     return {
         'success': True,
         'message': '檔案上傳成功',
         'save_path': file_path,
-        'file_id': unique_id
+        'file_id': unique_id,
+        'filename': filename
     }
 
 # 獲取科目列表
@@ -516,6 +529,23 @@ def delete_note_htmx(subject, note_id):
         return {'success': False, 'error': '找不到指定的筆記'}
     
     file_name_without_ext = filename.split('.')[0]
+
+    # delete related note in keypoints.json
+    notes_path = os.path.join(directory_server_path, file_name_without_ext + '.json')
+    if os.path.exists(notes_path):
+        notes_json = text_processer.read_json(notes_path, default_content={})
+        keypoint_name = notes_json['Lecture_Name']
+        keypoint_name_without_ext = keypoint_name.split('.')[0]
+        keypoint_path = os.path.join("app", "data_server", subject, "lectures", keypoint_name_without_ext, "keypoints.json")
+        keypoint_json = text_processer.read_json(keypoint_path, default_content={})
+
+        for note in notes_json['Notes']:
+            k_idx = note['Keypoint_id']
+            for note_kp in keypoint_json[k_idx]['Notes']:
+                if note_kp['Title'] == note['Title']:
+                    keypoint_json[k_idx]['Notes'].remove(note_kp)
+
+        text_processer.write_json(keypoint_json, keypoint_path)
 
     # 安全刪除函數
     def safe_remove(file_path):

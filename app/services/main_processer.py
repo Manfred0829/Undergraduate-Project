@@ -207,6 +207,14 @@ def processing_lecture(subject, pdf_path):
             # 加入 'Pages' 欄位，內含 pages_json 中對應的每一頁資料
             topic['Pages'] = pages_json[start_page:end_page]
 
+        # 移除沒有重點的Topic
+        for i, topic in enumerate(topics_json):
+            k_count = 0
+            for page in topic['Pages']:
+                k_count += len(page['Keypoints'])
+            if k_count == 0:
+                topics_json.pop(i)
+
         # extract sections process
         sections_json = OpenAI.processing_handouts_extract_section([topic['Topic'] for topic in topics_json])
         logger.info(f"已提取 {len(sections_json)} 個章節")
@@ -670,7 +678,7 @@ def processing_get_history(subject, lecture_name):
             continue
 
         t_lr = 0
-        valid_count = 0
+        t_weight = 0
         for k_idx in range(topic["k_start"], topic["k_end"]):
             # 檢查索引是否合法
             if k_idx >= len(keypoints_json):
@@ -683,12 +691,12 @@ def processing_get_history(subject, lecture_name):
                 logger.warning(f"關鍵點 {k_idx} 中缺少 'Learning_Rate' 屬性，使用默認值 0.0")
                 t_lr += 0.0
             else:
-                t_lr += kp["Learning_Rate"]
-            valid_count += 1
+                t_lr += kp["Learning_Rate"] * kp["Difficulty"] * 3
+                t_weight += kp["Difficulty"] * 3
 
         # 避免除以零
-        if valid_count > 0:
-            t_lr /= valid_count
+        if t_weight > 0:
+            t_lr /= t_weight
         else:
             t_lr = 0.0
             
