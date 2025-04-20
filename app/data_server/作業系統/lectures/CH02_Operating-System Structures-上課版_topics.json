@@ -1,0 +1,26 @@
+[
+    {
+        "Topic": "Introduction to Operating Systems",
+        "k_start": 0,
+        "k_end": 20,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Overview of Operating System Services",
+        "k_start": 20,
+        "k_end": 29,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "User and Operating System Interface",
+        "k_start": 29,
+        "k_end": 54,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Shell and Command Interfaces",
+        "k_start": 54,
+        "k_end": 108,
+        "Wrong_count": 0
+    }
+]

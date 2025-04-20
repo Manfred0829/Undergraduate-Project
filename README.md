@@ -225,6 +225,13 @@ git reset HEAD <file>
 git checkout -- <file>
 ```
 
+### 移除本地所有未提交的更動（包括修改、新增、刪除）
+
+```sh
+git reset --hard # 還原所有追蹤中的檔案
+git clean -fd # -f：強制刪除未被追蹤的檔案；-d：包含資料夾一起刪除
+```
+
 ### 取消追蹤檔案
 
 ```sh
