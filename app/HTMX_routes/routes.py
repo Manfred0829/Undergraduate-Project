@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, send_file, redir
 import os
 import json
 from app.services.file_service import get_subjects, get_lectures, get_notes, get_notes_for_lecture
-from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions, processing_update_weights, processing_get_notes
+from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions, processing_update_weights, processing_get_notes, processing_get_history, processing_update_topics
 from app.utils.media_processer import get_num_pages
 # 創建 Blueprint
 htmx_bp = Blueprint('htmx', __name__, url_prefix='/htmx')
@@ -221,16 +221,17 @@ def generate_quiz(subject, lecture_name, num_questions):
         return jsonify({'success': False, 'error': str(e)}), 500
 
 # 更新權重
-@htmx_bp.route('/quiz/update_weights/<subject>/<lecture_name>', methods=['POST'])
-def update_weights(subject, lecture_name):
+@htmx_bp.route('/quiz/post_result/<subject>/<lecture_name>', methods=['POST'])
+def post_result(subject, lecture_name):
     """更新後端評分紀錄"""
     
     # 獲取JSON數據(result 應為一個陣列，每個元素包含Keypoint_index與答對與否)
     answer_results = request.get_json()
-    print(f"接收到的答題結果數據: {answer_results}")
+    #print(f"接收到的答題結果數據: {answer_results}")
     
     try:
         processing_update_weights(subject, lecture_name, answer_results)
+        processing_update_topics(subject, lecture_name, answer_results)
         return jsonify({'success': True})
     except Exception as e:
         print(f"處理答題結果出錯: {e}")
@@ -248,29 +249,24 @@ def upload_note_fragment():
     return render_template('HTMX_templates/upload_note.html')
 
 
-# 檔案下載處理
-@htmx_bp.route('/download/<int:file_id>')
-def download_file(file_id):
-    # 模擬檔案下載處理
-    # 真實場景中，這裡會從檔案系統或資料庫取得檔案
-    
-    # 僅作示範，這個函數實際上不會回傳真正的檔案
-    return jsonify({'message': f'下載檔案 ID: {file_id}'}), 200
-
-# 刪除檔案處理
-@htmx_bp.route('/file/<int:file_id>', methods=['DELETE'])
-def delete_file(file_id):
-    # 模擬檔案刪除處理
-    # 真實場景中，這裡會從檔案系統或資料庫刪除檔案
-    
-    # 回傳空內容，表示檔案已被刪除
-    return '', 200
-
-
 # 學習紀錄片段
 @htmx_bp.route('/history')
 def history_fragment():
     return render_template('HTMX_templates/history.html')
 
+@htmx_bp.route('/history/get_history/<subject>/<lecture_name>')
+def get_history(subject, lecture_name):
+    """API端點：獲取指定科目的學習率"""
+    
+    try:
+        history = processing_get_history(subject, lecture_name)
+        # print('history:', history)
+        return jsonify({
+            'success': True,
+            'history': history
+        })
+    except Exception as e:
+        print('error:', e)
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 

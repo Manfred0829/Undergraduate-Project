@@ -461,7 +461,13 @@
             return;
         }
         
-        fetch(`/htmx/upload/note/${noteId}`, {
+        const subject = getCurrentSubject();
+        if (!subject) {
+            showUploadStatus('請先選擇科目', 'alert-info');
+            return;
+        }
+        
+        fetch(`/htmx/upload/delete_note/${subject}/${noteId}`, {
             method: 'DELETE'
         })
         .then(response => {

@@ -2,7 +2,8 @@
 from flask import Blueprint, request, jsonify, current_app, send_from_directory
 from app.services.file_service import (
     upload_lecture, upload_note, get_subjects, get_lectures, get_notes,
-    get_lecture, get_note, delete_lecture, delete_note, get_notes_for_lecture
+    get_lecture, get_note, get_notes_for_lecture,
+    delete_lecture_htmx, delete_note_htmx
 )
 from app.services import main_processer
 from app.routes.process import set_processing_status
@@ -128,10 +129,10 @@ def upload_note_route():
 
 
 # 刪除講義
-@upload_bp.route('/lecture/<lecture_id>', methods=['DELETE'])
-def delete_lecture_route(lecture_id):
+@upload_bp.route('/delete_lecture/<subject>/<lecture_id>', methods=['DELETE'])
+def delete_lecture_route(subject, lecture_id):
     """刪除講義"""
-    result = delete_lecture(lecture_id)
+    result = delete_lecture_htmx(subject, lecture_id)
     
     if result['success']:
         return jsonify(result), 200
@@ -139,10 +140,10 @@ def delete_lecture_route(lecture_id):
         return jsonify(result), 404
 
 # 刪除筆記
-@upload_bp.route('/note/<note_id>', methods=['DELETE'])
-def delete_note_route(note_id):
+@upload_bp.route('/delete_note/<subject>/<note_id>', methods=['DELETE'])
+def delete_note_route(subject, note_id):
     """刪除筆記"""
-    result = delete_note(note_id)
+    result = delete_note_htmx(subject, note_id)
     
     if result['success']:
         return jsonify(result), 200

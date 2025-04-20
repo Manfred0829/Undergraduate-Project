@@ -93,6 +93,14 @@ def processing_note(subject, lecture_name, img_path):
         keypoints_json = text.read_json(keypoints_path)
         keypoints_embedding = [k["Embedding"] for k in keypoints_json]
 
+        def _calculate_learning_rate(self,progress,diff):
+            if progress <= 0: # 若小於0則設為0%
+                return 0.0
+            elif progress >= 3*diff: # 若大於上限則為100%
+                return 1.0
+            else:
+                return float(progress / (3*diff))
+
         for n_idx, note in enumerate(notes_json):
             # 筆記json中儲存k_idx
             k_idx = sim.get_most_similar_index(note["Embedding"],keypoints_embedding)
@@ -106,9 +114,11 @@ def processing_note(subject, lecture_name, img_path):
                 keypoints_json[k_idx]["Notes"].append(note_info)
 
             if note['isCorrected']: # 筆記錯誤
-                keypoints_json[k_idx]['Learning_Progress'] -= 1
+                keypoints_json[k_idx]['Learning_Progress'] -= 2
+                keypoints_json[k_idx]['Learning_Rate'] = _calculate_learning_rate(keypoints_json[k_idx]['Learning_Progress'],keypoints_json[k_idx]['Difficulty'])
             else: # 筆記正確
                 keypoints_json[k_idx]['Learning_Progress'] += 1
+                keypoints_json[k_idx]['Learning_Rate'] = _calculate_learning_rate(keypoints_json[k_idx]['Learning_Progress'],keypoints_json[k_idx]['Difficulty'])
         
         text.write_json(keypoints_json,keypoints_path) # 儲存更新後的keypoints資料
         logger.info("相似度對應處理完成")
@@ -287,11 +297,13 @@ def processing_lecture(subject, pdf_path):
         weights = OpenAI.processing_handouts_weights(subject, keypoints_flatten)
 
         # 加入info
+
         for i, kp in enumerate(keypoints_list):
             kp["Embedding"] = vectors[i]
             kp["Difficulty"] = weights[i]["Difficulty"]
             kp["Importance"] = weights[i]["Importance"]
             kp["Learning_Progress"] = 0
+            kp["Learning_Rate"] = 0.0
 
         # save
         keypoints_path = os.path.join(lectures_output_dir, filename_without_ext + "_keypoints.json")
@@ -308,6 +320,14 @@ def processing_lecture(subject, pdf_path):
             logger.error(f"生成樹狀結構圖時出錯: {e}")
             # 確保即使圖無法生成，整個過程也能繼續
         
+
+        # topics_json
+        topics_json = _extract_topics_hierarchy(chapter_json)
+        topics_path = os.path.join(lectures_output_dir, filename_without_ext + "_topics.json")
+        text.write_json(topics_json, topics_path)
+        logger.info(f"主題嵌入向量已保存到: {topics_path}")
+
+
         return {
             "success": True, 
             "message": "講義處理完成", 
@@ -392,6 +412,33 @@ def _extract_keypoints_hierarchy(chapter: dict):
     except Exception as e:
         logger.error(f"提取重點層次結構時發生錯誤: {str(e)}", exc_info=True)
         return []
+
+
+def _extract_topics_hierarchy(chapter: dict):
+    """
+    從巢狀講義 JSON 檔中提取所有 topics，並標註其所屬的章節 / 主題 / 頁面索引。
+    將結果儲存成新的 JSON 檔案。
+    """
+    topics_list = []
+    k_count = 0
+    for section in chapter["Sections"]:
+        for topic in section["Topics"]:
+            topic_info = {
+                "Topic": topic["Topic"],
+                "k_start": k_count,
+            }
+
+            for page in topic["Pages"]:
+                for keypoint in page["Keypoints"]:
+                    keypoint["Topic"] = topic["Topic"]
+                    k_count += 1
+
+            topic_info["k_end"] = k_count
+            topic_info["Wrong_count"] = 0
+            #topic_info["Correct_count"] = 0
+            topics_list.append(topic_info)
+    
+    return topics_list
 
 
 def processing_get_keypoints(subject, lecture_name):
@@ -502,10 +549,49 @@ def processing_update_weights(subject, lecture_name, answer_results):
     
     QM = QuestioningManager(subject, keypoints_json)
 
-    edited_keypoints = QM.update_weights(answer_results)
+    # 更新權重
+    edited_keypoints, overall_lr = QM.update_weights(answer_results)
     text.write_json(edited_keypoints, keypoints_path)
 
-    return
+    # 更新總學習率歷史
+    overall_lr_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_overall_lr.json")
+    overall_lr_json = text.read_json(overall_lr_path,default_content=[])
+    overall_lr_json.append(overall_lr)
+    text.write_json(overall_lr_json, overall_lr_path)
+
+    return {
+        "success": True,
+        "message": "更新權重完成",
+    }
+
+def processing_update_topics(subject, lecture_name, answer_results):
+    # 讀取 json
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    topics_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_topics.json")
+    topics_json = text.read_json(topics_path, default_content=[])
+
+    # 初始化主題錯題數
+    for topic in topics_json:
+        topic["Wrong_count"] = 0
+
+    # 更新主題錯題數
+    for result in answer_results:
+        k_idx = result["Keypoints_Index"]
+        is_Correct = result["is_Correct"]
+        
+        if not is_Correct:
+            # 尋找k_idx對應的topic
+            for topic in topics_json:
+                if k_idx >= topic["k_start"] and k_idx < topic["k_end"]:
+                    topic["Wrong_count"] += 1
+                    break
+
+    text.write_json(topics_json, topics_path)
+
+    return {
+        "success": True,
+        "message": "更新主題完成",
+    }
 
 
 def _get_notes_from_keypoint(subject, keypoint_json):
@@ -566,4 +652,103 @@ def processing_get_page_info(subject, lecture_name, page_index):
               "Notes": result_notes}
     return result
 
-    
+
+def processing_get_history(subject, lecture_name):
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+
+    topics_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_topics.json")
+    topics_json = text.read_json(topics_path, default_content=[])
+    print('topics_json:', topics_json)
+
+    logger.info('處理歷史數據中...')
+    # 1. 主題學習率
+    result_t_lrs = []
+    for topic in topics_json:
+        if topic["k_end"] - topic["k_start"] == 0:
+            continue
+
+        t_lr = 0
+        valid_count = 0
+        for k_idx in range(topic["k_start"], topic["k_end"]):
+            # 檢查索引是否合法
+            if k_idx >= len(keypoints_json):
+                logger.warning(f"主題 '{topic['Topic']}' 的索引超出範圍: {k_idx} >= {len(keypoints_json)}")
+                continue
+                
+            kp = keypoints_json[k_idx]
+            # 檢查 Learning_Rate 是否存在，如果不存在則使用 0.0 作為默認值
+            if "Learning_Rate" not in kp:
+                logger.warning(f"關鍵點 {k_idx} 中缺少 'Learning_Rate' 屬性，使用默認值 0.0")
+                t_lr += 0.0
+            else:
+                t_lr += kp["Learning_Rate"]
+            valid_count += 1
+
+        # 避免除以零
+        if valid_count > 0:
+            t_lr /= valid_count
+        else:
+            t_lr = 0.0
+            
+        temp = {"Topic": topic["Topic"], "Learning_Rate": t_lr}
+        result_t_lrs.append(temp)
+
+    logger.info('主題學習率處理完成')
+    # 2. 主題錯題數
+    result_t_wrong_count = []
+    for topic in topics_json:
+        if "Wrong_count" not in topic or topic["Wrong_count"] == 0:
+            continue
+
+        temp = {"Topic": topic["Topic"], "Wrong_count": topic["Wrong_count"]}
+        result_t_wrong_count.append(temp)
+
+    logger.info('主題錯題數處理完成')
+    # 3. 總學習率歷史
+    overall_lr_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_overall_lr.json")
+    overall_lr_json = text.read_json(overall_lr_path,default_content=[])
+
+    logger.info('總學習率歷史處理完成')
+    result = {
+        "t_lrs": result_t_lrs,
+        "t_wrong_count": result_t_wrong_count,
+        "overall_lr_history": overall_lr_json
+    }   
+
+    logger.info(f'歷史數據處理完成: \n{result}')
+    return result
+
+
+#if __name__ == "__main__":
+    '''
+    keypoints_path = os.path.join("app", "data_server", "組合語言", "lectures", "w2_2_x86_architecture.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+    #print(keypoints_json)
+    topics_json = _extract_topics_hierarchy(keypoints_json)
+    topics_path = os.path.join("app", "data_server", "組合語言", "lectures", "w2_2_x86_architecture_topics.json")
+    text.write_json(topics_json, topics_path)
+
+    print(topics_json)
+    '''
+
+
+    '''
+    # 新增缺漏的keypoins lr
+    def _calculate_learning_rate(progress, diff):
+        if progress <= 0: # 若小於0則設為0%
+            return 0.0
+        elif progress >= 3*diff: # 若大於上限則為100%
+            return 1.0
+        else:
+            return float(progress / (3*diff))
+
+    keypoints_path = os.path.join("app", "data_server", "組合語言", "lectures", "w3_assembly_language_fundamentals_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+    for keypoint in keypoints_json:
+        if "Learning_Rate" not in keypoint:
+            keypoint["Learning_Rate"] = _calculate_learning_rate(keypoint["Learning_Progress"], keypoint["Difficulty"])
+    text.write_json(keypoints_json, keypoints_path)
+    '''
+

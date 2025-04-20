@@ -1548,7 +1548,9 @@
             0.02886521816253662
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Syntax Rules",
@@ -3099,7 +3101,9 @@
             -0.0032362807542085648
         ],
         "Difficulty": 2,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Digit Types",
@@ -4650,7 +4654,9 @@
             0.047499001026153564
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Common Radix Characters",
@@ -6201,7 +6207,9 @@
             0.0412927083671093
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Example Literals",
@@ -7752,7 +7760,9 @@
             0.051165621727705
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Hexadecimal Format",
@@ -9303,7 +9313,9 @@
             0.025423478335142136
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Operators and Precedence Levels",
@@ -10854,7 +10866,9 @@
             0.007960704155266285
         ],
         "Difficulty": 2,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Precedence Levels",
@@ -12405,7 +12419,9 @@
             0.007337968330830336
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Expression Examples",
@@ -13956,7 +13972,9 @@
             0.052411045879125595
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Value of Expressions",
@@ -15507,7 +15525,9 @@
             0.03424377366900444
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Decimal Real Structure",
@@ -17058,7 +17078,9 @@
             0.044524721801280975
         ],
         "Difficulty": 2,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Decimal Real Examples",
@@ -18609,7 +18631,9 @@
             0.05325246974825859
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Real Number Constant Rule",
@@ -20160,7 +20184,9 @@
             0.03551379591226578
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Encoded Real Standard",
@@ -21711,7 +21737,9 @@
             0.02580997534096241
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 3,
+        "Learning_Rate": 0.5
     },
     {
         "Title": "Character Literals Definition",
@@ -23262,7 +23290,9 @@
             0.018308090046048164
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "ASCII Character Size",
@@ -24813,7 +24843,9 @@
             0.03185490518808365
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "String Literals Definition",
@@ -26364,7 +26396,9 @@
             0.0018356344662606716
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Example String Literals",
@@ -27915,7 +27949,9 @@
             0.021578801795840263
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Character Byte Size",
@@ -29466,7 +29502,9 @@
             0.03544914349913597
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Embedded Quotes Example",
@@ -31017,7 +31055,9 @@
             -0.008789191953837872
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Practice Example",
@@ -32568,7 +32608,9 @@
             0.017834050580859184
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Reserved Words Definition",
@@ -34119,7 +34161,9 @@
             -0.003399265231564641
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Instruction Mnemonics",
@@ -35670,7 +35714,9 @@
             0.008960079401731491
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Directives Purpose",
@@ -37221,7 +37267,9 @@
             -0.0018088222714141011
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Type Attributes",
@@ -38772,7 +38820,9 @@
             0.026655545458197594
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Operators Examples",
@@ -40323,7 +40373,9 @@
             -0.0028698574751615524
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Predefined Symbols",
@@ -41874,7 +41926,9 @@
             -0.00591109786182642
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 3,
+        "Learning_Rate": 1.0
     },
     {
         "Title": "Data Section",
@@ -43425,7 +43479,9 @@
             0.03715270757675171
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": -3,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Message Definition",
@@ -44976,7 +45032,9 @@
             -0.0016122193774208426
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Code Section",
@@ -46527,7 +46585,9 @@
             0.022772423923015594
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Global Declaration",
@@ -48078,7 +48138,9 @@
             0.01944526471197605
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Start Marker",
@@ -49629,7 +49691,9 @@
             0.006637981627136469
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Data Bytes",
@@ -51180,7 +51244,9 @@
             0.015821289271116257
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Definition of Identifiers",
@@ -52731,7 +52797,9 @@
             0.013983440585434437
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Character Limit",
@@ -54282,7 +54350,9 @@
             0.02700146473944187
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Case Sensitivity",
@@ -55833,7 +55903,9 @@
             0.03308376669883728
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     },
     {
         "Title": "Starting Character Rules",
@@ -57384,6 +57456,8 @@
             0.011496299877762794
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0,
+        "Learning_Rate": 0.0
     }
 ]
