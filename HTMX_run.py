@@ -1,5 +1,10 @@
 from flask import Flask, render_template
 import os
+from app.services.ngrok_service import start_ngrok
+from app.services.rebrandly_service import update_rebrandly
+
+# 設定端口
+PORT = 5000
 
 def create_app():
     """創建 Flask 應用並註冊相關配置"""
@@ -22,6 +27,14 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    # 啟動開發伺服器
+    
+    # 1️⃣ 啟動 ngrok 並取得公開網址
+    ngrok_url = start_ngrok(PORT)
+    
+    # 2️⃣ 更新 Rebrandly 短網址
+    update_rebrandly(ngrok_url)
+    
+    # 3️⃣ 啟動 Flask 伺服器
     print("HTMX 版本伺服器已啟動，訪問 http://localhost:5000 查看效果")
-    app.run(debug=True, host='0.0.0.0', port=5000) 
+    print(f"公網網址: {ngrok_url}")
+    app.run(debug=False, host='0.0.0.0', port=PORT) 
