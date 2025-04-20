@@ -67,10 +67,25 @@ def upload_lecture(file, subject):
     register_new_file(subject,"lectures",file.filename,unique_id)
 
     # 建立檔案儲存路徑
-    file_path = os.path.join("app", "data_upload", subject, "lectures", file.filename)
+    directory_path = os.path.join("app", "data_upload", subject, "lectures")
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+    file_path = os.path.join(directory_path, file.filename)
     
     # 儲存檔案
     file.save(file_path)
+
+    # 將pdf儲存成圖片
+    file_name_without_ext = file.filename.split('.')[0]
+    imgs_dir_path = os.path.join(directory_path, file_name_without_ext + '_imgs')
+    if not os.path.exists(imgs_dir_path):
+        os.makedirs(imgs_dir_path)
+    
+    # 使用 pdf2image 將 PDF 轉換為圖片
+    from pdf2image import convert_from_path
+    images = convert_from_path(file_path)
+    for i, image in enumerate(images):
+        image.save(os.path.join(imgs_dir_path, f"{file_name_without_ext}_{i}.png"), "PNG")
     
     return {'success': True, 
             'message': '檔案上傳成功',

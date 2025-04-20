@@ -1548,7 +1548,8 @@
             0.005070901475846767
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "Launch Year",
@@ -3099,7 +3100,8 @@
             -0.04593750461935997
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0
     },
     {
         "Title": "Origin of the Name",
@@ -4650,7 +4652,8 @@
             -0.0351611003279686
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0
     },
     {
         "Title": "Common Identifier",
@@ -6201,7 +6204,8 @@
             0.0187044870108366
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Backward Compatibility",
@@ -7752,7 +7756,8 @@
             0.002720500575378537
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Widely Supported",
@@ -9303,7 +9308,8 @@
             0.003156837075948715
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "Hardware and Software Support",
@@ -10854,7 +10860,8 @@
             -0.02408614568412304
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Complex Instruction Set",
@@ -12405,7 +12412,8 @@
             0.026177214458584785
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 3
     },
     {
         "Title": "Registers in Computing",
@@ -13956,7 +13964,8 @@
             0.02140391618013382
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "Central Processing Unit",
@@ -15507,7 +15516,8 @@
             0.04566442593932152
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "Data Transmission",
@@ -17058,7 +17068,8 @@
             0.03490495681762695
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Memory Management",
@@ -18609,7 +18620,8 @@
             -0.0019473202992230654
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "Device Connections",
@@ -20160,7 +20172,8 @@
             0.0384385846555233
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Device #1 Details",
@@ -21711,7 +21724,8 @@
             0.03433069586753845
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0
     },
     {
         "Title": "Device #2 Details",
@@ -23262,7 +23276,8 @@
             0.04872140660881996
         ],
         "Difficulty": 2,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Arithmetic Logic Unit",
@@ -24813,7 +24828,8 @@
             0.043679315596818924
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 3
     },
     {
         "Title": "Control Unit Functions",
@@ -26364,7 +26380,8 @@
             0.019166406244039536
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "Clock Signal",
@@ -27915,7 +27932,8 @@
             0.019709710031747818
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "Control Bus Functionality",
@@ -29466,7 +29484,8 @@
             0.007751667872071266
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 3
     },
     {
         "Title": "Address Bus Role",
@@ -31017,7 +31036,8 @@
             0.034245315939188004
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "High-Speed Storage Locations",
@@ -32568,7 +32588,8 @@
             0.026447508484125137
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 3
     },
     {
         "Title": "Intel Program Execution Registers",
@@ -34119,7 +34140,8 @@
             -0.0066878460347652435
         ],
         "Difficulty": 2,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "General-Purpose Registers Count",
@@ -35670,7 +35692,8 @@
             0.044239748269319534
         ],
         "Difficulty": 1,
-        "Importance": 1
+        "Importance": 1,
+        "Learning_Progress": 0
     },
     {
         "Title": "Segment Registers Count",
@@ -37221,7 +37244,8 @@
             0.005675317253917456
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "32-bit General-Purpose Registers",
@@ -38772,7 +38796,8 @@
             0.04458966478705406
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": -3
     },
     {
         "Title": "EFLAGS Usage",
@@ -40323,7 +40348,8 @@
             0.03003525547683239
         ],
         "Difficulty": 1,
-        "Importance": 2
+        "Importance": 2,
+        "Learning_Progress": 0
     },
     {
         "Title": "EIP Function",
@@ -41874,7 +41900,8 @@
             0.021331196650862694
         ],
         "Difficulty": 1,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     },
     {
         "Title": "16-bit Segment Registers",
@@ -43425,6 +43452,7 @@
             0.02912052348256111
         ],
         "Difficulty": 2,
-        "Importance": 3
+        "Importance": 3,
+        "Learning_Progress": 0
     }
 ]

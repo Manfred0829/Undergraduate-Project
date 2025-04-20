@@ -1,0 +1,872 @@
+<div class="content-panel">
+    <h2>上傳筆記</h2>
+    <div class="upload-container">
+        <h3>我的筆記</h3>
+        <div class="file-list" id="note-file-list">
+            <!-- 檔案列表將由JavaScript動態填充 -->
+            <div class="loading-indicator">載入中...</div>
+        </div>
+
+        <div class="upload-form">
+            <h3>上傳新筆記</h3>
+            <form id="note-upload-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="related-lecture">對應講義</label>
+                    <select id="related-lecture" name="lecture_name" class="form-control">
+                        <option value="">請選擇對應講義</option>
+                        <!-- 講義選項將由JavaScript動態填充 -->
+                    </select>
+                </div>
+                <div class="drag-drop-area" id="note-drag-area">
+                    <p>拖放檔案至此處或點擊選擇檔案</p>
+                    <p>僅支援 JPG、JPEG、PNG 等圖片格式</p>
+                    <input type="file" id="note-file-upload" name="file" accept=".jpg,.jpeg,.png" style="display: none;">
+                    <button type="button" class="upload-btn" id="select-note-btn">選擇檔案</button>
+                </div>
+                <div id="selected-note-info" class="selected-file-info" style="margin-top: 10px; display: none;">
+                    <p>已選擇檔案：<span id="selected-note-filename"></span></p>
+                    <button type="button" class="cancel-btn" id="cancel-note-selection-btn">取消選擇</button>
+                </div>
+                <button type="submit" class="upload-btn" style="width: 100%; margin-top: 15px;">上傳</button>
+            </form>
+            <div id="note-upload-status" class="upload-status"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Upload Styles */
+    .upload-container {
+        max-width: 800px;
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-container h3 {
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .file-list {
+        margin: 15px 0;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .file-list-item {
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .file-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .file-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .file-name svg {
+        width: 16px;
+        height: 16px;
+        color: #777;
+    }
+
+    .file-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .file-action-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--primary-color);
+        font-size: 0.9rem;
+    }
+
+    .upload-form {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--secondary-color);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: white;
+    }
+
+    .drag-drop-area {
+        border: 2px dashed var(--border-color);
+        border-radius: 4px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 15px;
+        transition: all 0.2s;
+        background-color: white;
+    }
+
+    .drag-drop-area.active {
+        border-color: var(--primary-color);
+        background-color: var(--hover-color);
+    }
+
+    .drag-drop-area p {
+        margin-bottom: 10px;
+        color: #777;
+    }
+
+    .upload-btn {
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .upload-btn:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .cancel-btn {
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        background-color: #f8f9fa;
+        color: #666;
+        border: 1px solid #ddd;
+        transition: all 0.2s;
+    }
+
+    .cancel-btn:hover {
+        background-color: #e9ecef;
+    }
+
+    .selected-file-info {
+        background-color: white;
+        border-radius: 4px;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+    }
+
+    .upload-status {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .loading-indicator {
+        text-align: center;
+        padding: 15px;
+        color: #777;
+    }
+
+    .alert {
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+    .alert-info {
+        background-color: #e8f4fd;
+        border: 1px solid #b8daff;
+        color: #004085;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+
+    .processing-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        margin-left: 10px;
+    }
+
+    .processing-badge.processing {
+        background-color: #ffeeba;
+        color: #856404;
+    }
+
+    .processing-badge.completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .processing-badge.error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+
+<script>
+    // 自定義筆記列表變更事件
+    const notesListChangedEvent = new CustomEvent('notesListChanged');
+    
+    // 初始化按鈕事件綁定狀態 - 改為 window 屬性避免重複宣告
+    if (window.note_buttonsInitialized === undefined) {
+        window.note_buttonsInitialized = false;
+    }
+    
+    // 顯示上傳狀態
+    function showNoteUploadStatus(message, className) {
+        const uploadStatus = document.getElementById('note-upload-status');
+        if (uploadStatus) {
+            uploadStatus.innerHTML = `<div class="alert ${className}">${message}</div>`;
+        }
+    }
+    
+    // 重設檔案選擇
+    function resetNoteFileSelection() {
+        const fileInput = document.getElementById('note-file-upload');
+        const selectedFileInfo = document.getElementById('selected-note-info');
+        const dragArea = document.getElementById('note-drag-area');
+        
+        if (fileInput) fileInput.value = '';
+        if (selectedFileInfo) selectedFileInfo.style.display = 'none';
+        if (dragArea) dragArea.style.display = 'block';
+    }
+    
+    // 顯示選擇的檔案
+    function showSelectedNoteFile(file) {
+        const selectedFilename = document.getElementById('selected-note-filename');
+        const selectedFileInfo = document.getElementById('selected-note-info');
+        const dragArea = document.getElementById('note-drag-area');
+        
+        if (!file.name.toLowerCase().endsWith('.jpg') && 
+            !file.name.toLowerCase().endsWith('.jpeg') && 
+            !file.name.toLowerCase().endsWith('.png')) {
+            showNoteUploadStatus('只支援JPG、JPEG或PNG圖片格式', 'alert-danger');
+            resetNoteFileSelection();
+            return;
+        }
+        
+        if (selectedFilename) selectedFilename.textContent = file.name;
+        if (selectedFileInfo) selectedFileInfo.style.display = 'block';
+        if (dragArea) dragArea.style.display = 'none';
+    }
+    
+    // 檢查筆記檔案是否已選擇
+    function checkNoteFileSelected() {
+        const fileInput = document.getElementById('note-file-upload');
+        if (!fileInput || fileInput.files.length === 0) {
+            showNoteUploadStatus('請選擇要上傳的檔案', 'alert-danger');
+            return false;
+        }
+        return true;
+    }
+    
+    // 計算目前筆記數量
+    function countTotalNotes() {
+        const fileList = document.getElementById('note-file-list');
+        if (!fileList) return 0;
+        
+        // 跳過載入指示器和無筆記訊息
+        const items = fileList.querySelectorAll('.file-list-item');
+        let count = 0;
+        
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (!item.querySelector('.loading-indicator') && 
+                !item.textContent.includes('尚無筆記') && 
+                !item.textContent.includes('載入失敗')) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+    
+    // 加載筆記列表
+    // 添加筆記列表加載狀態和時間戳，防止短時間內重複請求
+    window.notesLoadingState = window.notesLoadingState || {
+        isLoading: false,
+        lastLoadTime: 0,
+        minInterval: 1000 // 最小請求間隔(毫秒)
+    };
+    
+    function loadNotesList() {
+        const fileList = document.getElementById('note-file-list');
+        if (!fileList) return;
+        
+        // 檢查是否正在加載中或剛剛加載過
+        const now = Date.now();
+        if (window.notesLoadingState.isLoading || 
+            (now - window.notesLoadingState.lastLoadTime < window.notesLoadingState.minInterval)) {
+            console.log('跳過筆記列表請求：正在加載中或剛剛加載過');
+            return;
+        }
+        
+        // 設置加載狀態
+        window.notesLoadingState.isLoading = true;
+        console.log('開始加載筆記列表');
+        
+        fileList.innerHTML = '<div class="loading-indicator">載入中...</div>';
+        
+        const currentSubject = getCurrentSubject();
+        if (!currentSubject) {
+            fileList.innerHTML = '<div class="file-list-item"><div class="file-name">請先選擇科目</div></div>';
+            window.notesLoadingState.isLoading = false;
+            return;
+        }
+        
+        fetch(`/htmx/api/notes/${currentSubject}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('加載筆記列表失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                fileList.innerHTML = '';
+                
+                if (data && data.length > 0) {
+                    data.forEach(note => {
+                        const listItem = createNoteListItem(note, currentSubject);
+                        fileList.appendChild(listItem);
+                    });
+                } else {
+                    fileList.innerHTML = '<div class="file-list-item"><div class="file-name">尚無筆記</div></div>';
+                }
+                
+                // 觸發筆記列表已更新事件
+                document.dispatchEvent(notesListChangedEvent);
+                
+                // 更新加載狀態和時間戳
+                window.notesLoadingState.isLoading = false;
+                window.notesLoadingState.lastLoadTime = Date.now();
+                console.log('筆記列表加載完成');
+            })
+            .catch(error => {
+                console.error('加載筆記列表錯誤:', error);
+                fileList.innerHTML = '<div class="file-list-item"><div class="file-name">載入失敗，請重試</div></div>';
+                
+                // 更新加載狀態
+                window.notesLoadingState.isLoading = false;
+                window.notesLoadingState.lastLoadTime = Date.now();
+            });
+    }
+    
+    // 創建筆記列表項目
+    function createNoteListItem(note, subject) {
+        const listItem = document.createElement('div');
+        listItem.className = 'file-list-item';
+        
+        // 使用圖片圖標
+        let iconPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />';
+        
+        // 檢查處理狀態
+        let statusBadge = '';
+        if (note.processing_status) {
+            let statusClass = '';
+            let statusText = '';
+            
+            switch (note.processing_status) {
+                case 'processing':
+                    statusClass = 'processing';
+                    statusText = '處理中';
+                    break;
+                case 'completed':
+                    statusClass = 'completed';
+                    statusText = '已處理';
+                    break;
+                case 'error':
+                    statusClass = 'error';
+                    statusText = '處理失敗';
+                    break;
+            }
+            
+            if (statusClass && statusText) {
+                statusBadge = `<span class="processing-badge ${statusClass}">${statusText}</span>`;
+            }
+        }
+        
+        listItem.innerHTML = `
+            <div class="file-name">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    ${iconPath}
+                </svg>
+                ${note.filename} ${statusBadge}
+            </div>
+            <div class="file-actions">
+                <button class="file-action-btn download-btn" data-id="${note.id}" data-filename="${note.filename}">下載</button>
+                <button class="file-action-btn delete-btn" data-id="${note.id}" data-filename="${note.filename}">刪除</button>
+            </div>
+        `;
+        
+        // 綁定下載按鈕事件
+        listItem.querySelector('.download-btn').addEventListener('click', function() {
+            const noteId = this.getAttribute('data-id');
+            const filename = this.getAttribute('data-filename');
+            downloadNote(subject, noteId, filename);
+        });
+        
+        // 綁定刪除按鈕事件
+        listItem.querySelector('.delete-btn').addEventListener('click', function() {
+            const noteId = this.getAttribute('data-id');
+            const filename = this.getAttribute('data-filename');
+            deleteNote(noteId, filename);
+        });
+        
+        return listItem;
+    }
+    
+    // 下載筆記
+    function downloadNote(subject, noteId, filename) {
+        window.open(`/htmx/upload/download/notes/${subject}/${noteId}`, '_blank');
+    }
+    
+    // 刪除筆記
+    function deleteNote(noteId, filename) {
+        if (!confirm(`確定要刪除筆記「${filename}」嗎？`)) {
+            return;
+        }
+        
+        fetch(`/htmx/upload/note/${noteId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('刪除筆記失敗');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showNoteUploadStatus(`筆記「${filename}」已成功刪除`, 'alert-success');
+                loadNotesList();
+            } else {
+                showNoteUploadStatus(`刪除失敗: ${data.error || '未知錯誤'}`, 'alert-danger');
+            }
+        })
+        .catch(error => {
+            console.error('刪除筆記錯誤:', error);
+            showNoteUploadStatus(`刪除錯誤: ${error.message}`, 'alert-danger');
+        });
+    }
+    
+    // 加載講義列表（用於關聯講義下拉選單）
+    // 添加講義列表加載狀態和時間戳，防止短時間內重複請求
+    window.lecturesLoadingState = window.lecturesLoadingState || {
+        isLoading: false,
+        lastLoadTime: 0,
+        minInterval: 1000 // 最小請求間隔(毫秒)
+    };
+
+    function loadLecturesForRelatedSelect() {
+        const lectureSelect = document.getElementById('related-lecture');
+        if (!lectureSelect) return;
+
+        // 檢查是否正在加載中或剛剛加載過
+        const now = Date.now();
+        if (window.lecturesLoadingState.isLoading || 
+            (now - window.lecturesLoadingState.lastLoadTime < window.lecturesLoadingState.minInterval)) {
+            console.log('跳過講義列表請求：正在加載中或剛剛加載過');
+            return;
+        }
+        
+        // 設置加載狀態
+        window.lecturesLoadingState.isLoading = true;
+        console.log('開始加載講義列表');
+        
+        // 清空現有選項（除了第一個預設選項）
+        while (lectureSelect.options.length > 1) {
+            lectureSelect.remove(1);
+        }
+        
+        const currentSubject = getCurrentSubject();
+        if (!currentSubject) {
+            window.lecturesLoadingState.isLoading = false;
+            return;
+        }
+        
+        fetch(`/htmx/api/lectures/${currentSubject}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('加載講義列表失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.length > 0) {
+                    data.forEach(lecture => {
+                        const option = document.createElement('option');
+                        option.value = lecture.id;
+                        option.textContent = lecture.filename;
+                        lectureSelect.appendChild(option);
+                    });
+                } else {
+                    const option = document.createElement('option');
+                    option.disabled = true;
+                    option.textContent = '尚無講義';
+                    lectureSelect.appendChild(option);
+                }
+                // 更新加載狀態和時間戳
+                window.lecturesLoadingState.isLoading = false;
+                window.lecturesLoadingState.lastLoadTime = Date.now();
+                console.log('講義列表加載完成');
+            })
+            .catch(error => {
+                console.error('加載講義列表錯誤:', error);
+                const option = document.createElement('option');
+                option.disabled = true;
+                option.textContent = '載入失敗';
+                lectureSelect.appendChild(option);
+                // 更新加載狀態
+                window.lecturesLoadingState.isLoading = false;
+                window.lecturesLoadingState.lastLoadTime = Date.now();
+            });
+    }
+    
+    // 獲取當前選擇的科目
+    function getCurrentSubject() {
+        // 從全域或父頁面獲取當前科目
+        try {
+            // 嘗試從父頁面獲取 - 注意避免遞歸呼叫
+            if (window.parent && window.parent.getCurrentSubject && window.parent !== window) {
+                try {
+                    // 直接呼叫，但加上超時防護，避免無限遞歸
+                    const result = window.parent.getCurrentSubject();
+                    if (result) return result;
+                } catch (e) {
+                    console.log('從父頁面獲取科目時出現錯誤', e);
+                    // 出錯時繼續下面的方法
+                }
+            }
+            
+            // 嘗試從全域選擇器獲取
+            let subjectDropdown = null;
+            
+            // 先檢查當前頁面
+            subjectDropdown = document.getElementById('subject-dropdown') || 
+                              document.querySelector('#subject-dropdown');
+            
+            // 如果當前頁面沒有，再檢查父頁面
+            if (!subjectDropdown && window.parent && window.parent.document && window.parent !== window) {
+                try {
+                    subjectDropdown = window.parent.document.getElementById('subject-dropdown');
+                } catch (e) {
+                    console.log('訪問父頁面下拉選單時出現錯誤', e);
+                }
+            }
+            
+            if (subjectDropdown) {
+                try {
+                    const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+                    if (selectedSubject && selectedSubject !== '+ 新增科目') {
+                        return selectedSubject;
+                    }
+                } catch (e) {
+                    console.log('讀取下拉選單值時出現錯誤', e);
+                }
+            }
+            
+            // 從URL參數中獲取
+            const urlParams = new URLSearchParams(window.location.search);
+            const subject = urlParams.get('subject');
+            if (subject) {
+                return subject;
+            }
+            
+            // 從localStorage嘗試獲取
+            const savedSubject = localStorage.getItem('currentSubject');
+            if (savedSubject) {
+                return savedSubject;
+            }
+            
+            return null;
+        } catch (error) {
+            console.error('獲取當前科目錯誤:', error);
+            return null;
+        }
+    }
+    
+    // 監聽HTMX事件，處理頁面切換後的重新初始化
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        // 檢查是否是當前頁面被替換
+        if (event.detail.target && (
+            event.detail.target.id === 'content-panel' || 
+            event.detail.target.closest('#content-panel')
+        )) {
+            // 檢查當前頁面是否包含筆記上傳元素
+            if (document.getElementById('note-file-list')) {
+                console.log('頁面切換後重新初始化筆記上傳頁面');
+                // 重置初始化狀態，確保事件能重新綁定
+                window.note_buttonsInitialized = false;
+                // 延遲執行以確保DOM完全載入
+                setTimeout(initPageContent, 300);
+            }
+        }
+    });
+
+    // 另外監聽htmx:load事件，確保新加載的內容也能初始化
+    document.body.addEventListener('htmx:load', function(event) {
+        // 檢查加載的元素是否包含或就是筆記列表
+        const fileList = event.detail.elt.querySelector('#note-file-list') || 
+                        (event.detail.elt.id === 'note-file-list' ? event.detail.elt : null);
+        
+        if (fileList) {
+            console.log('htmx:load事件中發現筆記列表，重新初始化');
+            // 重置初始化狀態，確保事件能重新綁定
+            window.note_buttonsInitialized = false;
+            // 延遲執行以確保DOM完全載入
+            setTimeout(initPageContent, 300);
+        }
+    });
+    
+    // 檢測DOM變化，以便在內容重新渲染後重新綁定事件
+    if (window.MutationObserver) {
+        // 創建一個觀察器實例
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                // 檢查是否有節點添加
+                if (mutation.addedNodes.length > 0) {
+                    // 檢查是否包含筆記上傳元素
+                    for (let i = 0; i < mutation.addedNodes.length; i++) {
+                        const node = mutation.addedNodes[i];
+                        if (node.nodeType === 1) { // 元素節點
+                            if (node.id === 'note-file-list' || node.querySelector('#note-file-list')) {
+                                console.log('DOM變化檢測到筆記上傳元素，重新初始化');
+                                // 重置初始化狀態，確保事件能重新綁定
+                                window.note_buttonsInitialized = false;
+                                // 延遲執行以確保DOM完全載入
+                                setTimeout(initPageContent, 100);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // 開始觀察document.body的變化
+        observer.observe(document.body, { 
+            childList: true, 
+            subtree: true 
+        });
+    }
+    
+    // 初始化檔案選擇按鈕，確保在DOM渲染後能正確找到元素並綁定事件
+    function initNoteFileSelectionButtons() {
+        console.log('初始化筆記檔案選擇按鈕');
+        
+        // 使用setTimeout確保DOM已經完全渲染
+        setTimeout(function() {
+            const selectNoteBtn = document.getElementById('select-note-btn');
+            const fileInput = document.getElementById('note-file-upload');
+            const cancelSelectionBtn = document.getElementById('cancel-note-selection-btn');
+            const dragArea = document.getElementById('note-drag-area');
+            const uploadForm = document.getElementById('note-upload-form');
+            
+            // 檢查元素是否存在
+            if (!selectNoteBtn || !fileInput) {
+                console.error('找不到選擇筆記檔案按鈕或檔案輸入框');
+                return;
+            }
+            
+            // 如果已經初始化過按鈕事件，則不再重複綁定
+            if (window.note_buttonsInitialized) {
+                console.log('按鈕事件已經初始化過，不再重複綁定');
+                return;
+            }
+            
+            console.log('綁定筆記上傳按鈕事件：', selectNoteBtn, fileInput);
+            
+            // 選擇檔案按鈕點擊事件
+            selectNoteBtn.addEventListener('click', function() {
+                console.log('點擊選擇筆記檔案按鈕');
+                fileInput.click();
+            });
+            
+            // 檔案選擇變更事件
+            fileInput.addEventListener('change', function() {
+                console.log('筆記檔案選擇變更', this.files);
+                if (this.files.length > 0) {
+                    showSelectedNoteFile(this.files[0]);
+                } else {
+                    resetNoteFileSelection();
+                }
+            });
+            
+            // 取消選擇按鈕點擊事件
+            if (cancelSelectionBtn) {
+                cancelSelectionBtn.addEventListener('click', function() {
+                    resetNoteFileSelection();
+                });
+            }
+            
+            // 拖放區域事件
+            if (dragArea) {
+                console.log('綁定拖放區域事件', dragArea);
+                dragArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('active');
+                });
+                
+                dragArea.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('active');
+                });
+                
+                dragArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('active');
+                    console.log('檔案拖放');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        fileInput.files = files;
+                        showSelectedNoteFile(files[0]);
+                    }
+                });
+            }
+            
+            // 表單提交事件
+            if (uploadForm) {
+                console.log('綁定筆記上傳表單提交事件');
+                uploadForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (!checkNoteFileSelected()) {
+                        return;
+                    }
+                    
+                    const currentSubject = getCurrentSubject();
+                    if (!currentSubject) {
+                        showNoteUploadStatus('請先選擇科目', 'alert-danger');
+                        return;
+                    }
+                    
+                    // 創建表單數據
+                    const formData = new FormData(this);
+                    formData.append('subject', currentSubject);
+                    
+                    // 顯示上傳中狀態
+                    showNoteUploadStatus('上傳中，請稍候...', 'alert-info');
+                    
+                    // 發送上傳請求
+                    fetch('/htmx/upload/note', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('上傳失敗');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            showNoteUploadStatus('筆記上傳成功！系統將自動處理檔案...', 'alert-success');
+                            resetNoteFileSelection();
+                            loadNotesList();
+                        } else {
+                            showNoteUploadStatus(`上傳失敗: ${data.error || '未知錯誤'}`, 'alert-danger');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('上傳筆記錯誤:', error);
+                        showNoteUploadStatus(`上傳錯誤: ${error.message}`, 'alert-danger');
+                    });
+                });
+            }
+            
+            // 標記為已初始化
+            window.note_buttonsInitialized = true;
+            console.log('筆記上傳按鈕事件綁定完成');
+        }, 50); // 短延遲確保DOM已渲染
+    }
+    
+    // 初始化頁面內容
+    function initPageContent() {
+        console.log('初始化筆記上傳頁面內容');
+        loadNotesList();
+        loadLecturesForRelatedSelect();
+        initNoteFileSelectionButtons();
+    }
+    
+    // 當科目變更時重新加載資料
+    document.addEventListener('subjectChanged', function(e) {
+        console.log('科目變更，重新加載資料');
+        // 重置加載時間戳以確保立即重新加載
+        window.notesLoadingState.lastLoadTime = 0;
+        window.lecturesLoadingState.lastLoadTime = 0;
+        initPageContent();
+    });
+    
+    // 獲取科目下拉選單
+    function getSubjectDropdown() {
+        // 嘗試從父頁面或當前頁面獲取科目下拉選單
+        try {
+            // 嘗試從父頁面獲取
+            if (window.parent && window.parent.document) {
+                return window.parent.document.getElementById('subject-dropdown');
+            }
+            
+            // 嘗試從當前頁面獲取
+            return document.getElementById('subject-dropdown');
+        } catch (error) {
+            console.error('獲取科目下拉選單錯誤:', error);
+            return null;
+        }
+    }
+    
+    // 頁面初始化
+    (function initPage() {
+        console.log('正在初始化upload_note頁面...');
+        
+        // 延遲執行以確保HTMX已完成頁面加載
+        setTimeout(function() {
+            console.log('嘗試初始化筆記上傳頁面');
+            
+            // 獲取科目下拉選單
+            const subjectDropdown = getSubjectDropdown();
+            if (subjectDropdown) {
+                console.log('找到科目下拉選單:', subjectDropdown.options[subjectDropdown.selectedIndex]?.text);
+            } else {
+                console.log('找不到科目下拉選單或未選擇科目');
+            }
+            
+            initPageContent();
+        }, 300);
+    })();
+</script> 

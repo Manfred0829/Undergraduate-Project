@@ -1,0 +1,768 @@
+<div class="content-panel">
+    <h2>上傳講義</h2>
+    <div class="upload-container">
+        <h3>目前講義</h3>
+        <div class="file-list" id="lecture-file-list">
+            <!-- 檔案列表將由JavaScript動態填充 -->
+            <div class="loading-indicator">載入中...</div>
+                </div>
+
+        <div class="upload-form">
+            <h3>上傳新講義</h3>
+            <form id="lecture-upload-form" enctype="multipart/form-data">
+                <div class="drag-drop-area" id="lecture-drag-area">
+                    <p>拖放檔案至此處或點擊選擇檔案</p>
+                    <p>支援 PDF 格式檔案</p>
+                    <input type="file" id="lecture-file-upload" name="file" accept=".pdf" style="display: none;">
+                    <button type="button" class="upload-btn" id="select-file-btn">選擇檔案</button>
+                </div>
+                <div id="selected-file-info" class="selected-file-info" style="margin-top: 10px; display: none;">
+                    <p>已選擇檔案：<span id="selected-filename"></span></p>
+                    <button type="button" class="cancel-btn" id="cancel-selection-btn">取消選擇</button>
+                </div>
+                <button type="submit" class="upload-btn" style="width: 100%; margin-top: 15px;">上傳</button>
+            </form>
+            <div id="upload-status" class="upload-status"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Upload Styles */
+    .upload-container {
+        max-width: 800px;
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-container h3 {
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .file-list {
+        margin: 15px 0;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        max-height: 250px;
+        overflow-y: auto;
+    }
+
+    .file-list-item {
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .file-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .file-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .file-name svg {
+        width: 16px;
+        height: 16px;
+        color: #777;
+    }
+
+    .file-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .file-action-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--primary-color);
+        font-size: 0.9rem;
+    }
+
+    .upload-form {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: var(--secondary-color);
+    }
+
+    .drag-drop-area {
+        border: 2px dashed var(--border-color);
+        border-radius: 4px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 15px;
+        transition: all 0.2s;
+        background-color: white;
+    }
+
+    .drag-drop-area.active {
+        border-color: var(--primary-color);
+        background-color: var(--hover-color);
+    }
+
+    .drag-drop-area p {
+        margin-bottom: 10px;
+        color: #777;
+    }
+
+    .upload-btn {
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .upload-btn:hover {
+        background-color: var(--primary-dark);
+    }
+
+    .cancel-btn {
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        background-color: #f8f9fa;
+        color: #666;
+        border: 1px solid #ddd;
+        transition: all 0.2s;
+    }
+
+    .cancel-btn:hover {
+        background-color: #e9ecef;
+    }
+
+    .selected-file-info {
+        background-color: white;
+        border-radius: 4px;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+    }
+
+    .upload-status {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .loading-indicator {
+        text-align: center;
+        padding: 15px;
+        color: #777;
+    }
+
+    .alert {
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+
+    .alert-info {
+        background-color: #e8f4fd;
+        border: 1px solid #b8daff;
+        color: #004085;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+
+    .processing-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        margin-left: 10px;
+    }
+
+    .processing-badge.processing {
+        background-color: #ffeeba;
+        color: #856404;
+    }
+
+    .processing-badge.completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .processing-badge.error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+
+<script>
+    // 自定義文件列表變更事件
+    const lecturesListChangedEvent = new CustomEvent('lecturesListChanged');
+    
+    // 顯示上傳狀態
+    function showUploadStatus(message, className) {
+        const uploadStatus = document.getElementById('upload-status');
+        if (uploadStatus) {
+            uploadStatus.innerHTML = `<div class="alert ${className}">${message}</div>`;
+        }
+    }
+    
+    // 重設檔案選擇
+    function resetFileSelection() {
+        const fileInput = document.getElementById('lecture-file-upload');
+        const selectedFileInfo = document.getElementById('selected-file-info');
+        const dragArea = document.getElementById('lecture-drag-area');
+        
+        if (fileInput) fileInput.value = '';
+        if (selectedFileInfo) selectedFileInfo.style.display = 'none';
+        if (dragArea) dragArea.style.display = 'block';
+    }
+    
+    // 顯示選擇的檔案
+    function showSelectedFile(file) {
+        const selectedFilename = document.getElementById('selected-filename');
+        const selectedFileInfo = document.getElementById('selected-file-info');
+        const dragArea = document.getElementById('lecture-drag-area');
+        
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+            showUploadStatus('只支援PDF檔案格式', 'alert-danger');
+            resetFileSelection();
+            return;
+        }
+
+        if (selectedFilename) selectedFilename.textContent = file.name;
+        if (selectedFileInfo) selectedFileInfo.style.display = 'block';
+        if (dragArea) dragArea.style.display = 'none';
+    }
+    
+    // 載入講義清單
+    function loadLecturesList() {
+        console.log('loadLecturesList');
+        const fileListContainer = document.getElementById('lecture-file-list');
+        
+        // 使用統一的獲取科目函數
+        const subject = getCurrentSubject();
+        if (!subject) {
+            if (fileListContainer) {
+                fileListContainer.innerHTML = '<div class="alert alert-info">請先選擇科目</div>';
+                resetFileSelection();
+                showUploadStatus('', '');
+            }
+            return;
+        }
+
+        console.log('正在載入科目講義列表:', subject);
+        if (fileListContainer) {
+            fileListContainer.innerHTML = '<div class="loading-indicator">載入中...</div>';
+        }
+
+        fetch(`/htmx/api/lectures/${subject}`)
+            .then(response => response.json())
+            .then(lectures => {
+                if (!fileListContainer) return;
+                
+                if (!lectures || lectures.length === 0) {
+                    fileListContainer.innerHTML = '<div class="alert alert-info">尚無上傳講義</div>';
+                    return;
+                }
+
+                let html = '';
+                lectures.forEach(lecture => {
+                    const status = lecture.processing_status || 'completed';
+                    const statusBadge = status !== 'completed' ? 
+                        `<span class="processing-badge ${status}">${status === 'processing' ? '處理中' : '錯誤'}</span>` : '';
+                    
+                    html += `
+                        <div class="file-list-item" data-id="${lecture.id}">
+                            <div class="file-name">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                                ${lecture.filename} ${statusBadge}
+                            </div>
+                            <div class="file-actions">
+                                <button class="file-action-btn download-btn" data-id="${lecture.id}">下載</button>
+                                <button class="file-action-btn delete-btn" data-id="${lecture.id}">刪除</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                fileListContainer.innerHTML = html;
+
+                // 綁定下載和刪除按鈕事件
+                document.querySelectorAll('.download-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        downloadLecture(this.getAttribute('data-id'));
+                    });
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        deleteLecture(this.getAttribute('data-id'));
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('獲取講義列表錯誤:', error);
+                if (fileListContainer) {
+                    fileListContainer.innerHTML = '<div class="alert alert-danger">載入講義列表失敗</div>';
+                }
+            });
+    }
+    
+    // 下載講義
+    function downloadLecture(lectureId) {
+        const subject = getCurrentSubject();
+        if (!subject) {
+            showUploadStatus('請先選擇科目', 'alert-info');
+            return;
+        }
+        
+        window.location.href = `/htmx/upload/download/lectures/${subject}/${lectureId}`;
+    }
+    
+    // 刪除講義
+    function deleteLecture(lectureId) {
+        if (!confirm('確定要刪除此講義嗎？這將同時刪除相關的處理結果。')) {
+            return;
+        }
+
+        fetch(`/htmx/upload/lecture/${lectureId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 觸發文件列表變更事件
+                    document.dispatchEvent(lecturesListChangedEvent);
+                    // 直接刷新檔案列表，確保UI更新
+                    loadLecturesList();
+                    showUploadStatus('講義已成功刪除', 'alert-success');
+                } else {
+                    showUploadStatus('刪除失敗: ' + data.error, 'alert-danger');
+                }
+            })
+            .catch(error => {
+                console.error('刪除講義錯誤:', error);
+                showUploadStatus('刪除講義失敗', 'alert-danger');
+            });
+    }
+    
+    // 上傳講義
+    function uploadLecture(formData) {
+        const subject = getCurrentSubject();
+        if (!subject) {
+            showUploadStatus('請先選擇科目', 'alert-info');
+            return;
+        }
+        
+        showUploadStatus('上傳中...', 'alert-info');
+
+        // 發送上傳請求
+        fetch(`/htmx/upload/lecture/${subject}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showUploadStatus('檔案上傳成功！系統正在處理檔案...', 'alert-success');
+                resetFileSelection();
+                
+                // 觸發文件列表變更事件
+                document.dispatchEvent(lecturesListChangedEvent);
+                // 直接刷新檔案列表，確保UI更新
+                loadLecturesList();
+                
+                // 監控處理狀態
+                monitorProcessingStatus(data.file_id);
+            } else {
+                showUploadStatus('上傳失敗: ' + data.error, 'alert-danger');
+            }
+        })
+        .catch(error => {
+            console.error('上傳錯誤:', error);
+            showUploadStatus('上傳失敗: ' + error.message, 'alert-danger');
+        });
+    }
+    
+    // 監控處理狀態
+    function monitorProcessingStatus(fileId) {
+        const checkInterval = 3000; // 每3秒檢查一次
+        const maxAttempts = 20; // 最多檢查20次
+        let attempts = 0;
+        const subject = getCurrentSubject();
+        
+        const checkStatus = () => {
+            fetch(`/htmx/process/status/lecture/${fileId}?subject=${encodeURIComponent(subject)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'completed') {
+                        showUploadStatus('講義處理完成！', 'alert-success');
+                        // 觸發文件列表變更事件
+                        document.dispatchEvent(lecturesListChangedEvent);
+                        // 直接刷新檔案列表，確保UI更新
+                        loadLecturesList();
+                    } else if (data.status === 'processing') {
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            setTimeout(checkStatus, checkInterval);
+                        } else {
+                            showUploadStatus('處理時間較長，請稍後查看結果', 'alert-info');
+                            // 觸發文件列表變更事件
+                            document.dispatchEvent(lecturesListChangedEvent);
+                            // 直接刷新檔案列表，確保UI更新
+                            loadLecturesList();
+                        }
+                    } else if (data.status === 'error') {
+                        showUploadStatus('處理過程中發生錯誤: ' + data.error, 'alert-danger');
+                        // 觸發文件列表變更事件
+                        document.dispatchEvent(lecturesListChangedEvent);
+                        // 直接刷新檔案列表，確保UI更新
+                        loadLecturesList();
+                    }
+                })
+                .catch(error => {
+                    console.error('檢查狀態錯誤:', error);
+                    showUploadStatus('檢查處理狀態時發生錯誤', 'alert-danger');
+                });
+        };
+
+        // 開始檢查
+        setTimeout(checkStatus, 2000); // 2秒後開始第一次檢查
+    }
+
+    // DOM載入完成後初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('upload_lecture.html DOM loading');
+        const dragArea = document.getElementById('lecture-drag-area');
+        const fileInput = document.getElementById('lecture-file-upload');
+        const selectFileBtn = document.getElementById('select-file-btn');
+        const cancelSelectionBtn = document.getElementById('cancel-selection-btn');
+        const uploadForm = document.getElementById('lecture-upload-form');
+        
+        // 監聽文件列表變更事件
+        document.addEventListener('lecturesListChanged', function() {
+            loadLecturesList();
+        });
+
+        // 初始載入講義清單
+        loadLecturesList();
+        
+        // 當科目變更時也重新加載
+        window.addEventListener('subjectChanged', function() {
+            document.dispatchEvent(lecturesListChangedEvent);
+        });
+        
+        // 點擊選擇檔案按鈕
+        if (selectFileBtn) {
+            selectFileBtn.addEventListener('click', function() {
+                if (fileInput) fileInput.click();
+            });
+        }
+        
+        // 檔案選擇事件
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    showSelectedFile(file);
+                }
+            });
+        }
+
+        // 取消選擇
+        if (cancelSelectionBtn) {
+            cancelSelectionBtn.addEventListener('click', function() {
+                resetFileSelection();
+            });
+        }
+        
+        // 拖曳事件
+        if (dragArea) {
+            dragArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dragArea.classList.add('active');
+            });
+            
+            dragArea.addEventListener('dragleave', function() {
+                dragArea.classList.remove('active');
+            });
+            
+            dragArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dragArea.classList.remove('active');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    fileInput.files = e.dataTransfer.files;
+                    showSelectedFile(file);
+                }
+            });
+        }
+    });
+
+    // 監聽HTMX事件，處理頁面切換後的重新初始化
+    document.body.addEventListener('htmx:afterSwap', function(event) {
+        // 檢查是否是當前頁面被替換
+        if (event.detail.target && (
+            event.detail.target.id === 'content-panel' || 
+            event.detail.target.closest('#content-panel')
+        )) {
+            // 檢查當前頁面是否包含講義上傳元素
+            if (document.getElementById('lecture-file-list')) {
+                console.log('頁面切換後重新初始化講義上傳頁面');
+                // 重置初始化狀態，確保事件能重新綁定
+                window.lecture_buttonsInitialized = false;
+                // 延遲執行以確保DOM完全載入
+                setTimeout(function() {
+                    loadLecturesList();
+                    initFileSelectionButtons();
+                }, 300);
+            }
+        }
+    });
+
+    // 另外監聽htmx:load事件，確保新加載的內容也能初始化
+    document.body.addEventListener('htmx:load', function(event) {
+        // 檢查加載的元素是否包含或就是講義列表
+        const fileList = event.detail.elt.querySelector('#lecture-file-list') || 
+                        (event.detail.elt.id === 'lecture-file-list' ? event.detail.elt : null);
+        
+        if (fileList) {
+            console.log('htmx:load事件中發現講義列表，重新初始化');
+            // 重置初始化狀態，確保事件能重新綁定
+            window.lecture_buttonsInitialized = false;
+            // 延遲執行以確保DOM完全載入
+            setTimeout(function() {
+                loadLecturesList();
+                initFileSelectionButtons();
+            }, 300);
+        }
+    });
+    
+    // 檢測DOM變化，以便在內容重新渲染後重新綁定事件
+    if (window.MutationObserver) {
+        // 創建一個觀察器實例
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                // 檢查是否有節點添加
+                if (mutation.addedNodes.length > 0) {
+                    // 檢查是否包含講義上傳元素
+                    for (let i = 0; i < mutation.addedNodes.length; i++) {
+                        const node = mutation.addedNodes[i];
+                        if (node.nodeType === 1) { // 元素節點
+                            if (node.id === 'lecture-file-list' || node.querySelector('#lecture-file-list')) {
+                                console.log('DOM變化檢測到講義上傳元素，重新初始化');
+                                // 重置初始化狀態，確保事件能重新綁定
+                                window.lecture_buttonsInitialized = false;
+                                // 延遲執行以確保DOM完全載入
+                                setTimeout(function() {
+                                    loadLecturesList();
+                                    initFileSelectionButtons();
+                                }, 100);
+                                break;
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // 開始觀察document.body的變化
+        observer.observe(document.body, { 
+            childList: true, 
+            subtree: true 
+        });
+    }
+
+    // 頁面初始化
+    (function initPage() {
+        console.log('正在初始化upload_lecture頁面...');
+        
+        // 延遲執行以確保HTMX已完成頁面加載
+        setTimeout(function() {
+            console.log('嘗試初始化講義選擇器');
+            
+            // 獲取科目下拉選單
+            const subjectDropdown = getSubjectDropdown();
+            if (subjectDropdown) {
+                console.log('找到科目下拉選單:', subjectDropdown.options[subjectDropdown.selectedIndex]?.text);
+            } else {
+                console.error('找不到科目下拉選單或未選擇科目');
+            }
+            
+            loadLecturesList();
+            
+            // 綁定按鈕事件
+            initFileSelectionButtons();
+        }, 300);
+    })();
+
+    // 獲取科目下拉選單
+    function getSubjectDropdown() {
+        // 嘗試多種方式獲取科目下拉選單
+        let dropdown = document.getElementById('subject-dropdown');
+        
+        // 如果在當前文檔中找不到，嘗試在父文檔中尋找
+        if (!dropdown && window.parent) {
+            try {
+                dropdown = parent.document.getElementById('subject-dropdown');
+            } catch (e) {
+                console.error('無法從父頁面獲取科目下拉選單:', e);
+            }
+        }
+        
+        return dropdown;
+    }
+    
+    // 獲取當前選中的科目名稱
+    function getCurrentSubject() {
+        const dropdown = getSubjectDropdown();
+        if (!dropdown || dropdown.selectedIndex < 0) {
+            return '';
+        }
+        
+        const selectedText = dropdown.options[dropdown.selectedIndex].text;
+        if (selectedText === '載入中...' || selectedText === '+ 新增科目') {
+            return '';
+        }
+        
+        return selectedText;
+    }
+
+    // 追蹤是否已經初始化了按鈕事件，使用window對象避免重複宣告
+    if (window.lecture_buttonsInitialized === undefined) {
+        window.lecture_buttonsInitialized = false;
+    }
+
+    // 初始化檔案選擇相關按鈕
+    function initFileSelectionButtons() {
+        console.log('初始化檔案選擇按鈕');
+        
+        // 使用setTimeout確保DOM已經完全渲染
+        setTimeout(function() {
+            const selectFileBtn = document.getElementById('select-file-btn');
+            const fileInput = document.getElementById('lecture-file-upload');
+            const cancelSelectionBtn = document.getElementById('cancel-selection-btn');
+            const dragArea = document.getElementById('lecture-drag-area');
+            const uploadForm = document.getElementById('lecture-upload-form');
+            
+            // 檢查元素是否存在
+            if (!selectFileBtn || !fileInput) {
+                console.error('找不到選擇檔案按鈕或檔案輸入框');
+                return;
+            }
+            
+            // 如果已經初始化過按鈕事件，則不再重複綁定
+            if (window.lecture_buttonsInitialized) {
+                console.log('按鈕事件已經初始化過，不再重複綁定');
+                return;
+            }
+            
+            console.log('綁定講義上傳按鈕事件：', selectFileBtn, fileInput);
+            
+            // 點擊選擇檔案按鈕
+            selectFileBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('點擊選擇檔案按鈕');
+                fileInput.click();
+            });
+            
+            // 檔案選擇事件
+            fileInput.addEventListener('change', function(e) {
+                console.log('檔案選擇變更:', e.target.files);
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    showSelectedFile(file);
+                }
+            });
+            
+            // 取消選擇
+            if (cancelSelectionBtn) {
+                cancelSelectionBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('取消選擇檔案');
+                    resetFileSelection();
+                });
+            }
+            
+            // 拖曳事件
+            if (dragArea) {
+                console.log('綁定拖放區域事件', dragArea);
+                dragArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    dragArea.classList.add('active');
+                });
+                
+                dragArea.addEventListener('dragleave', function() {
+                    dragArea.classList.remove('active');
+                });
+                
+                dragArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    dragArea.classList.remove('active');
+                    console.log('檔案拖放');
+                    
+                    if (e.dataTransfer.files.length > 0) {
+                        const file = e.dataTransfer.files[0];
+                        fileInput.files = e.dataTransfer.files;
+                        showSelectedFile(file);
+                    }
+                });
+            }
+
+            // 表單提交事件
+            if (uploadForm) {
+                console.log('綁定表單提交事件');
+                uploadForm.addEventListener('submit', function handleSubmit(e) {
+                    e.preventDefault();
+                    console.log('提交表單');
+                    
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        showUploadStatus('請選擇要上傳的檔案', 'alert-danger');
+                        return;
+                    }
+                    
+                    const subject = getCurrentSubject();
+                    if (!subject) {
+                        showUploadStatus('請先選擇科目', 'alert-info');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    formData.append('subject', subject);
+                    
+                    console.log('上傳檔案:', fileInput.files[0].name, '到科目:', subject);
+                    uploadLecture(formData);
+                });
+            } else {
+                console.error('找不到上傳表單');
+            }
+            
+            // 標記為已初始化
+            window.lecture_buttonsInitialized = true;
+            console.log('講義上傳按鈕事件綁定完成');
+        }, 50); // 短延遲確保DOM已渲染
+    }
+</script> 

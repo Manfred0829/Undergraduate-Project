@@ -418,6 +418,61 @@ def processing_get_keypoints(subject, lecture_name):
     return keypoints_json
 
 
+def processing_get_notes(subject, note_name):
+    """
+    獲取指定筆記的詳細信息
+    
+    Args:
+        subject: 科目名稱
+        note_name: 筆記文件名
+    
+    Returns:
+        dict: 包含筆記詳細信息的字典，格式為 {"Lecture_Name": str, "Notes": list}
+    """
+    # 讀取 json
+    note_name_without_ext = os.path.splitext(note_name)[0]
+    note_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
+    
+    try:
+        note_json = text.read_json(note_path, default_content={})
+        
+        # 判斷返回的數據格式，進行適當處理
+        if isinstance(note_json, dict) and "Notes" in note_json and "Lecture_Name" in note_json:
+            # 格式已經是 {"Lecture_Name": xxx, "Notes": [...]} 
+            result = note_json
+        elif isinstance(note_json, list):
+            # 如果只是筆記列表，則包裝成預期格式
+            result = {
+                "Lecture_Name": note_name,  # 用筆記名稱作為講義名稱的預設值
+                "Notes": note_json
+            }
+        else:
+            # 其他格式情況，構建一個預設結構
+            result = {
+                "Lecture_Name": note_name,
+                "Notes": [note_json] if note_json else []
+            }
+        
+        # 處理 Notes 數組中每個筆記
+        for note in result.get("Notes", []):
+            # 刪除不需要的欄位（安全 pop）
+            for field in ["Embedding", "Keypoint_id"]:
+                note.pop(field, None)
+            
+
+        
+        logger.info(f"成功獲取筆記 '{note_name}' 的詳細信息，共 {len(result.get('Notes', []))} 條筆記")
+        return result
+        
+    except Exception as e:
+        logger.error(f"獲取筆記 '{note_name}' 詳細信息失敗: {str(e)}")
+        # 返回一個空的結構以保持格式一致
+        return {
+            "Lecture_Name": note_name,
+            "Notes": []
+        }
+
+
 def processing_get_questions(subject, lecture_name, num_questions):
     # 讀取 json
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
@@ -468,15 +523,25 @@ def _get_notes_from_keypoint(subject, keypoint_json):
 
 
 def processing_get_page_info(subject, lecture_name, page_index):
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+
+
     # 1. page image
-    pdf_path = os.path.join("app", "data_upload", subject, "lectures", lecture_name)
-    imgs = media.read_pdf_to_images(pdf_path)
-    result_img = imgs[page_index]
-    # 將PIL圖像轉換為base64字串
-    result_img_base64 = media.convert_PIL_to_base64(result_img)
+    result_img_base64 = None
+    imgs_dir_path = os.path.join("app", "data_upload", subject, "lectures", lecturename_without_ext + "_imgs")
+    if not os.path.exists(imgs_dir_path): # 如果沒有圖片，則從pdf轉換
+        
+        pdf_path = os.path.join("app", "data_upload", subject, "lectures", lecture_name)
+        imgs = media.read_pdf_to_images(pdf_path)
+        result_img = imgs[page_index]
+        # 將PIL圖像轉換為base64字串
+        result_img_base64 = media.convert_PIL_to_base64(result_img)
+    else: # 如果圖片存在，則從圖片中讀取
+        img_path = os.path.join(imgs_dir_path, f"{lecturename_without_ext}_{page_index}.png")
+        result_img = media.read_image_to_PIL(img_path)
+        result_img_base64 = media.convert_PIL_to_base64(result_img)
 
     # 讀取 json
-    lecturename_without_ext = os.path.splitext(lecture_name)[0]
     keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
     keypoints_json = text.read_json(keypoints_path, default_content=[])
     target_keypoints = list(filter(lambda x: x["from_page"] == page_index, keypoints_json))

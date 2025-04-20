@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人化學習系統</title>
+    <!-- 引入 HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+    <!-- 引入 Chart.js 用於圖表展示 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+        }
+
+        :root {
+            --primary-color: #4e8cff;
+            --primary-dark: #3b7dff;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --sidebar-width: 240px;
+            --topbar-height: 60px;
+            --border-color: #e0e0e0;
+            --hover-color: #f0f7ff;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar Styles */
+        .top-bar {
+            height: var(--topbar-height);
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .subject-selector {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .subject-dropdown {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            min-width: 160px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .username {
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            margin-top: var(--topbar-height);
+            height: calc(100vh - var(--topbar-height));
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: white;
+            border-right: 1px solid var(--border-color);
+            padding: 20px 0;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: var(--topbar-height);
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .sidebar-menu button.active {
+            background-color: var(--hover-color);
+            border-left: 3px solid var(--primary-color);
+            font-weight: 500;
+        }
+
+        .sidebar-menu button svg {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- 頂部導航欄 -->
+    <div class="top-bar">
+        <div class="logo">個人化學習系統</div>
+        <div class="subject-selector">
+            <select 
+                id="subject-dropdown" 
+                class="subject-dropdown" 
+                hx-get="/htmx/api/subjects" 
+                hx-trigger="load" 
+                hx-target="#subject-dropdown" 
+                hx-swap="innerHTML">
+                <option value="">載入中...</option>
+            </select>
+        </div>
+        <div class="user-menu">
+            <span class="username">用戶名稱</span>
+            <button 
+                class="logout-btn"
+                id="logout-btn"
+                hx-push-url="true">登出</button>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 側邊欄 -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li>
+                    <button 
+                        hx-get="/htmx/outline" 
+                        hx-target="#content-panel"
+                        class="active">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                        </svg>
+                        章節大綱
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/integration" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        重點統合
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/key_points" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        重點列表
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/notes" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        筆記列表
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/quiz" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        測驗系統
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/history" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        學習紀錄
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/upload_lecture" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3-3m0 0l3 3m-3-3v12" />
+                        </svg>
+                        上傳講義
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        hx-get="/htmx/upload_note" 
+                        hx-target="#content-panel">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        上傳筆記
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 內容區域 -->
+        <div class="content-area">
+            <div id="content-panel">
+                <!-- 這裡的內容將被 HTMX 動態替換 -->
+                <!-- 初始載入大綱內容 -->
+                <div hx-get="/htmx/outline" hx-trigger="load" hx-swap="outerHTML"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 用於處理側邊欄按鈕的活動狀態
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Layout DOM加載完成');
+            
+            const buttons = document.querySelectorAll('.sidebar-menu button');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 移除所有按鈕的活動狀態
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    // 為當前點擊的按鈕添加活動狀態
+                    this.classList.add('active');
+                });
+            });
+
+            // 一旦頁面加載完成，獲取當前科目並發出事件
+            function initializeSubject() {
+                const subjectDropdown = document.getElementById('subject-dropdown');
+                if (subjectDropdown && subjectDropdown.options.length > 0 && subjectDropdown.selectedIndex >= 0) {
+                    const selectedSubjectText = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+                    console.log('初始科目：', selectedSubjectText);
+                    
+                    if (selectedSubjectText && selectedSubjectText !== '載入中...' && selectedSubjectText !== '+ 新增科目') {
+                        // 發送自定義事件通知子頁面科目已變更
+                        const subjectChangedEvent = new CustomEvent('subjectChanged', {
+                            detail: {
+                                subject: selectedSubjectText,
+                                trigger: 'init'
+                            }
+                        });
+                        document.dispatchEvent(subjectChangedEvent);
+                    }
+                }
+            }
+            
+            // HTMX 加載完成後的事件處理，確保在科目下拉框填充後初始化
+            document.body.addEventListener('htmx:afterOnLoad', function(event) {
+                console.log('HTMX 加載完成：', event.detail.elt.id);
+                
+                // 如果是科目下拉框被加載
+                if (event.detail.elt.id === 'subject-dropdown') {
+                    console.log('科目下拉框已加載，正在初始化...');
+                    setTimeout(initializeSubject, 200);  // 短暫延遲確保下拉框已完全加載
+                }
+                
+                // 如果是內容區域被加載，確保側邊欄按鈕狀態與當前頁面一致
+                if (event.detail.elt.id === 'content-panel' || event.detail.elt.closest('#content-panel')) {
+                    console.log('內容區域加載完成，確保側邊欄按鈕狀態正確');
+                    
+                    // 獲取當前加載的頁面路徑
+                    const loadedUrl = event.detail.xhr ? event.detail.xhr.responseURL : '';
+                    
+                    // 找到對應的側邊欄按鈕並激活它
+                    if (loadedUrl) {
+                        const buttons = document.querySelectorAll('.sidebar-menu button');
+                        buttons.forEach(btn => {
+                            const btnUrl = btn.getAttribute('hx-get');
+                            if (loadedUrl.includes(btnUrl)) {
+                                // 移除所有按鈕的活動狀態
+                                buttons.forEach(b => b.classList.remove('active'));
+                                // 為匹配的按鈕添加活動狀態
+                                btn.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+
+            // 監聽科目選擇變化
+            document.body.addEventListener('change', function(event) {
+                // 確保是科目下拉框觸發的變更
+                if (event.target && event.target.id === 'subject-dropdown') {
+                    const selectedSubject = event.target.value;
+                    const selectedSubjectText = event.target.options[event.target.selectedIndex].text;
+                    console.log('選擇的科目變更為：', selectedSubjectText);
+                    
+                    // 如果選擇了"新增科目"選項
+                    if (selectedSubject === 'add-new') {
+                        alert('在HTMX版本中，"新增科目"功能暫不可用。請使用原始版本添加新科目。');
+                        // 重置選擇到第一個選項
+                        if (event.target.options.length > 1) {
+                            event.target.selectedIndex = 0;
+                        }
+                        return;
+                    }
+                    
+                    // 發送自定義事件通知子頁面科目已變更
+                    const subjectChangedEvent = new CustomEvent('subjectChanged', {
+                        detail: {
+                            subject: selectedSubjectText,
+                            trigger: 'change'
+                        }
+                    });
+                    document.dispatchEvent(subjectChangedEvent);
+                }
+            });
+        });
+
+
+        document.getElementById('logout-btn').addEventListener('click', function(e) { 
+            e.preventDefault();
+            
+            // 創建一個表單元素
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/htmx/logout';
+            
+            // 將表單添加到文檔中並提交
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
+</body>
+</html> 
