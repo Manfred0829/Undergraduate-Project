@@ -161,6 +161,65 @@
             padding: 20px;
             overflow-y: auto;
         }
+
+        /* 模態窗口樣式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        .modal-btn.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            background-color: var(--primary-dark);
+        }
     </style>
 </head>
 <body>
@@ -286,6 +345,31 @@
         </div>
     </div>
 
+    <div class="modal" id="new-subject-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>科目管理</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="add-subject-container">
+                    <h4 style="margin-bottom: 10px;">新增科目</h4>
+                    <p style="margin-bottom: 10px; color: #777;">請輸入新科目名稱：</p>
+                    <input type="text" id="subject-name" placeholder="科目名稱" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 10px;">
+                    <button id="add-subject-btn" class="modal-btn primary" style="background-color: var(--primary-color); color: white; border: none; width: 100%;">新增科目</button>
+                </div>
+                <div class="delete-subject-container" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                    <h4 style="margin-bottom: 10px;">刪除科目</h4>
+                    <p style="margin-bottom: 10px; color: #777;">請選擇要刪除的科目：</p>
+                    <select id="delete-subject-dropdown" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-bottom: 10px;">
+                        <option value="">請選擇科目</option>
+                    </select>
+                    <button id="delete-subject-btn" class="modal-btn" style="background-color: #ff4d4f; color: white; border: none; width: 100%;">刪除科目</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 用於處理側邊欄按鈕的活動狀態
         document.addEventListener('DOMContentLoaded', function() {
@@ -365,11 +449,16 @@
                     
                     // 如果選擇了"新增科目"選項
                     if (selectedSubject === 'add-new') {
-                        alert('在HTMX版本中，"新增科目"功能暫不可用。請使用原始版本添加新科目。');
+                        // 打開模態窗口
+                        newSubjectModal.style.display = 'block';
+                        
                         // 重置選擇到第一個選項
                         if (event.target.options.length > 1) {
                             event.target.selectedIndex = 0;
                         }
+                        
+                        // 更新刪除科目下拉框
+                        updateDeleteSubjectDropdown();
                         return;
                     }
                     
@@ -385,7 +474,6 @@
             });
         });
 
-
         document.getElementById('logout-btn').addEventListener('click', function(e) { 
             e.preventDefault();
             
@@ -397,6 +485,200 @@
             // 將表單添加到文檔中並提交
             document.body.appendChild(form);
             form.submit();
+        });
+
+        // 模態窗口相關功能
+        const newSubjectModal = document.getElementById('new-subject-modal');
+        const closeModalBtn = document.querySelector('.close-modal');
+        
+        // 關閉模態窗口
+        closeModalBtn.addEventListener('click', () => {
+            newSubjectModal.style.display = 'none';
+        });
+        
+        // 點擊模態窗口外部時關閉
+        window.addEventListener('click', (e) => {
+            if (e.target === newSubjectModal) {
+                newSubjectModal.style.display = 'none';
+            }
+        });
+        
+        // 更新刪除科目下拉列表
+        function updateDeleteSubjectDropdown() {
+            const deleteSubjectDropdown = document.getElementById('delete-subject-dropdown');
+            const subjectDropdown = document.getElementById('subject-dropdown');
+            
+            // 清空現有選項
+            while (deleteSubjectDropdown.options.length > 1) {
+                deleteSubjectDropdown.remove(1);
+            }
+            
+            // 獲取當前科目列表
+            const subjects = [];
+            for (let i = 0; i < subjectDropdown.options.length; i++) {
+                const option = subjectDropdown.options[i];
+                if (option.value !== 'add-new' && option.text !== '載入中...') {
+                    subjects.push(option.text);
+                }
+            }
+            
+            // 添加科目到刪除下拉框
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.text = subject;
+                deleteSubjectDropdown.appendChild(option);
+            });
+        }
+        
+        // 處理新增科目
+        const addSubjectBtn = document.getElementById('add-subject-btn');
+        addSubjectBtn.addEventListener('click', () => {
+            const subjectNameInput = document.getElementById('subject-name');
+            const subjectName = subjectNameInput.value.trim();
+            
+            if (subjectName) {
+                // 檢查是否已存在相同名稱的科目
+                const subjectDropdown = document.getElementById('subject-dropdown');
+                let isDuplicate = false;
+                for (let i = 0; i < subjectDropdown.options.length; i++) {
+                    if (subjectDropdown.options[i].text === subjectName) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+                
+                if (isDuplicate) {
+                    alert('已存在相同名稱的科目！');
+                    return;
+                }
+                
+                // 在後端創建資料夾結構
+                fetch('/htmx/subjects/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ subject_name: subjectName })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('創建科目資料夾失敗');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log(`為科目 "${subjectName}" 創建資料夾成功`);
+                        
+                        // 在前端下拉選單中添加新科目
+                        const newOption = document.createElement('option');
+                        newOption.value = subjectName;
+                        newOption.text = subjectName;
+                        
+                        // 插入到「新增科目」選項之前
+                        const addNewOption = subjectDropdown.querySelector('option[value="add-new"]');
+                        subjectDropdown.insertBefore(newOption, addNewOption);
+                        
+                        // 選擇新添加的科目
+                        newOption.selected = true;
+                        
+                        // 清空輸入框並關閉模態窗口
+                        subjectNameInput.value = '';
+                        newSubjectModal.style.display = 'none';
+                        
+                        // 發送科目變更事件
+                        const subjectChangedEvent = new CustomEvent('subjectChanged', {
+                            detail: {
+                                subject: subjectName,
+                                trigger: 'new'
+                            }
+                        });
+                        document.dispatchEvent(subjectChangedEvent);
+                    } else {
+                        console.error('創建科目資料夾失敗:', data.error);
+                        alert('創建科目資料夾失敗: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('創建科目資料夾錯誤:', error);
+                    alert('創建科目資料夾錯誤: ' + error.message);
+                });
+            } else {
+                alert('請輸入科目名稱！');
+            }
+        });
+        
+        // 處理刪除科目
+        const deleteSubjectBtn = document.getElementById('delete-subject-btn');
+        deleteSubjectBtn.addEventListener('click', () => {
+            const deleteSubjectDropdown = document.getElementById('delete-subject-dropdown');
+            const selectedSubject = deleteSubjectDropdown.value;
+            
+            if (!selectedSubject) {
+                alert('請選擇要刪除的科目');
+                return;
+            }
+            
+            // 確認是否要刪除
+            if (!confirm(`確定要刪除科目「${selectedSubject}」嗎？此操作將刪除所有相關數據且無法恢復！`)) {
+                return;
+            }
+            
+            // 發送刪除請求到後端
+            fetch('/htmx/subjects/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ subject_name: selectedSubject })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('刪除科目失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(`已成功刪除科目「${selectedSubject}」`);
+                    
+                    // 從下拉列表中移除該科目
+                    const subjectDropdown = document.getElementById('subject-dropdown');
+                    for (let i = 0; i < subjectDropdown.options.length; i++) {
+                        if (subjectDropdown.options[i].text === selectedSubject) {
+                            subjectDropdown.remove(i);
+                            break;
+                        }
+                    }
+                    
+                    // 選擇第一個可用的科目
+                    if (subjectDropdown.options.length > 1) {
+                        subjectDropdown.selectedIndex = 0;
+                        
+                        // 發送科目變更事件
+                        const newSelectedSubject = subjectDropdown.options[0].text;
+                        if (newSelectedSubject !== '載入中...' && newSelectedSubject !== '+ 新增科目') {
+                            const subjectChangedEvent = new CustomEvent('subjectChanged', {
+                                detail: {
+                                    subject: newSelectedSubject,
+                                    trigger: 'change'
+                                }
+                            });
+                            document.dispatchEvent(subjectChangedEvent);
+                        }
+                    }
+                    
+                    // 關閉模態窗口
+                    newSubjectModal.style.display = 'none';
+                } else {
+                    alert('刪除科目失敗: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('刪除科目錯誤:', error);
+                alert('刪除科目時發生錯誤: ' + error.message);
+            });
         });
     </script>
 </body>
