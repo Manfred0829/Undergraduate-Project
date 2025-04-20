@@ -1,0 +1,661 @@
+{
+    "Chapter": "Chapter 2: Operating System Structures",
+    "Sections": [
+        {
+            "Section": "Introduction and Overview of Operating Systems",
+            "Starting_topic": 1,
+            "Topics": [
+                {
+                    "Topic": "Introduction to Operating Systems",
+                    "Starting_page": 1,
+                    "Pages": [
+                        {
+                            "Original_text": "Chapter 2\nOperating-System Structures\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Operating-System Structures"
+                            },
+                            "page_idx": 0
+                        },
+                        {
+                            "Original_text": "Outline\nOperating System Services\nUser and Operating-System Interface\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Operating System",
+                                    "Content": "Outline of operating system components"
+                                },
+                                {
+                                    "Title": "Key Services Provided",
+                                    "Content": "Operating system services overview"
+                                },
+                                {
+                                    "Title": "User Interface",
+                                    "Content": "User and operating-system interface"
+                                },
+                                {
+                                    "Title": "System Interaction",
+                                    "Content": "System calls and services"
+                                },
+                                {
+                                    "Title": "Linking Applications",
+                                    "Content": "Role of linkers and loaders"
+                                },
+                                {
+                                    "Title": "Application Specificity",
+                                    "Content": "Why applications depend on OS"
+                                },
+                                {
+                                    "Title": "Design Considerations",
+                                    "Content": "Operating-system design and implementation"
+                                },
+                                {
+                                    "Title": "Structural Aspects",
+                                    "Content": "Overview of operating-system structure"
+                                },
+                                {
+                                    "Title": "System Startup",
+                                    "Content": "Building and booting an OS"
+                                },
+                                {
+                                    "Title": "Debugging Process",
+                                    "Content": "Operating system debugging techniques"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                            },
+                            "page_idx": 1
+                        },
+                        {
+                            "Original_text": "Outline\nOperating System Services\nUser and Operating-System Interface\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Services",
+                                    "Content": "Overview of services provided by the OS"
+                                },
+                                {
+                                    "Title": "User and Operating-System Interface",
+                                    "Content": "Interaction between users and OS"
+                                },
+                                {
+                                    "Title": "System Calls",
+                                    "Content": "APIs for user applications to access OS"
+                                },
+                                {
+                                    "Title": "System Services",
+                                    "Content": "Essential services provided by the OS"
+                                },
+                                {
+                                    "Title": "Linkers and Loaders",
+                                    "Content": "Tools for managing program execution"
+                                },
+                                {
+                                    "Title": "Applications and OS Specificity",
+                                    "Content": "Why applications depend on specific OS"
+                                },
+                                {
+                                    "Title": "Design and Implementation",
+                                    "Content": "How OS is designed and built"
+                                },
+                                {
+                                    "Title": "Operating-System Structure",
+                                    "Content": "Components and organization of OS"
+                                },
+                                {
+                                    "Title": "Building and Booting",
+                                    "Content": "Processes of creating and starting OS"
+                                },
+                                {
+                                    "Title": "Operating System Debugging",
+                                    "Content": "Techniques for troubleshooting OS issues"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services; User and Operating-System Interface; System Calls; System Services; Linkers and Loaders; Why Applications Are Operating-System Specific; Operating-System Design and Implementation; Operating-System Structure; Building and Booting an Operating System; Operating System Debugging"
+                            },
+                            "page_idx": 2
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Overview of Operating System Services",
+                    "Starting_page": 4,
+                    "Pages": [
+                        {
+                            "Original_text": "Operating System Services\n' OS provides\nto programs and users\nservices\nE.g.,\n• Program execution\n• Manage hardware\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Program execution service",
+                                    "Content": "OS facilitates execution of programs."
+                                },
+                                {
+                                    "Title": "Hardware management service",
+                                    "Content": "OS manages and allocates hardware resources."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Operating System Services"
+                            },
+                            "page_idx": 3
+                        },
+                        {
+                            "Original_text": "Program 1\nProgram 2\nUser\nprogram\nexecution\noperations\nerror\ndetection\nhardware I\nfile\nsystems\ncommunication\nservices\nos\nhardware 2\nresource\nallocation\naccounting\nprotection\nand\nsecurity\nhardware\n3\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Programs Overview",
+                                    "Content": "Program 1 and Program 2"
+                                },
+                                {
+                                    "Title": "User Operations",
+                                    "Content": "User program execution operations"
+                                },
+                                {
+                                    "Title": "Error Management",
+                                    "Content": "Error detection in operations"
+                                },
+                                {
+                                    "Title": "Hardware Interaction",
+                                    "Content": "Communication services with hardware"
+                                },
+                                {
+                                    "Title": "File Management",
+                                    "Content": "File systems in operations"
+                                },
+                                {
+                                    "Title": "Resource Management",
+                                    "Content": "Resource allocation and accounting"
+                                },
+                                {
+                                    "Title": "Security Measures",
+                                    "Content": "Protection and security protocols"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Program 1, Program 2, User, program execution, operations, error detection, hardware I, file systems, communication services, os, hardware 2, resource allocation, accounting, protection and security, hardware 3"
+                            },
+                            "page_idx": 4
+                        },
+                        {
+                            "Original_text": "Outline\nOperating System Services\nOperating-System Interface to Users\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, Operating-System Interface to Users, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                            },
+                            "page_idx": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Section": "User Interaction with Operating Systems",
+            "Starting_topic": 3,
+            "Topics": [
+                {
+                    "Topic": "User and Operating System Interface",
+                    "Starting_page": 7,
+                    "Pages": [
+                        {
+                            "Original_text": "User Operating System Interface\n' For users, fundamental approaches to interface with the OS (see\nthe following slide)\nCommand-line interface (CLI) (or command interpreter)\n— Batch interface\nGraphical User Interface (GUI)\nTouch-Screen Interface\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "User Interfaces Overview",
+                                    "Content": "Fundamental approaches to interface with the OS."
+                                },
+                                {
+                                    "Title": "Command-line Interface",
+                                    "Content": "CLI or command interpreter for users."
+                                },
+                                {
+                                    "Title": "Batch Interface",
+                                    "Content": "A method of executing a series of commands."
+                                },
+                                {
+                                    "Title": "Graphical User Interface",
+                                    "Content": "GUI allows interaction through visual elements."
+                                },
+                                {
+                                    "Title": "Touch-Screen Interface",
+                                    "Content": "Allows users to interact via touch."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface"
+                            },
+                            "page_idx": 6
+                        },
+                        {
+                            "Original_text": "User Operating System Interface\n• For us rs, fundamental approaches to interface with the OS (see\nthe followi g slide)\nCo\n- Bat\n— Gra\n- Tou\nmand-line interface (CLI) or command interpreter)\nh interface\nhical User Interface (GUI)\nh-Screen Interface\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "User Interface Approaches",
+                                    "Content": "Fundamental approaches to interface with the OS"
+                                },
+                                {
+                                    "Title": "Command-Line Interface",
+                                    "Content": "Command-line interface (CLI) or command interpreter"
+                                },
+                                {
+                                    "Title": "Graphical User Interface",
+                                    "Content": "Graphical User Interface (GUI)"
+                                },
+                                {
+                                    "Title": "Touch-Screen Interface",
+                                    "Content": "Touch-Screen Interface"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface"
+                            },
+                            "page_idx": 7
+                        },
+                        {
+                            "Original_text": "program\nexecution\nuser 1\nGUI\n1/0\noperations\nerror\ndetection\nhardware I\ntouch screen\nuser interfaces\nfile\nsystems\nresource\nallocation\nline\naccounting\nprotection\ncommunication\nservices\nos\nhardware 2\nand\nsecurity\nhardware 3\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Program Execution",
+                                    "Content": "program execution"
+                                },
+                                {
+                                    "Title": "User Interfaces",
+                                    "Content": "user 1, GUI, touch screen"
+                                },
+                                {
+                                    "Title": "Error Detection",
+                                    "Content": "1/0 operations error detection"
+                                },
+                                {
+                                    "Title": "File Systems",
+                                    "Content": "file systems"
+                                },
+                                {
+                                    "Title": "Resource Allocation",
+                                    "Content": "resource allocation"
+                                },
+                                {
+                                    "Title": "Accounting",
+                                    "Content": "line accounting"
+                                },
+                                {
+                                    "Title": "Protection",
+                                    "Content": "protection"
+                                },
+                                {
+                                    "Title": "Communication Services",
+                                    "Content": "communication services"
+                                },
+                                {
+                                    "Title": "Operating System (OS)",
+                                    "Content": "os"
+                                },
+                                {
+                                    "Title": "Hardware Components",
+                                    "Content": "hardware I, hardware 2, hardware 3"
+                                },
+                                {
+                                    "Title": "Security",
+                                    "Content": "security"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "program execution, user interfaces, error detection, resource allocation, protection, communication services, hardware and security"
+                            },
+                            "page_idx": 8
+                        },
+                        {
+                            "Original_text": "User Operating System Interface :\n( Command LMC Infnfaæ)\nCLI\n• Command interpreter (CLI) allows directly typing commands\n— Fetch a command from user and execute\n— Implemented as a system program\n' Not part of OS\n— In Linux, multiple choices are implemented — shells\n' Bourne shell (bash), C shell (csh), Korn shell (ksh)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Command Interpreter Functionality",
+                                    "Content": "CLI allows directly typing commands."
+                                },
+                                {
+                                    "Title": "Execution Process",
+                                    "Content": "Fetch a command from user and execute."
+                                },
+                                {
+                                    "Title": "System Program Definition",
+                                    "Content": "Implemented as a system program."
+                                },
+                                {
+                                    "Title": "OS Independence",
+                                    "Content": "Not part of OS."
+                                },
+                                {
+                                    "Title": "Linux Shell Options",
+                                    "Content": "Multiple choices: bash, csh, ksh."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface"
+                            },
+                            "page_idx": 9
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Shell and Command Interfaces",
+                    "Starting_page": 11,
+                    "Pages": [
+                        {
+                            "Original_text": "Croot@r6181-d5-usØ1\nuptime\nup 16 days,\n10:52, 3 users,\nCroot@r6181-d5-us01\nFilesystem\n/dev/mapper/vg_ks-lv_root\nShell Command Interpreter\n1. (ssh)\n0.0\n0.0\n-r-x------\nX root@r6181-d5-u... X\nssh\n-82 X root@r6181-d5-us01...\nLast login: Thu Jul 14 on ttysØØ2\niMacPro:— pbg$ ssh root@r6181-d5-us01\nroot@r6181-d5-us01's password:\nLast login: Thu Jul 14 2016 from 172.16.16.162\nload average: 129.52,\nUse% Mounted on\n1% /dev/shm\n16% /boot\n47% /dssd—xfs\n47% /mnt/orangefs\n5% /mnt/gpfs\n80.33,\n56.55\ndf\nSize\n50G\n127G\n477M\nI.ØT\n-kh\nUsed Avail\ntmpfs\n/dev/sdal\n/dev/dssdØØØØ\ntcp://192.168.150.1.\n/dev/gpfs-test\nCroot@r6181-d5-us01\nCroot@r6181-d5-usØ1\n19G\n520K\n71M\n480G\n• 3334/orangefs\nIZT 5.7T\n23T I.IT\n28G\n127G\n381M\n54SG\n6.4T\n22T\nps aux I sort -nrk 3,3 1 head -n 5\n6.6 42665344 17520636? S<LI Ju113 166:23\nroot\nroot\nroot\nroot\nroot\n97653 11.2\n69849 6.6\n69850 6.4\n3829 3.0\n3826 3.0\n0\n0\ns\nJu112 181:54\ns\nJull? 177:42\ns\nJun27 730:Ø4\ns\nJun27 728:08\n/usr/lpp/mfs/bin/mfsd\nCvpthread-l-l]\n[vpthread-1-2]\n[rp_thread 7:01\n[rp_thread 6:01\nCroot@r6181-dS-usØ1\nIs -l /usr/lpp/mfs/bin/mfsd\n1 root root 20667161 Jun 3 2015 /usr/lpp/mfs/bin/mfsd\nCroot@r6181-d5-usØ1\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "System Uptime",
+                                    "Content": "up 16 days, 10:52, 3 users"
+                                },
+                                {
+                                    "Title": "Last Login Information",
+                                    "Content": "Last login: Thu Jul 14 on ttysØØ2"
+                                },
+                                {
+                                    "Title": "Shell Command",
+                                    "Content": "ssh root@r6181-d5-us01"
+                                },
+                                {
+                                    "Title": "Load Average",
+                                    "Content": "load average: 129.52"
+                                },
+                                {
+                                    "Title": "Filesystem Usage",
+                                    "Content": "1% /dev/shm, 16% /boot, 47% /dssd—xfs"
+                                },
+                                {
+                                    "Title": "Top Processes",
+                                    "Content": "ps aux | sort -nrk 3,3 | head -n 5"
+                                },
+                                {
+                                    "Title": "Executable File Details",
+                                    "Content": "1 root root 20667161 Jun 3 2015 /usr/lpp/mfs/bin/mfsd"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Shell command interpreter and system monitoring"
+                            },
+                            "page_idx": 10
+                        },
+                        {
+                            "Original_text": "Use\nShell\nO\nhardwa e\nThompson Shea —\n1971\nBourne (sh)\nKorn (ksh) - 1983\nKorn (ksh93) - 1993\n- 1977\nZ - 1990\nBourne-Again (bash) - 1987\nC (csh) - 1978\nTENEX C (tcsh) - 1981\nAlmquist (ash) - 1989\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Shell Variants Overview",
+                                    "Content": "Different shells and their years"
+                                },
+                                {
+                                    "Title": "Thompson Shell",
+                                    "Content": "First shell introduced in 1971"
+                                },
+                                {
+                                    "Title": "Bourne Shell",
+                                    "Content": "Developed in 1977, foundational shell"
+                                },
+                                {
+                                    "Title": "C Shell",
+                                    "Content": "Introduced in 1978, supports C-like syntax"
+                                },
+                                {
+                                    "Title": "TENEX C Shell",
+                                    "Content": "Enhanced version of C shell in 1981"
+                                },
+                                {
+                                    "Title": "Bourne-Again Shell",
+                                    "Content": "Popular shell created in 1987"
+                                },
+                                {
+                                    "Title": "Korn Shell",
+                                    "Content": "Developed in 1983 with advanced features"
+                                },
+                                {
+                                    "Title": "Korn Shell 93",
+                                    "Content": "Updated version released in 1993"
+                                },
+                                {
+                                    "Title": "Almquist Shell",
+                                    "Content": "Lightweight shell released in 1989"
+                                },
+                                {
+                                    "Title": "Z Shell",
+                                    "Content": "Introduced in 1990, feature-rich shell"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Shell programming and history"
+                            },
+                            "page_idx": 11
+                        },
+                        {
+                            "Original_text": "User Operating System Interface\n• For users, fundamental approaches to interface with the OS (see\nthe following slide)\n— Command-line interface (CLI) (or command interpreter)\nBatch interface\n— Graphical User Interface (GUI)\n— Touch-Screen Interface\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Fundamental User Interface Approaches",
+                                    "Content": "User interfaces with the OS."
+                                },
+                                {
+                                    "Title": "Command-Line Interface",
+                                    "Content": "CLI or command interpreter."
+                                },
+                                {
+                                    "Title": "Batch Interface",
+                                    "Content": "Process commands in batches."
+                                },
+                                {
+                                    "Title": "Graphical User Interface",
+                                    "Content": "Visual interface with graphics."
+                                },
+                                {
+                                    "Title": "Touch-Screen Interface",
+                                    "Content": "User interaction via touch."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface"
+                            },
+                            "page_idx": 12
+                        },
+                        {
+                            "Original_text": "User Operating System Interface :\nBatch Interfaces\ns) 4b 4 tLiA.flfe 4tRt,i\ncc -g -c menu.c\ncc -g -o driver driver.c menu.o\ndriver < test data > test out\nIpr -PthePrinter test out\ntar cvf driver test.tar menu.c driver.c test data test out\nuuencode driver test.tar driver test.tar >driver test.encode\nA \"shell script\" batch\nFile\nfrom \"Operating Systems by NUTT\"\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "User Operating System Interface",
+                                    "Content": "Batch Interfaces"
+                                },
+                                {
+                                    "Title": "Compilation Commands",
+                                    "Content": "cc -g -c menu.c"
+                                },
+                                {
+                                    "Title": "Linking Commands",
+                                    "Content": "cc -g -o driver driver.c menu.o"
+                                },
+                                {
+                                    "Title": "Execution Command",
+                                    "Content": "driver < test data > test out"
+                                },
+                                {
+                                    "Title": "Printing Output",
+                                    "Content": "Ipr -PthePrinter test out"
+                                },
+                                {
+                                    "Title": "Creating Archive",
+                                    "Content": "tar cvf driver test.tar menu.c driver.c test data test out"
+                                },
+                                {
+                                    "Title": "Encoding Archive",
+                                    "Content": "uuencode driver test.tar driver test.tar >driver test.encode"
+                                },
+                                {
+                                    "Title": "Shell Script Batch",
+                                    "Content": "A 'shell script' batch File"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface Batch Interfaces"
+                            },
+                            "page_idx": 13
+                        },
+                        {
+                            "Original_text": "User Operating System Interface\n• For users, fundamental approaches to interface with the OS (see\nthe following slide)\n— Command-line interface (CLI) (or command interpreter)\n— Batch interface\nGraphical User Interface (GUI)\n— Touch-Screen Interface\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "User OS Interface Approaches",
+                                    "Content": "For users, fundamental approaches to interface with the OS."
+                                },
+                                {
+                                    "Title": "Command-Line Interface",
+                                    "Content": "Command-line interface (CLI) (or command interpreter)."
+                                },
+                                {
+                                    "Title": "Batch Interface",
+                                    "Content": "Batch interface for user operations."
+                                },
+                                {
+                                    "Title": "Graphical User Interface",
+                                    "Content": "Graphical User Interface (GUI) for easier interaction."
+                                },
+                                {
+                                    "Title": "Touch-Screen Interface",
+                                    "Content": "Touch-Screen Interface for direct interaction."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface approaches"
+                            },
+                            "page_idx": 14
+                        },
+                        {
+                            "Original_text": "User Operating System Interface :\nGUI\n• User-friendly desktop interface\n— Mouse-based window-and-menu\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "User-friendly Interface",
+                                    "Content": "User-friendly desktop interface"
+                                },
+                                {
+                                    "Title": "Mouse-based Interaction",
+                                    "Content": "Mouse-based window-and-menu"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface"
+                            },
+                            "page_idx": 15
+                        },
+                        {
+                            "Original_text": "User Operating System Interface\n' For users, fundamental approaches to interface with the OS (see\nthe following slide)\n— Command-line interface (CLI) (or command interpreter)\n— Batch interface\n— Graphical User Interface (GUI)\nTouch-Screen Interface\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Interfaces",
+                                    "Content": "Fundamental approaches to interface with the OS"
+                                },
+                                {
+                                    "Title": "Command-line Interface",
+                                    "Content": "CLI or command interpreter"
+                                },
+                                {
+                                    "Title": "Batch Interface",
+                                    "Content": "Processing commands in batches"
+                                },
+                                {
+                                    "Title": "Graphical User Interface",
+                                    "Content": "Visual interface for user interaction"
+                                },
+                                {
+                                    "Title": "Touch-Screen Interface",
+                                    "Content": "User interaction through touch technology"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface approaches"
+                            },
+                            "page_idx": 16
+                        },
+                        {
+                            "Original_text": "User Operating System Interface :\nTouchscreen Interfaces\n• Touchscreen devices\n• Voice commands\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Touchscreen Devices",
+                                    "Content": "Touchscreen devices"
+                                },
+                                {
+                                    "Title": "Voice Commands",
+                                    "Content": "Voice commands"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Operating System Interface"
+                            },
+                            "page_idx": 17
+                        },
+                        {
+                            "Original_text": "Outline\nOperating System Services\nOperating-System Interface to Users\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Services",
+                                    "Content": "Services provided by operating systems."
+                                },
+                                {
+                                    "Title": "Operating-System Interface to Users",
+                                    "Content": "How users interact with OS."
+                                },
+                                {
+                                    "Title": "System Calls",
+                                    "Content": "Methods for programs to request services."
+                                },
+                                {
+                                    "Title": "System Services",
+                                    "Content": "Core functionalities of an OS."
+                                },
+                                {
+                                    "Title": "Linkers and Loaders",
+                                    "Content": "Tools for program execution management."
+                                },
+                                {
+                                    "Title": "Applications Specific to OS",
+                                    "Content": "Reasons for OS-specific software."
+                                },
+                                {
+                                    "Title": "OS Design and Implementation",
+                                    "Content": "Creating and structuring an OS."
+                                },
+                                {
+                                    "Title": "Operating-System Structure",
+                                    "Content": "Framework within an OS."
+                                },
+                                {
+                                    "Title": "Building and Booting an OS",
+                                    "Content": "Creating and starting an operating system."
+                                },
+                                {
+                                    "Title": "Operating System Debugging",
+                                    "Content": "Finding and fixing OS issues."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, Operating-System Interface to Users, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                            },
+                            "page_idx": 18
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
