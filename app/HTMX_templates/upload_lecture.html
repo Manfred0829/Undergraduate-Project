@@ -457,6 +457,16 @@
         setTimeout(checkStatus, 2000); // 2秒後開始第一次檢查
     }
 
+    // 當科目變更時也重新加載
+    document.addEventListener('subjectChanged', function(event) {
+        console.log('科目變更事件觸發，重新載入講義列表');
+        // 如果是新格式的事件(帶有detail屬性)
+        if (event.detail && event.detail.subject) {
+            console.log(`收到科目變更事件，選擇的科目: ${event.detail.subject}`);
+        }
+        loadLecturesList();
+    });
+
     // DOM載入完成後初始化
     document.addEventListener('DOMContentLoaded', function() {
         console.log('upload_lecture.html DOM loading');
@@ -474,10 +484,7 @@
         // 初始載入講義清單
         loadLecturesList();
         
-        // 當科目變更時也重新加載
-        window.addEventListener('subjectChanged', function() {
-            document.dispatchEvent(lecturesListChangedEvent);
-        });
+        
         
         // 點擊選擇檔案按鈕
         if (selectFileBtn) {

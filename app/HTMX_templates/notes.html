@@ -315,10 +315,14 @@
             return;
         }
         
-        // 清空現有選項，只保留第一個
-        while (notesSelect.options.length > 1) {
-            notesSelect.remove(1);
-        }
+        // 完全清空選擇器，包括第一個選項
+        notesSelect.innerHTML = '';
+        
+        // 添加默認選項
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+        defaultOption.text = "請選擇筆記";
+        notesSelect.add(defaultOption);
         
         // 顯示載入中提示
         const loadingOption = document.createElement('option');
@@ -337,8 +341,10 @@
             .then(notes => {
                 console.log(`獲取到科目 "${subjectName}" 的筆記:`, notes);
                 
-                // 移除載入中選項
-                notesSelect.remove(1);
+                // 清空選擇器，只保留第一個默認選項
+                while (notesSelect.options.length > 1) {
+                    notesSelect.remove(1);
+                }
                 
                 if (notes && notes.length > 0) {
                     // 添加筆記選項
@@ -371,8 +377,10 @@
             })
             .catch(error => {
                 console.error(`獲取科目 "${subjectName}" 的筆記時出錯:`, error);
-                // 移除載入中選項
-                notesSelect.remove(1);
+                // 清空選擇器，只保留第一個默認選項
+                while (notesSelect.options.length > 1) {
+                    notesSelect.remove(1);
+                }
                 // 加入錯誤提示
                 const errorOption = document.createElement('option');
                 errorOption.text = '加載失敗，請重試';
