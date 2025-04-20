@@ -3,6 +3,7 @@ from pdf2image import convert_from_path
 from PIL import Image
 import base64
 from io import BytesIO
+from PyPDF2 import PdfReader
 
 from graphviz import Digraph
 
@@ -59,6 +60,12 @@ def process_pdf_to_base64(pdf_path):
         base64_image = convert_PIL_to_base64(img)
         base64_images.append(base64_image)
     return base64_images
+
+
+def get_num_pages(pdf_path):
+    """高效獲取 PDF 頁數（不轉圖片）"""
+    reader = PdfReader(pdf_path)
+    return len(reader.pages)
 
 
 def generate_chapter_hierarchy_graph(chapter: dict, save_path='chapter_tree', exclude_keys=None, max_str_len=30):

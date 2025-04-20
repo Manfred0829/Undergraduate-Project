@@ -1,0 +1,457 @@
+<div class="content-panel">
+    <h2>章節大綱</h2>
+    
+    <div class="outline-container">
+        <div class="lecture-selector">
+            <select id="outline-lecture-select" onchange="loadOutlineContent(this.options[this.selectedIndex].text)">
+                <option value="">請選擇講義</option>
+            </select>
+        </div>
+        
+        <div class="outline-content" id="outline-tree">
+            <!-- 大綱內容將通過JavaScript動態加載 -->
+            <div class="loading">正在載入大綱內容...</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Outline Panel */
+    .outline-container {
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .lecture-selector {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .lecture-selector select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 1rem;
+        background-color: white;
+    }
+
+    .outline-content {
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    .outline-item {
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .outline-item h3 {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .outline-item > p {
+        margin-bottom: 15px;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    .outline-subitem {
+        margin-left: 20px;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        border-left: 3px solid #4e8cff;
+    }
+
+    .outline-subitem h4 {
+        font-size: 1rem;
+        color: #444;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .outline-subitem p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    /* 自訂滾動條樣式 */
+    .outline-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .outline-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .outline-content::-webkit-scrollbar-thumb {
+        background: #cecece;
+        border-radius: 10px;
+    }
+
+    .outline-content::-webkit-scrollbar-thumb:hover {
+        background: #adadad;
+    }
+    
+    /* 加載和錯誤狀態樣式 */
+    .loading, .no-data, .error {
+        text-align: center;
+        padding: 30px 15px;
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .loading:before {
+        content: "";
+        display: block;
+        width: 30px;
+        height: 30px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .no-data {
+        color: #888;
+        font-style: italic;
+    }
+
+    .error {
+        background-color: #fff5f5;
+        border-left: 4px solid #e53e3e;
+        color: #e53e3e;
+        font-weight: 500;
+        border-radius: 4px;
+    }
+    
+    .tree-image-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .tree-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 警告和提示訊息樣式 */
+    .alert {
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+    }
+    
+    .alert-warning {
+        background-color: #fff8e1;
+        border-left: 4px solid #ffc107;
+        color: #856404;
+    }
+    
+    .alert-danger {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+    }
+    
+    .alert-info {
+        background-color: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        color: #0c5460;
+    }
+</style>
+
+<script>
+    // 當頁面加載完成時
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('outline.html DOM loaded');
+        
+        // 首先嘗試從下拉框獲取當前選中的科目
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        
+        if (subjectDropdown && subjectDropdown.options.length > 0 && subjectDropdown.selectedIndex >= 0) {
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject && selectedSubject !== '+ 新增科目' && selectedSubject !== '載入中...') {
+                console.log('從下拉框獲取的科目:', selectedSubject);
+                updateOutlineLectureSelector(selectedSubject);
+            } else {
+                // 如果下拉框沒有有效選項，直接通過API獲取科目列表
+                fetchSubjectsAndUpdateOutline();
+            }
+        } else {
+            // 如果找不到下拉框或尚未初始化，直接通過API獲取科目列表
+            fetchSubjectsAndUpdateOutline();
+        }
+        
+        // 當科目選擇變更時，更新講義選擇器
+        if (subjectDropdown) {
+            subjectDropdown.addEventListener('change', function() {
+                if (this.selectedIndex >= 0) {
+                    const selectedSubject = this.options[this.selectedIndex].text;
+                    if (selectedSubject && selectedSubject !== '+ 新增科目') {
+                        console.log('科目變更為:', selectedSubject);
+                        updateOutlineLectureSelector(selectedSubject);
+                    }
+                }
+            });
+        }
+        
+        // 監聽自定義科目變更事件
+        document.addEventListener('subjectChanged', function(e) {
+            const newSubject = e.detail.subject;
+            console.log('收到科目變更事件:', newSubject);
+            if (newSubject && newSubject !== '+ 新增科目') {
+                updateOutlineLectureSelector(newSubject);
+            }
+        });
+    });
+    
+    // 獲取科目列表並更新講義選擇器
+    function fetchSubjectsAndUpdateOutline() {
+        console.log('開始獲取科目列表...');
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        
+        try {
+            // 如果找不到科目下拉框，嘗試從API獲取科目列表
+            if (!subjectDropdown || subjectDropdown.options.length === 0) {
+                console.log('未找到科目下拉框或下拉框為空，正在從API獲取科目列表...');
+                fetch('/htmx/api/subjects-list')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`獲取科目列表API錯誤: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(subjects => {
+                        console.log('從API獲取的科目列表:', subjects);
+                        if (subjects && subjects.length > 0) {
+                            updateOutlineLectureSelector(subjects[0]);
+                        } else {
+                            console.error('獲取到的科目列表為空');
+                            document.getElementById('outline-tree').innerHTML = 
+                                '<div class="alert alert-warning">未找到科目，請先創建科目</div>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('獲取科目列表時發生錯誤:', error);
+                        document.getElementById('outline-tree').innerHTML = 
+                            `<div class="alert alert-danger">獲取科目列表失敗: ${error.message}</div>`;
+                    });
+            } else {
+                // 如果找到科目下拉框，獲取當前選擇的科目
+                console.log('找到科目下拉框，獲取當前選定科目');
+                if (subjectDropdown.selectedIndex >= 0) {
+                    const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+                    console.log('當前選定的科目:', selectedSubject);
+                    
+                    // 檢查選定的科目是否有效
+                    if (selectedSubject && selectedSubject !== '載入中...' && selectedSubject !== '+ 新增科目') {
+                        updateOutlineLectureSelector(selectedSubject);
+                    } else {
+                        console.warn('無效的科目選擇:', selectedSubject);
+                    }
+                } else {
+                    console.warn('科目下拉框未選擇任何項目');
+                }
+            }
+        } catch (e) {
+            console.error('獲取科目或講義時出錯:', e);
+            document.getElementById('outline-tree').innerHTML = 
+                `<div class="alert alert-danger">處理科目時發生錯誤: ${e.message}</div>`;
+        }
+    }
+
+    // 為特定科目更新講義選擇器
+    function updateOutlineLectureSelector(subjectName) {
+        if (!subjectName) {
+            console.error('科目名稱為空，無法獲取講義');
+            return;
+        }
+        
+        console.log(`正在獲取科目 "${subjectName}" 的講義列表...`);
+        const lectureSelect = document.getElementById('outline-lecture-select');
+        
+        if (!lectureSelect) {
+            console.error('找不到講義選擇器');
+            return;
+        }
+        
+        // 清空現有選項，只保留第一個
+        while (lectureSelect.options.length > 1) {
+            lectureSelect.remove(1);
+        }
+        
+        // 顯示載入中提示
+        const loadingOption = document.createElement('option');
+        loadingOption.text = '載入中...';
+        loadingOption.disabled = true;
+        lectureSelect.add(loadingOption);
+        
+        // 調用API獲取講義列表
+        fetch(`/htmx/api/lectures/${subjectName}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`獲取講義API錯誤: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(lectures => {
+                console.log(`獲取到科目 "${subjectName}" 的講義:`, lectures);
+                
+                // 移除載入中選項
+                lectureSelect.remove(1);
+                
+                if (lectures && lectures.length > 0) {
+                    // 添加講義選項
+                    lectures.forEach(lecture => {
+                        const option = document.createElement('option');
+                        option.value = lecture.id;
+                        option.text = lecture.filename;
+                        lectureSelect.add(option);
+                    });
+                    console.log(`已加載 ${lectures.length} 個講義到選擇器`);
+                    
+                    // 選擇第一個講義並加載其大綱
+                    if (lectureSelect.options.length > 1) {
+                        lectureSelect.selectedIndex = 1;
+                        loadOutlineContent(lectureSelect.options[1].text);
+                    }
+                } else {
+                    // 無講義時添加提示
+                    const emptyOption = document.createElement('option');
+                    emptyOption.text = '該科目暫無講義';
+                    emptyOption.disabled = true;
+                    lectureSelect.add(emptyOption);
+                    document.getElementById('outline-tree').innerHTML = 
+                        `<div class="alert alert-info">科目 "${subjectName}" 下暫無講義，請先上傳講義</div>`;
+                }
+            })
+            .catch(error => {
+                console.error(`獲取科目 "${subjectName}" 的講義時出錯:`, error);
+                // 移除載入中選項
+                lectureSelect.remove(1);
+                // 加入錯誤提示
+                const errorOption = document.createElement('option');
+                errorOption.text = '加載失敗，請重試';
+                errorOption.disabled = true;
+                lectureSelect.add(errorOption);
+                document.getElementById('outline-tree').innerHTML = 
+                    `<div class="alert alert-danger">獲取講義失敗: ${error.message}</div>`;
+            });
+    }
+
+    // 加載特定講義的大綱
+    function loadOutlineContent(lectureName) {
+        if (!lectureName || lectureName === '請選擇講義' || lectureName === '載入中...' || 
+            lectureName === '該科目暫無講義' || lectureName === '加載失敗，請重試') {
+            document.getElementById('outline-tree').innerHTML = 
+                '<div class="no-data">請選擇一個講義以查看大綱</div>';
+            return;
+        }
+        
+        console.log(`正在加載講義 "${lectureName}" 的大綱...`);
+        const outlineTree = document.getElementById('outline-tree');
+        
+        // 顯示加載中
+        outlineTree.innerHTML = '<div class="loading">正在加載大綱內容...</div>';
+        
+        // 獲取當前選中的科目
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        if (!subjectDropdown) {
+            console.error('找不到科目下拉框');
+            outlineTree.innerHTML = '<div class="error">無法確定當前科目</div>';
+            return;
+        }
+        
+        const currentSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+        if (currentSubject === '+ 新增科目' || currentSubject === '載入中...') {
+            console.error('當前選擇的科目無效');
+            outlineTree.innerHTML = '<div class="error">請先選擇有效的科目</div>';
+            return;
+        }
+        
+        // 加載樹狀結構圖
+        fetch(`/htmx/outline/get_tree_images/${currentSubject}/${lectureName}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('獲取樹狀結構圖失敗');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // 清空現有內容
+                outlineTree.innerHTML = '';
+                
+                if (data && data.images && data.images.length > 0) {
+                    // 如果有樹狀結構圖，顯示它們
+                    data.images.forEach(imgPath => {
+                        const imgDiv = document.createElement('div');
+                        imgDiv.className = 'tree-image-container';
+                        
+                        const img = document.createElement('img');
+                        img.src = imgPath;
+                        img.alt = `${lectureName} 樹狀結構圖`;
+                        img.className = 'tree-image';
+                        
+                        imgDiv.appendChild(img);
+                        outlineTree.appendChild(imgDiv);
+                    });
+                } else {
+                    // 如果沒有圖片，顯示提示信息
+                    outlineTree.innerHTML = '<div class="outline-item"><p>此講義暫無樹狀結構圖</p></div>';
+                }
+            })
+            .catch(error => {
+                console.error('獲取大綱錯誤:', error);
+                outlineTree.innerHTML = '<div class="error">加載樹狀結構圖失敗</div>';
+            });
+    }
+    
+    // 監聽科目變更事件
+    document.addEventListener('subjectChanged', function(event) {
+        const selectedSubject = event.detail.subject;
+        const trigger = event.detail.trigger || 'unknown';
+        console.log(`收到科目變更事件 [${trigger}]，選擇的科目: ${selectedSubject}`);
+        
+        if (selectedSubject) {
+            updateOutlineLectureSelector(selectedSubject);
+        }
+    });
+
+    // 頁面初始化
+    (function initPage() {
+        console.log('正在初始化outline頁面...');
+        
+        // 延遲執行以確保HTMX已完成頁面加載
+        setTimeout(function() {
+            console.log('嘗試初始化講義選擇器');
+            fetchSubjectsAndUpdateOutline();
+        }, 300);
+    })();
+</script> 

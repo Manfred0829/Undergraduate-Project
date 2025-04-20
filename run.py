@@ -6,6 +6,7 @@ PORT = 5002
 app = create_app()
 
 if __name__ == '__main__':
+
     # 1️⃣ 啟動 ngrok 並取得公開網址
     ngrok_url = start_ngrok(PORT)
 

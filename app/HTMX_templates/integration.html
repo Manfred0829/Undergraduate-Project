@@ -1,0 +1,708 @@
+<div class="content-panel">
+    <h2>重點統合</h2>
+    <div class="key-points-integration">
+        <!-- 頂部導覽欄 -->
+        <div class="key-points-nav">
+            <div class="nav-group">
+                <span class="nav-label">講義名稱</span>
+                <select id="integration-lecture-select" class="nav-select" onchange="loadLecturePages(this.value, this.options[this.selectedIndex].text)">
+                    <option value="">請選擇講義</option>
+                </select>
+            </div>
+            <div class="nav-group">
+                <button class="nav-button" id="prev-page-btn" onclick="navigatePage(-1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <span class="nav-label">講義頁數</span>
+                <select id="integration-page-select" class="nav-select" onchange="loadPageContent(this.value)">
+                    <option value="">請先選擇講義</option>
+                </select>
+                <button class="nav-button" id="next-page-btn" onclick="navigatePage(1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 三欄內容區域 -->
+        <div class="key-points-content">
+            <!-- 左側：講義預覽 -->
+            <div class="content-column">
+                <div class="column-header">原始講義頁面</div>
+                <div class="column-content">
+                    <div class="lecture-preview" id="lecture-preview-container">
+                        <img src="/static/img/pdf-placeholder.png" id="lecture-preview-img" alt="講義預覽">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中間：講義重點 -->
+            <div class="content-column">
+                <div class="column-header">講義重點</div>
+                <div class="column-content" id="lecture-key-points">
+                    <!-- 動態載入內容 -->
+                    <div class="loading">請先選擇講義和頁碼</div>
+                </div>
+            </div>
+            
+            <!-- 右側：筆記重點 -->
+            <div class="content-column">
+                <div class="column-header">筆記重點</div>
+                <div class="column-content" id="notes-key-points">
+                    <!-- 動態載入內容 -->
+                    <div class="loading">請先選擇講義和頁碼</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 重點統合樣式 */
+    .key-points-integration {
+        padding: 0;
+    }
+
+    .key-points-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #f5f7fa;
+        padding: 10px 15px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+    }
+
+    .nav-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-label {
+        font-weight: 500;
+        color: #555;
+    }
+
+    .nav-select {
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 0.95rem;
+        min-width: 180px;
+    }
+
+    .nav-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .nav-button:hover {
+        background-color: var(--hover-color);
+    }
+
+    .nav-button svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .key-points-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .content-column {
+        background-color: white;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .column-header {
+        padding: 12px 15px;
+        font-weight: 600;
+        background-color: #f5f7fa;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .column-content {
+        padding: 15px;
+        max-height: calc(100vh - 300px);
+        overflow-y: auto;
+    }
+
+    .lecture-preview {
+        text-align: center;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lecture-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .key-point-item {
+        margin-bottom: 15px;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background-color: #fdfdfd;
+    }
+
+    .key-point-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+    }
+
+    .key-point-content {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    /* 加載和錯誤狀態樣式 */
+    .loading, .no-data, .error {
+        text-align: center;
+        padding: 30px 15px;
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .loading:before {
+        content: "";
+        display: block;
+        width: 30px;
+        height: 30px;
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .no-data {
+        color: #888;
+        font-style: italic;
+    }
+
+    .error {
+        background-color: #fff5f5;
+        border-left: 4px solid #e53e3e;
+        color: #e53e3e;
+        font-weight: 500;
+        border-radius: 4px;
+    }
+    
+    /* 警告和提示訊息樣式 */
+    .alert {
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+    }
+    
+    .alert-warning {
+        background-color: #fff8e1;
+        border-left: 4px solid #ffc107;
+        color: #856404;
+    }
+    
+    .alert-danger {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+    }
+    
+    .alert-info {
+        background-color: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        color: #0c5460;
+    }
+</style>
+
+<script>
+    // 當頁面加載完成時
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('integration.html DOM loaded');
+        
+        // 嘗試從下拉框獲取當前選中的科目
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        
+        if (subjectDropdown && subjectDropdown.options.length > 0 && subjectDropdown.selectedIndex >= 0) {
+            const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+            if (selectedSubject && selectedSubject !== '+ 新增科目' && selectedSubject !== '載入中...') {
+                console.log('從下拉框獲取的科目:', selectedSubject);
+                loadLecturesForSubject(selectedSubject);
+            } else {
+                // 如果下拉框沒有有效選項，直接通過API獲取科目列表
+                fetchSubjectsAndUpdateLectures();
+            }
+        } else {
+            // 如果找不到下拉框或尚未初始化，直接通過API獲取科目列表
+            fetchSubjectsAndUpdateLectures();
+        }
+        
+        // 當科目選擇變更時，更新講義選擇器
+        if (subjectDropdown) {
+            subjectDropdown.addEventListener('change', function() {
+                if (this.selectedIndex >= 0) {
+                    const selectedSubject = this.options[this.selectedIndex].text;
+                    if (selectedSubject && selectedSubject !== '+ 新增科目') {
+                        console.log('科目變更為:', selectedSubject);
+                        loadLecturesForSubject(selectedSubject);
+                    }
+                }
+            });
+        }
+        
+        // 監聽自定義科目變更事件
+        document.addEventListener('subjectChanged', function(e) {
+            const newSubject = e.detail.subject;
+            console.log('收到科目變更事件:', newSubject);
+            if (newSubject && newSubject !== '+ 新增科目') {
+                loadLecturesForSubject(newSubject);
+            }
+        });
+    });
+    
+    // 獲取科目列表並更新講義選擇器
+    function fetchSubjectsAndUpdateLectures() {
+        console.log('開始獲取科目列表...');
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        
+        try {
+            // 如果找不到科目下拉框，嘗試從API獲取科目列表
+            if (!subjectDropdown || subjectDropdown.options.length === 0) {
+                console.log('未找到科目下拉框或下拉框為空，正在從API獲取科目列表...');
+                fetch('/htmx/api/subjects-list')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`獲取科目列表API錯誤: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(subjects => {
+                        console.log('從API獲取的科目列表:', subjects);
+                        if (subjects && subjects.length > 0) {
+                            loadLecturesForSubject(subjects[0]);
+                        } else {
+                            console.error('獲取到的科目列表為空');
+                            showError('lecture-key-points', '未找到科目，請先創建科目');
+                            showError('notes-key-points', '未找到科目，請先創建科目');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('獲取科目列表時發生錯誤:', error);
+                        showError('lecture-key-points', `獲取科目列表失敗: ${error.message}`);
+                        showError('notes-key-points', `獲取科目列表失敗: ${error.message}`);
+                    });
+            } else {
+                // 如果找到科目下拉框，獲取當前選擇的科目
+                console.log('找到科目下拉框，獲取當前選定科目');
+                if (subjectDropdown.selectedIndex >= 0) {
+                    const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+                    console.log('當前選定的科目:', selectedSubject);
+                    
+                    // 檢查選定的科目是否有效
+                    if (selectedSubject && selectedSubject !== '載入中...' && selectedSubject !== '+ 新增科目') {
+                        loadLecturesForSubject(selectedSubject);
+                    } else {
+                        console.warn('無效的科目選擇:', selectedSubject);
+                        showWarning('lecture-key-points', '請選擇有效的科目');
+                        showWarning('notes-key-points', '請選擇有效的科目');
+                    }
+                } else {
+                    console.warn('科目下拉框未選擇任何項目');
+                    showWarning('lecture-key-points', '請選擇科目');
+                    showWarning('notes-key-points', '請選擇科目');
+                }
+            }
+        } catch (e) {
+            console.error('獲取科目或講義時出錯:', e);
+            showError('lecture-key-points', `處理科目時發生錯誤: ${e.message}`);
+            showError('notes-key-points', `處理科目時發生錯誤: ${e.message}`);
+        }
+    }
+
+    // 為特定科目更新講義選擇器
+    function loadLecturesForSubject(subjectName) {
+        if (!subjectName) {
+            console.error('科目名稱為空，無法獲取講義');
+            return;
+        }
+        
+        console.log(`正在獲取科目 "${subjectName}" 的講義列表...`);
+        const lectureSelect = document.getElementById('integration-lecture-select');
+        
+        if (!lectureSelect) {
+            console.error('找不到講義選擇器');
+            return;
+        }
+        
+        // 清空現有選項，只保留第一個
+        while (lectureSelect.options.length > 1) {
+            lectureSelect.remove(1);
+        }
+        
+        // 清空頁碼選擇器
+        const pageSelect = document.getElementById('integration-page-select');
+        while (pageSelect.options.length > 1) {
+            pageSelect.remove(1);
+        }
+        
+        // 重置內容區域
+        document.getElementById('lecture-key-points').innerHTML = '<div class="loading">請選擇講義...</div>';
+        document.getElementById('notes-key-points').innerHTML = '<div class="loading">請選擇講義...</div>';
+        document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+        
+        // 顯示載入中提示
+        const loadingOption = document.createElement('option');
+        loadingOption.text = '載入中...';
+        loadingOption.disabled = true;
+        lectureSelect.add(loadingOption);
+        
+        // 調用API獲取講義列表
+        fetch(`/htmx/api/lectures/${subjectName}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`獲取講義API錯誤: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(lectures => {
+                console.log(`獲取到科目 "${subjectName}" 的講義:`, lectures);
+                
+                // 移除載入中選項
+                lectureSelect.remove(1);
+                
+                if (lectures && lectures.length > 0) {
+                    // 添加講義選項
+                    lectures.forEach(lecture => {
+                        const option = document.createElement('option');
+                        option.value = lecture.id;
+                        option.text = lecture.filename;
+                        lectureSelect.add(option);
+                    });
+                    console.log(`已加載 ${lectures.length} 個講義到選擇器`);
+                    
+                    // 自動選擇第一個講義
+                    if (lectures.length > 0) {
+                        lectureSelect.selectedIndex = 1; // 選擇第一個講義（索引0是"請選擇講義"提示選項）
+                        
+                        // 觸發change事件，載入該講義的頁面
+                        const event = new Event('change');
+                        lectureSelect.dispatchEvent(event);
+                        
+                        console.log(`自動選擇了第一個講義: ${lectures[0].filename}`);
+                    }
+                } else {
+                    // 無講義時添加提示
+                    const emptyOption = document.createElement('option');
+                    emptyOption.text = '該科目暫無講義';
+                    emptyOption.disabled = true;
+                    lectureSelect.add(emptyOption);
+                    
+                    showInfo('lecture-key-points', `科目 "${subjectName}" 下暫無講義，請先上傳講義`);
+                    showInfo('notes-key-points', `科目 "${subjectName}" 下暫無講義，請先上傳講義`);
+                }
+            })
+            .catch(error => {
+                console.error(`獲取科目 "${subjectName}" 的講義時出錯:`, error);
+                // 移除載入中選項
+                lectureSelect.remove(1);
+                // 加入錯誤提示
+                const errorOption = document.createElement('option');
+                errorOption.text = '加載失敗，請重試';
+                errorOption.disabled = true;
+                lectureSelect.add(errorOption);
+                
+                showError('lecture-key-points', `獲取講義失敗: ${error.message}`);
+                showError('notes-key-points', `獲取講義失敗: ${error.message}`);
+            });
+    }
+
+    // 載入指定講義的頁面選項
+    function loadLecturePages(lectureId, lectureName) {
+        if (!lectureName || lectureName === '請選擇講義' || lectureName === '載入中...' || 
+            lectureName === '該科目暫無講義' || lectureName === '加載失敗，請重試') {
+            return;
+        }
+        
+        console.log(`正在載入講義 "${lectureName}" 的頁面...`);
+        
+        // 清空頁碼選擇器，只保留第一個選項
+        const pageSelect = document.getElementById('integration-page-select');
+        while (pageSelect.options.length > 1) {
+            pageSelect.remove(1);
+        }
+        
+        // 添加載入中提示
+        const loadingOption = document.createElement('option');
+        loadingOption.text = '載入中...';
+        loadingOption.disabled = true;
+        pageSelect.add(loadingOption);
+        
+        // 重置內容區域
+        document.getElementById('lecture-key-points').innerHTML = '<div class="loading">載入頁面中...</div>';
+        document.getElementById('notes-key-points').innerHTML = '<div class="loading">載入頁面中...</div>';
+        document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+        
+        // 獲取當前選中的科目
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        if (!subjectDropdown) {
+            console.error('找不到科目下拉框');
+            showError('lecture-key-points', '無法確定當前科目');
+            showError('notes-key-points', '無法確定當前科目');
+            return;
+        }
+        
+        const currentSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+        if (currentSubject === '+ 新增科目' || currentSubject === '載入中...') {
+            console.error('當前選擇的科目無效');
+            showError('lecture-key-points', '請先選擇有效的科目');
+            showError('notes-key-points', '請先選擇有效的科目');
+            return;
+        }
+        
+        // 呼叫API獲取講義的頁數
+        fetch(`/htmx/integration/get_num_pages/${encodeURIComponent(currentSubject)}/${encodeURIComponent(lectureName)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`獲取頁數API錯誤: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('獲取到頁數數據:', data);
+                
+                // 移除載入中選項
+                pageSelect.remove(1);
+                
+                if (data.success && data.total_pages > 0) {
+                    // 添加頁碼選項
+                    for (let i = 1; i <= data.total_pages; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.text = `第 ${i} 頁`;
+                        pageSelect.add(option);
+                    }
+                    console.log(`已加載 ${data.total_pages} 頁的頁碼到選擇器`);
+                    
+                    // 自動選擇第一頁
+                    pageSelect.selectedIndex = 1;
+                    
+                    // 載入第一頁內容
+                    loadPageContent(1);
+                    
+                } else {
+                    showError('lecture-key-points', '獲取講義頁數失敗或該講義無頁面');
+                    showError('notes-key-points', '獲取講義頁數失敗或該講義無頁面');
+                }
+            })
+            .catch(error => {
+                console.error('獲取頁數時出錯:', error);
+                
+                // 移除載入中選項
+                pageSelect.remove(1);
+                
+                // 顯示錯誤訊息
+                showError('lecture-key-points', `獲取頁數失敗: ${error.message}`);
+                showError('notes-key-points', `獲取頁數失敗: ${error.message}`);
+                
+                // 重置預覽圖
+                document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+            });
+    }
+
+
+    // 根據頁碼載入頁面內容
+    function loadPageContent(pageNum) {
+        if (!pageNum) return;
+        
+        console.log(`正在載入第 ${pageNum} 頁內容...`);
+        
+        // 重置內容區域為載入狀態
+        document.getElementById('lecture-key-points').innerHTML = '<div class="loading">載入重點中...</div>';
+        document.getElementById('notes-key-points').innerHTML = '<div class="loading">載入筆記中...</div>';
+        document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+        
+        // 獲取當前選中的講義名稱
+        const lectureSelect = document.getElementById('integration-lecture-select');
+        if (!lectureSelect || lectureSelect.selectedIndex < 1) {
+            showError('lecture-key-points', '請先選擇講義');
+            showError('notes-key-points', '請先選擇講義');
+            return;
+        }
+        
+        const selectedLecture = lectureSelect.options[lectureSelect.selectedIndex].text;
+        
+        // 獲取當前選中的科目
+        const subjectDropdown = document.getElementById('subject-dropdown');
+        if (!subjectDropdown || subjectDropdown.selectedIndex < 0) {
+            showError('lecture-key-points', '無法確定當前科目');
+            showError('notes-key-points', '無法確定當前科目');
+            return;
+        }
+        
+        const currentSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
+        if (currentSubject === '+ 新增科目' || currentSubject === '載入中...') {
+            showError('lecture-key-points', '請先選擇有效的科目');
+            showError('notes-key-points', '請先選擇有效的科目');
+            return;
+        }
+        
+        // 呼叫API獲取特定頁面的講義內容
+        fetch(`/htmx/integration/get_page_info/${encodeURIComponent(currentSubject)}/${encodeURIComponent(selectedLecture)}/${pageNum}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`獲取頁面內容API錯誤: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(response => {
+                console.log('獲取到頁面內容:', response);
+                
+                if (response.success && response.data) {
+                    const data = response.data;
+                    
+                    // 更新預覽圖
+                    if (data.Image) {
+                        document.getElementById('lecture-preview-img').src = `data:image/jpeg;base64,${data.Image}`;
+                    } else {
+                        document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+                    }
+                    
+                    // 更新講義重點區域
+                    updatePointsDisplay('lecture-key-points', data.Keypoints, '該頁無重點內容');
+                    
+                    // 更新筆記重點區域
+                    updatePointsDisplay('notes-key-points', data.Notes, '該頁無筆記內容');
+                    
+                    console.log(`已載入第 ${pageNum} 頁的內容`);
+                } else {
+                    showError('lecture-key-points', '無法取得頁面內容或返回格式錯誤');
+                    showError('notes-key-points', '無法取得頁面內容或返回格式錯誤');
+                    document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+                }
+            })
+            .catch(error => {
+                console.error('獲取頁面內容時出錯:', error);
+                showError('lecture-key-points', `獲取頁面內容失敗: ${error.message}`);
+                showError('notes-key-points', `獲取頁面內容失敗: ${error.message}`);
+                document.getElementById('lecture-preview-img').src = '/static/img/pdf-placeholder.png';
+            });
+    }
+    
+    // 更新重點/筆記顯示
+    function updatePointsDisplay(containerId, points, emptyMessage) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+        
+        if (points && points.length > 0) {
+            points.forEach(point => {
+                const pointElement = document.createElement('div');
+                pointElement.className = 'key-point-item';
+                pointElement.innerHTML = `
+                    <div class="key-point-title">${point.Title}</div>
+                    <div class="key-point-content">${point.Content}</div>
+                `;
+                container.appendChild(pointElement);
+            });
+        } else {
+            container.innerHTML = `<div class="no-data">${emptyMessage}</div>`;
+        }
+    }
+
+    // 頁面導航功能
+    function navigatePage(step) {
+        const pageSelect = document.getElementById('integration-page-select');
+        const currentIndex = pageSelect.selectedIndex;
+        
+        // 計算新的索引值，確保在有效範圍內
+        const newIndex = Math.max(1, Math.min(currentIndex + step, pageSelect.options.length - 1));
+        
+        // 如果是有效的新索引值且與當前不同，則進行頁面切換
+        if (newIndex !== currentIndex && newIndex >= 1 && newIndex < pageSelect.options.length) {
+            pageSelect.selectedIndex = newIndex;
+            
+            // 觸發change事件
+            const event = new Event('change');
+            pageSelect.dispatchEvent(event);
+        }
+    }
+
+    // 顯示錯誤消息
+    function showError(containerId, message) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+        }
+    }
+    
+    // 顯示提示信息
+    function showInfo(containerId, message) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<div class="alert alert-info">${message}</div>`;
+        }
+    }
+
+    // 顯示警告信息
+    function showWarning(containerId, message) {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.innerHTML = `<div class="alert alert-warning">${message}</div>`;
+        }
+    }
+
+    // 監聽科目變更事件
+    document.addEventListener('subjectChanged', function(event) {
+        const selectedSubject = event.detail.subject;
+        const trigger = event.detail.trigger || 'unknown';
+        console.log(`收到科目變更事件 [${trigger}]，選擇的科目: ${selectedSubject}`);
+        
+        if (selectedSubject) {
+            loadLecturesForSubject(selectedSubject);
+        }
+    });
+
+    // 頁面初始化
+    (function initPage() {
+        console.log('正在初始化重點統合頁面...');
+        
+        // 延遲執行以確保HTMX已完成頁面加載
+        setTimeout(function() {
+            console.log('嘗試初始化講義選擇器');
+            fetchSubjectsAndUpdateLectures();
+        }, 300);
+    })();
+</script> 

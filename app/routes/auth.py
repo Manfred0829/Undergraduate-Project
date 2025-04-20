@@ -8,4 +8,6 @@ def login_interface():
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
-    return redirect(url_for('main.user_interface')) 
+    # 在此可以添加實際的登入驗證邏輯
+    # 成功登入後，重定向到主界面
+    return redirect('/htmx/main') 

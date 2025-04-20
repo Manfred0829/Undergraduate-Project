@@ -17,6 +17,7 @@ pdf2image = "*"
 matplotlib = "*"
 easyocr = "*"
 graphviz = "*"
+pypdf2 = "*"
 
 [dev-packages]
 openai = "==1.55.3"
