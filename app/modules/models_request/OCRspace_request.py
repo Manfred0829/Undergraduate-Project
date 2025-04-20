@@ -68,12 +68,13 @@ class OCRspaceRequest(LazySingleton):
         for img in img_list:
             OCR_result_str = self.generate_img_OCR(img)
             OCR_result_json = json.loads(OCR_result_str)
-            if 'TextOverlay' not in OCR_result_json['ParsedResults'][0]:
-                print("OCRspace reach the limit:")
+            try:
+                page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
+                OCR_results.append(page_lines)
+            except Exception as e:
+                print("OCRspace encounter Limite or image size error:")
                 print(OCR_result_json)
-                raise Exception("OCRspace reach the limit")
-            page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
-            OCR_results.append(page_lines)
+                raise Exception("OCRspace encounter Limite or image size error")
 
         pages_list = self._merge_words_to_pages(OCR_results)
         return pages_list
