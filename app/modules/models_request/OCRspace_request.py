@@ -12,9 +12,10 @@ class OCRspaceRequest(LazySingleton):
         """初始化方法"""
 
         # 獲取 Api key
-        self.TOKEN_NUM = int(config.get_env_variable("OCRSPACE_API_TOKEN_NUM"))
-        self.TOKEN_LIST = [config.get_env_variable(f"OCRSPACE_API_TOKEN_{i}") for i in range(1, self.TOKEN_NUM + 1)]
+        TOKEN_NUM = int(config.get_env_variable("OCRSPACE_API_TOKEN_NUM"))
+        self.TOKEN_LIST = [config.get_env_variable(f"OCRSPACE_API_TOKEN_{i}") for i in range(1, TOKEN_NUM + 1)]
         self.TOKEN_INDEX = 0
+        self.TOKEN_NUM = TOKEN_NUM
 
         # 設定已初始化
         self._initialized = True
