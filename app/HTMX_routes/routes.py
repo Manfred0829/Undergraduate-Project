@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, send_file, redirect
 import os
 import json
-from app.services.file_service import get_subjects, get_lectures, get_notes, get_notes_for_lecture, create_subject_folders, delete_subject_folders
+from app.services.file_service import get_subjects, get_lectures, get_notes, create_subject_folders, delete_subject_folders
 from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions, processing_update_weights, processing_get_notes, processing_get_history, processing_update_topics
 from app.utils.media_processer import get_num_pages
 # 創建 Blueprint
@@ -69,15 +69,6 @@ def notes(subject):
     """獲取指定科目的所有筆記"""
     #print('subject:', subject)
     return jsonify(get_notes(subject))
-
-'''
-# 獲取特定講義相關的所有筆記
-@htmx_bp.route('/api/get_lecture_notes/<subject>/<lecture_id>', methods=['GET'])
-def lecture_notes(subject, lecture_id):
-    """獲取與特定講義相關的所有筆記"""
-    return jsonify(get_notes_for_lecture(subject, lecture_id))
-'''
-
 
 
 # 章節大綱片段

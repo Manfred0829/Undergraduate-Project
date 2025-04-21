@@ -3,8 +3,9 @@ import time
 import json
 import re
 import config
-
+from app.services import file_service
 from app.modules.module_template import LazySingleton
+
 
 class OpenAIRequest(LazySingleton):
     model = None
@@ -464,8 +465,9 @@ class OpenAIRequest(LazySingleton):
 
         notes_from_keypoint = file_service.get_notes_from_keypoint(subject, keypoint_json)
         notes_prompt = ""
-        for note in notes_from_keypoint:
-            notes_prompt += "Student Note: " + note["Content"] + "\n"
+        if notes_from_keypoint != []:
+            for note in notes_from_keypoint:
+                notes_prompt += "Student Note: " + note["Content"] + "\n"
 
         response = self.generate_content(prompt + keypoint_prompt + notes_prompt, return_json=True)
         
