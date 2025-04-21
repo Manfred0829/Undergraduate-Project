@@ -740,14 +740,15 @@ def processing_query_keypoint(subject, lecture_name, query_text):
     keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
     keypoints_json = text.read_json(keypoints_path, default_content=[])
 
-    OpenAI = OpenAI_request()
+    OpenAI = OpenAIRequest()
     query_embedding = OpenAI.processing_embedding([query_text])
     query_embedding = query_embedding[0]
 
     # 計算每個重點的餘弦相似度
     keypoints_embedding = [keypoint["Embedding"] for keypoint in keypoints_json]
-    target_k_idx = similarity.get_most_similar_index(query_embedding, keypoints_embedding)
+    target_k_idx = sim.get_most_similar_index(query_embedding, keypoints_embedding)
     target_keypoint = keypoints_json[target_k_idx]
+
 
     # 生成重點解釋
     explanation = OpenAI.processing_keypoint_explanation(subject, target_keypoint)
