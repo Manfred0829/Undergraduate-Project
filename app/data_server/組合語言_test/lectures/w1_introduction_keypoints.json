@@ -1549,8 +1549,8 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": 3,
+        "Learning_Rate": 0.5
     },
     {
         "Title": "Overview of Assembly Language",
@@ -9314,8 +9314,8 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": 3,
+        "Learning_Rate": 0.5
     },
     {
         "Title": "Overview of System Programming",

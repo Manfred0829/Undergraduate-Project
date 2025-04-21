@@ -368,6 +368,9 @@ def delete_note(note_id):
 
 def get_notes_from_keypoint(subject, keypoint_json):
     result_notes = []
+    if "Notes" not in keypoint_json:
+        return result_notes
+    
     for note_kp in keypoint_json["Notes"]:
         note_name_without_ext = os.path.splitext(note_kp["Notes_File_Name"])[0]
         notes_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")

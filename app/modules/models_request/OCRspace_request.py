@@ -136,7 +136,7 @@ class OCRspaceRequest(LazySingleton):
                     
                     if 'TextOverlay' not in OCR_result_json['ParsedResults'][0]:
                         print(f"The page {i+1} is empty, using default text.")
-                        page_lines = ['The page is empty.']
+                        page_lines = {"LineText": "The page is empty."}
                     else:
                         page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
                     

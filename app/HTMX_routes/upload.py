@@ -2,7 +2,7 @@
 from flask import Blueprint, request, jsonify, current_app, send_from_directory
 from app.services.file_service import (
     upload_lecture, upload_note, get_subjects, get_lectures, get_notes,
-    get_lecture, get_note, get_notes_for_lecture,
+    get_lecture, get_note,
     delete_lecture_htmx, delete_note_htmx
 )
 from app.services import main_processer
