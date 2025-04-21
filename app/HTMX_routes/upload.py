@@ -110,7 +110,7 @@ def upload_note_route():
         return jsonify({'success': False, 'error': '請提供科目名稱'}), 400
 
     # 檢查講義名稱
-    print(f"lecture_name: {lecture_name}")
+    #print(f"lecture_name: {lecture_name}")
     if not lecture_name:
         return jsonify({'success': False, 'error': '請提供講義名稱'}), 400
     
@@ -156,42 +156,6 @@ def delete_note_route(subject, note_id):
     else:
         return jsonify(result), 404
     
-
-
-'''
-@upload_bp.route('/test-lecture', methods=['POST'])
-def upload_lecture_test():
-    """測試上傳講義檔案"""
-    if 'file' not in request.files:
-        return jsonify({'success': False, 'message': '沒有檔案部分'}), 400
-    
-    file = request.files['file']
-    
-    if file.filename == '':
-        return jsonify({'success': False, 'message': '沒有選擇檔案'}), 400
-    
-    # 保存檔案
-    result = save_uploaded_file(current_app, file, 'lecture')
-    
-    return jsonify(result)
-
-@upload_bp.route('/test-note', methods=['POST'])
-def upload_note_test():
-    """測試上傳筆記檔案"""
-    if 'file' not in request.files:
-        return jsonify({'success': False, 'message': '沒有檔案部分'}), 400
-    
-    file = request.files['file']
-    
-    if file.filename == '':
-        return jsonify({'success': False, 'message': '沒有選擇檔案'}), 400
-    
-    # 保存檔案
-    result = save_uploaded_file(current_app, file, 'note')
-    
-    return jsonify(result)
-
-'''
 
 # 下載檔案
 @upload_bp.route('/download/<file_type>/<subject>/<file_id>', methods=['GET'])
