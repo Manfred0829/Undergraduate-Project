@@ -450,7 +450,7 @@ class OpenAIRequest(LazySingleton):
         prompt = f"""
         You are given one of the keypoints in the subject {subject}, please complete below tesk:
 
-        Create a multiple-choice question with four options, numbered 1 to 4, and output it in the following JSON format:
+        Create a multiple-choice question based on the keypoint with four options, numbered 1 to 4, and output it in the following JSON format:
         {{
             "question": "question text",
             "options": ["option1", "option2", "option3", "option4"],
@@ -462,14 +462,12 @@ class OpenAIRequest(LazySingleton):
 
         keypoint_prompt = "Title: " + keypoint_json["Title"] + "\nContent: " + keypoint_json["Content"]+ "\n"
 
-        # 暫不實現將筆記加入prompt
-        """
-        if "Notes" in keypoint_json: # 如果有筆記
-            for i, note in keypoint_json['Notes']:
-                keypoint_prompt += f"Note {i+1}: " + note[]
-        """
+        notes_from_keypoint = file_service.get_notes_from_keypoint(subject, keypoint_json)
+        notes_prompt = ""
+        for note in notes_from_keypoint:
+            notes_prompt += "Student Note: " + note["Content"] + "\n"
 
-        response = self.generate_content(prompt + keypoint_prompt, return_json=True)
+        response = self.generate_content(prompt + keypoint_prompt + notes_prompt, return_json=True)
         
         # 格式化並轉換返回的數據以匹配前端期望
         if isinstance(response, dict) and "correct_answer" in response:

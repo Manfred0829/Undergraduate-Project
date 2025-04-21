@@ -622,21 +622,6 @@ def processing_update_topics(subject, lecture_name, answer_results):
     }
 
 
-def _get_notes_from_keypoint(subject, keypoint_json):
-    result_notes = []
-    for note_kp in keypoint_json["Notes"]:
-        note_name_without_ext = os.path.splitext(note_kp["Notes_File_Name"])[0]
-        notes_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
-        try:
-            notes_json = text.read_json(notes_path)
-            result_notes.append(notes_json["Notes"][note_kp["Note_Index"]])
-        except Exception as e:
-            print(f"Error reading notes file {notes_path}: {e}")
-            continue  # 讀取錯誤則跳過此筆資料
-
-    return result_notes  # 確保有返回結果
-
-
 def processing_get_page_info(subject, lecture_name, page_index):
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
 
@@ -671,7 +656,7 @@ def processing_get_page_info(subject, lecture_name, page_index):
     result_notes = []
     for keypoint in target_keypoints:
         if "Notes" in keypoint:
-            notes = _get_notes_from_keypoint(subject, keypoint)
+            notes = file_service.get_notes_from_keypoint(subject, keypoint)
             for note in notes:
                 temp = {"Title": note["Title"], "Content": note["Content"]}
                 result_notes.append(temp)
@@ -748,36 +733,3 @@ def processing_get_history(subject, lecture_name):
 
     logger.info(f'歷史數據處理完成: \n{result}')
     return result
-
-
-#if __name__ == "__main__":
-    '''
-    keypoints_path = os.path.join("app", "data_server", "組合語言", "lectures", "w2_2_x86_architecture.json")
-    keypoints_json = text.read_json(keypoints_path, default_content=[])
-    #print(keypoints_json)
-    topics_json = _extract_topics_hierarchy(keypoints_json)
-    topics_path = os.path.join("app", "data_server", "組合語言", "lectures", "w2_2_x86_architecture_topics.json")
-    text.write_json(topics_json, topics_path)
-
-    print(topics_json)
-    '''
-
-
-    '''
-    # 新增缺漏的keypoins lr
-    def _calculate_learning_rate(progress, diff):
-        if progress <= 0: # 若小於0則設為0%
-            return 0.0
-        elif progress >= 3*diff: # 若大於上限則為100%
-            return 1.0
-        else:
-            return float(progress / (3*diff))
-
-    keypoints_path = os.path.join("app", "data_server", "組合語言", "lectures", "w3_assembly_language_fundamentals_keypoints.json")
-    keypoints_json = text.read_json(keypoints_path, default_content=[])
-    for keypoint in keypoints_json:
-        if "Learning_Rate" not in keypoint:
-            keypoint["Learning_Rate"] = _calculate_learning_rate(keypoint["Learning_Progress"], keypoint["Difficulty"])
-    text.write_json(keypoints_json, keypoints_path)
-    '''
-
