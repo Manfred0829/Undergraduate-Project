@@ -12,10 +12,21 @@ import time
 
 def register_new_file(subject,type,filename,unique_id):
     path = os.path.join("app", "data_upload", subject, type, 'index.json')
+
     register = text_processer.read_json(path, default_content=[])
 
-    entry = {"id": unique_id, "filename": filename}
+    entry = {"id": unique_id, "filename": filename, "status": "processing"}
     register.append(entry)
+
+    text_processer.write_json(register, path)
+
+def update_file_status(subject, type, file_name, status):
+    path = os.path.join("app", "data_upload", subject, type, 'index.json')
+    register = text_processer.read_json(path, default_content=[])
+
+    for entry in register:
+        if entry.get("filename") == file_name:
+            entry["status"] = status
 
     text_processer.write_json(register, path)
 
@@ -206,6 +217,10 @@ def get_lectures(subject):
                 # 同時更新 index.json
                 register_new_file(subject, "lectures", filename, unique_id)
     
+
+    # 將註冊資料夾中的檔案進行排序
+    lectures.sort(key=lambda x: x['filename'])
+
     return lectures
 
 # 獲取筆記列表
@@ -240,6 +255,9 @@ def get_notes(subject):
                 # 同時更新 index.json
                 register_new_file(subject, "notes", filename, unique_id)
     
+    # 將註冊資料夾中的檔案進行排序
+    notes.sort(key=lambda x: x['filename'])
+
     return notes
 
 

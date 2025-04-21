@@ -177,6 +177,21 @@
         font-size: 0.95rem;
         line-height: 1.5;
     }
+    
+    /* pre標籤樣式 - 保持換行且更美觀 */
+    .key-point-content pre {
+        margin: 0;
+        padding: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        color: inherit;
+        background: transparent;
+        border: none;
+        overflow: visible;
+    }
 
     /* 加載和錯誤狀態樣式 */
     .loading, .no-data, .error {
@@ -645,7 +660,7 @@
                 pointElement.className = 'key-point-item';
                 pointElement.innerHTML = `
                     <div class="key-point-title">${point.Title}</div>
-                    <div class="key-point-content">${point.Content}</div>
+                    <div class="key-point-content"><pre>${point.Content}</pre></div>
                 `;
                 container.appendChild(pointElement);
             });

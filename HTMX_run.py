@@ -28,26 +28,11 @@ def create_app():
     return app
 
 def check_process():
-    '''
-    from app.utils import text_processer
-    # 讀取keypoints.json
-    keypoints_path = r"app\data_server\作業系統\lectures\CH02_Operating-System Structures-上課版_keypoints.json"
-    keypoints_json = text_processer.read_json(keypoints_path)
-
-    # Note被意外重複加入，去除多餘的Note
-    #keypoints_json[59].pop("Embedding")
-    for i in range(1, len(keypoints_json[59]["Notes"])):
-        keypoints_json[59]["Notes"].pop()
-    print(keypoints_json[59]["Notes"])
     
-    #keypoints_json[60].pop("Embedding")
-    for i in range(1, len(keypoints_json[60]["Notes"])):
-        keypoints_json[60]["Notes"].pop()
-    print(keypoints_json[60]["Notes"])
-
-    # 寫回keypoints.json
-    text_processer.write_json(keypoints_json, keypoints_path)
-    '''
+    from app.services import file_service
+    #file_service.update_file_status("組合語言_test", "lectures", "w1_introduction.pdf", "error")
+    
+    return
 
 if __name__ == "__main__":
     # 解析命令行參數
