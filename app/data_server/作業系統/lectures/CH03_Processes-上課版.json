@@ -1,0 +1,1345 @@
+{
+    "Chapter": "Chapter 3: Processes",
+    "Sections": [
+        {
+            "Section": "Fundamentals of Process Management",
+            "Starting_topic": 1,
+            "Topics": [
+                {
+                    "Topic": "Concepts of Process Management",
+                    "Starting_page": 4,
+                    "Pages": [
+                        {
+                            "Original_text": "Overview\nProcess一aprogramlnexecution\n一Alsocalledjobs,tasks\n·Program一\npasslve·\n·Process一active\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Processes",
+                                    "Content": "• Process is a program in execution\n• Also referred to as jobs or tasks\n• Program is passive; process is active"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Difference between program and process"
+                            },
+                            "page_idx": 3
+                        },
+                        {
+                            "Original_text": "ProgramsandProcesses\nVlew\neChrome\nApplication\nApplication\nSearchAppIication\nType\nFilefolder\nFilefolder\nApplication\nFile\nAppIication\nXMLDocument\n838KB\n43KB\n839KB\n1KB\nFileOptionsView\nPerformance\nBTHSSecurityMgr.e.\nchrome.exe\nchrome.exe\nchrome.exe\nchrome.exe\nchrome.e)(e\nchrome.exe\nChrome.exe\nchrome.exe\nchrome.e)(e\nchrome.exe\nChrome.exe\nchrome.exe\nChrome.exe\nchrome.exe\nChrome.exe\nchrome.exe\nChrome.exe\nchrome.exe\nchrorne.exe\nÄCommonAgent.exe\naconhost.exe\nCSrss.exe\nApphist\nPID\n5396\n5460\n5412\n5480\n5808\n5860\n6036\n2224\n5004\n5300\n4200\n2220\n4188\n6360\n5100\n6780\n6956\n8144\n6436\n832\n1176\n500\nProcess\nTherunninginstantiationOfa\nprogram,storedinRAM\n33.0.1750.27\nL\n34.0.1797.2\nchrome.exe\nmasterpreferences\nOld\nVisualElementsManifest.xml\nAnexecutablefileinstorage\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\nRunning\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\ncbw\nSYSTEM\nSYSTEM\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n00\n19,084KGoogleChrome\n64,560KGoogleChrome\n298,436KGoogleChrome\nG009|eChrome\n6,520K\n9,360KGoogleChrome\nG009|eChrome\n6,648K\nGoogleChrome\n760K\nG009|eChrome\n680K\nGoogleChrome\n696K\nG009|eChrome\n648K\nGoogleChrome\n628K\nG009|eChrome\n8,704K\nGoogleChrome\n632K\nG009|eChrome\n620K\nGoogleChrome\n588K\nG009|eChrome\n612K\n1,000KGoogleChrome\nGoogIeChrome\n36,056K\n380K\nSAgent\nConsoleWindo\n72K\n1,328KClientServerRL\n5\nCS5600ComputerSystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Processes Overview",
+                                    "Content": "• Processes are running instantiations of programs;\n• Stored in RAM;\n• Executable files found in storage."
+                                },
+                                {
+                                    "Title": "Chrome Application Instances",
+                                    "Content": "• Multiple instances of chrome.exe running;\n• Different file sizes and memory usage indicated."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Overview of programs and processes in memory"
+                            },
+                            "page_idx": 4
+                        },
+                        {
+                            "Original_text": "Overview(Conte)\n·Aprocessneedcertainresources:\n一CPU\n·Statusofthecurrentactivity:PC(ProgramCounter),registers·\n一Memory\n·Textsection:programcode(fixedsize)(。)\n·Datasection:globalvariable(fixedsize)\n·Stack\nParametereturnaddres10ca1variable\n·Heapsection:memorythataredynamicallyallocatedbycallingmalloc()and\nfree()\n一Files\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Process Resources",
+                                    "Content": "• Essential resources for a process include CPU, memory, and files\n• Current activity status is tracked by Program Counter and registers\n• Memory sections: Text section for program code; Data section for global variables; Stack for parameters and return addresses; Heap for dynamic memory allocation with malloc() and free()"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Overview of computer resources and memory sections"
+                            },
+                            "page_idx": 5
+                        },
+                        {
+                            "Original_text": "Process\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Process"
+                            },
+                            "page_idx": 6
+                        },
+                        {
+                            "Original_text": "·EIP()rPC)\n複習·\nmoveax,Y;\n1000\naddeax,4;\n1003\nmovebx3;\n1006\nimulebx;\n1009\nmovX,eax;\n100\n12\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "EIP and instruction execution in assembly"
+                            },
+                            "page_idx": 7
+                        },
+                        {
+                            "Original_text": "Again:Storage-DeviceHierarchy\nstoragecapacity\naccesstime\nregisters\nJöllP-WS\npnmary\ncache\nstorage\nvolatile\nstorage\nmalnmemory\nnonvolatile\nnonvolatilememory\nstorage\nsecondary\nstorage\nhard-diskdrives\nopticaldisk\n.IöMOlS\ntertiary\nstorage\nmagnetictapes\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Storage Device Hierarchy",
+                                    "Content": "• Types of storage: primary, secondary, tertiary\n• Key attributes: storage capacity, access time\n• Categories: volatile and nonvolatile storage\n• Examples of storage: registers, cache, main memory, hard disk drives, optical disks, magnetic tapes"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Storage Device Hierarchy"
+                            },
+                            "page_idx": 8
+                        },
+                        {
+                            "Original_text": "Stack:Example1\n一main()\nstack\narugment\nreturnaddress\na=a十1·\nargument\nfunction1(·\nreturnaddress\nexit(1);\ncvariables\nargument\nfunction1()\nb=b-1;\nfunction2(·\nreturn•\nfunction2()\nreturn•\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding stack in function calls"
+                            },
+                            "page_idx": 9
+                        },
+                        {
+                            "Original_text": "Stack:Example2\nvoidbar()\nvoidf00()\nintmai\nfo\nmain()\nstackframe\nma1n\nf00()\nStack\nma1n\nf00\nbar()\nStack\nma1n\nf00\nStack\nStack\nreturn\nreturn\n加s:s28g\"·s2\"tct\"Testing.htmI\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Stack and Function Call Example"
+                            },
+                            "page_idx": 10
+                        },
+                        {
+                            "Original_text": "mainPROC\nca11Sub1\nexit\nmainENDP\nSub1PROC\nca11Sub2\nret\nSub1ENDP\nSub2PROC\nca11Sub3\nret\nStack:Example3\nBythetimeSub3iscalled,thestackcontains\nthreestackframes\nSub2\nS\nSub3\nENDP\nPROC\nENDP\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Stack Frames in Procedures",
+                                    "Content": "• Stack frames are created for each procedure call\n• By the time Sub3 is called, there are three stack frames on the stack:\n• The structure of the stack includes frames for Sub2, Sub3, etc."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Stack frames and procedure calls"
+                            },
+                            "page_idx": 11
+                        },
+                        {
+                            "Original_text": "heap\nHeap\nmain()\nmalloc(1024);\na110c048)\n攵亻匕\nmalloc(512);\nhmp\nree12)\nree(2048);\nfree(1024);\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Memory management using heap allocation"
+                            },
+                            "page_idx": 12
+                        },
+                        {
+                            "Original_text": "ActualMemoryLayoutofaCProgram\n·Asshowninthefollowingslide,infact\n一Theglobaldatasectionisdividedintoinitializeddataand\nuninitializeddatasections\n一Aseparatesectionisprovidedfortheargcandargvparameters\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Memory Layout of C Program",
+                                    "Content": "• Global data section divided into initialized and uninitialized data\n• Separate section for argc and argv parameters"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Memory Layout of a C Program"
+                            },
+                            "page_idx": 13
+                        },
+                        {
+                            "Original_text": "ActualMemoryLayoutofaCProgram\nhigh\nmemory\nlow\nmemory\nargc,agrv\nstack\nheap\nuninitialized\ndata\ninitialized\ndata\ntext\n#include<stdio·h>\n#include<stdlib·h>\nintⅩ;\ninty=15;\nintmain(\nintargc,char*argv冂)\nint*values\nint土\n(int*)malloc(sizeof(int)*5)\nvalues\nfor(i\nvalues〕\nreturn0;\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Memory Layout in C",
+                                    "Content": "• Includes high and low memory regions\n• Components: stack, heap, uninitialized data, initialized data, text\n• Example code showing memory allocation and usage"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Actual Memory Layout of a C Program"
+                            },
+                            "page_idx": 14
+                        },
+                        {
+                            "Original_text": "ActualMemoryLayout0faProcess\nHigherAddress\nCommandLineArguments\nStack\nMemory\nUninitiaIizedgme\nln壩Segment\nTex(0Segment\nL0werAddress\nMemoryLayout\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Memory Layout of a Process"
+                            },
+                            "page_idx": 15
+                        },
+                        {
+                            "Original_text": "MemoryLayoutofaCProgram\n·TOobtainthesizeofthesegmentofaprogram\nsizeexecutable—file—name\n$sizemain.exe\ndata\nbss\ndec\nhexfilename廴\ntext\nbb8main.exe\n1984\n744\n272\n3000\n一text:codesegmeh$--+\n一data:initializedglobaldata\n一bss(blockstartuninitializedglobal\ndata\n一decandhex:sumofthreesections\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Memory Layout Overview",
+                                    "Content": "• Size of executable segments\n• Components: text, data, bss\n• Decimal and hexadecimal sizes of sections"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Memory layout of a C program"
+                            },
+                            "page_idx": 16
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n一TheProcess\n-ProcessState\n一ProcessControlBlock\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·IPCinMessage-PassingSystems\n·ExamplesofIPCSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, The Process, Process State, Process Control Block, Process Scheduling, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, IPC in Message-Passing Systems, Examples of IPC Systems"
+                            },
+                            "page_idx": 17
+                        },
+                        {
+                            "Original_text": "ProcessState\nASaprocessexecutes,itchangesstate\nnew:Theprocessisbeingcreated\nrunning:lnstructionsarebeingexecuted\nwaiting:TheprocessISwaitingforsomeeventtOoccur\nready:TheprocessISwaitingtObeassignedtOaprocessor\n·TheprocessISr\"\"\nterminated:Theprocesshasfinishedexecution\n·Only\ncanbe\nonacore\noneprocess\nManyprocessesmaybereadyorwaiting\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process States in Execution",
+                                    "Content": "• new: The process is being created\n• running: Instructions are being executed\n• waiting: The process is waiting for some event to occur\n• ready: The process is waiting to be assigned to a processor\n• terminated: The process has finished execution\n• Only one process can be on a core; many processes may be ready or waiting"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process state transitions during execution"
+                            },
+                            "page_idx": 18
+                        },
+                        {
+                            "Original_text": "Diagram0fProcessState\nnew\nadmitted\ninterrupt\nready\nexit\nrunmng\nterminated\nschedulerdispatch\n|/0oreventcompletion\n|/0oreventwait\nwaiting\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Diagram of Process States"
+                            },
+                            "page_idx": 19
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n一TheProcess\n一ProcessState\n-ProcessControlBlock\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, The Process, Process State, Process Control Block, Process Scheduling, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 20
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Process Control Block and Management",
+                    "Starting_page": 22,
+                    "Pages": [
+                        {
+                            "Original_text": "ProcessContr01Block(PCB)()rProcessDescriptor)•\n·Foreachprocess,OSmaintainadatastructurecalledprocessco勿c(also\ncalledsc勿cprocessdescriptor,sdescriptor)tokeepinformation\nWitheachprocess\nKeepinformationassociatedwitheachprocess\nProcessState\nProgramcounter:address0fthenextinstruction\n·whenan\ninterrupt\ncontextswitches\nOCCLlrSor\nOCCLlrS\nCPUregisters\n·whenan\ninterruptorcontextswitchesoccurs(introducelater)\nCPUschedulinginformation:processpriority\nMemory-managementinformation\nWillbeintroducedlater\nAccountinginformation\nCPUtimeandrealtimeused.\n··(seefollowingslide)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Control Block Overview",
+                                    "Content": "• OS maintains a data structure for each process called Process Control Block (PCB) / Process Descriptor\n• PCB keeps important information associated with each process\n• Information includes process state, program counter, CPU registers, scheduling info (priority), memory management, and accounting data"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process Control Block and Management"
+                            },
+                            "page_idx": 21
+                        },
+                        {
+                            "Original_text": "ProcessContr01Block(PCB)\nprocessstate\nprocessnumber\nprogramcounter\nregisters\nmemorylimits\nlist0fopenfiles\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Control Block (PCB)",
+                                    "Content": "• process state\n• process number\n• program counter\n• registers\n• memory limits\n• list of open files"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process Control Block (PCB) components"
+                            },
+                            "page_idx": 22
+                        },
+                        {
+                            "Original_text": "ProcessContr01Block(PCB)\noute,\n,eax,e\noute矼,)x3\n,ebx,e\nPIPCB\nC=Xeax=\nP2PCB\nPC=eax—J,““\nOS\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process Control Block (PCB) description"
+                            },
+                            "page_idx": 23
+                        },
+                        {
+                            "Original_text": "ProcessRepresentationinLinux\nRepresentedbytheCstructuretaskstruct\npidtpid;\nlongstate;\nrcessidentifier*/\n/*stateoftheprocess*/\n/*schedulxngxnformatxon*/\nSIICe\nstructtaskstruct*parent;/*th1Sprocess'sparent*/\nstruct11Stheadchlldren;/*th1Sprocess'schlldren*/\nstructfllesstruct*files;/*list0fopenflles*/\n乛,ddressspaceofth1Sprocess\nstructmmstruct*mm·\ncurrent\n(currentlyexecutingproccess)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Representation in Linux",
+                                    "Content": "• Represented by the C structure task_struct\n• Contains process ID (pid) and state\n• Includes parent and child process structures\n• Maintains a list of open files\n• Holds address space information of the process\n• References currently executing process"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process representation in Linux"
+                            },
+                            "page_idx": 24
+                        },
+                        {
+                            "Original_text": "Accounting\n,d。、”工作管理員\n檔案選項(檢視)説明)\n應用程式處理程序|效能|\n影像名稱\nCPU問\n記憶體使用量尖峰記憶體用量記憶體使用量\n分頁錯誤分頁錯誤\n虛擬記憶\n分頁集區\n非分頁集\n基本優\nPID\nCPU\nSystemProces\n0\n95\n042:18\n16K\n16K\n1\n0K\n0K\n0K\nSystem\n0:00:15\n272K\n780K\n2,845\n0K\n0K\n164\n000:00\n260K\n2,016K\n631\n1,1K\n5K\n1K\n192\n000:04\n2,456K\n2,712K\n1,565\n1,112K\n48K\n5K\ncsrs.e>•æ\nw0〕exe\n212\n0:00•01\n1,368K\n7,928K\n4,775\n5,752K\n36K\n64K\n240\n0:00:02\n2,448K\n5,296K\n1,726\n2,636K\n33K\n476K\nær•.•'lces.e>æ\nIse\n252\n0:00:00\n1,236K\n4,836K\n1,490\n2,232K\n29K\n52K\nwchost.e»\n432\n0:OO:00\n1,424K\n2,212K\n727\n1,056K\n18K\n32K\nSPOOLSVEXE\n460\n1,840K\n3,560K\n1,761\n2,292K\n25K\n13K\n488\n0OO0\n368K\n3,296K\n1,038\n1,304K\n23K\n21K\n548\n2,392K\n5,636K\n2,430\n3,252K\n26K\n9K\n0:00:06\n620\n1,132K\n316\n14K\n1K\ndefwatch.exe\n808K\n280K\n632\n1,058K\n4,208K\n1,279\n2,132K\n29K\n31K\ntcpwcs.exe\n652\n00:01\n1,124K\n8,436K\n9,52e\n5,92eK\n43K\n32K\nwchost.e:•æ\nftpsched.exe\n65e\n696K\n1,124K\n2e3\n24eK\n11K\n1K\nllsavexe\n696\n1,332K\n1,e76K\n530\n700K\n16K\n12K\nsfmprint.exe\n732\n600K\n1,252K\n464K\n12K\n2K\n744\n01\n0:00:38\n1,388K\n7,204K\n261,201\n0\n5,252K\n30K\n8K\n924\n02\n0:00:12\n9,332K\n9,704K\n5,426\n3,464K\n49K\n9K\nNSPMON.exe\n932\ne36K\n1,552K\n3e9\n5K\n14K\n3K\nNSCM.exe\n956\n236K\n2,676K\n762\n1,048K\n17K\n6K\n996\n512K\n844K\n236K\n8K\n9K\nregs•/c.eE\n1024\n0:00:20\n1,924K\n22,960K\n83,016\n2\n19,02eK\n54K\n193K\nn-n.SiVer.eXe\nnm\n1060\n2,092K\n2,2K\n660K\n19K\n3K\n.exe\n1096\n0:00:00\n516K\n1,912K\n532K\n20K\n13K\n1128\n0:00:00\n916K\n3,528K\n976\n1,460K\n21K\n8K\nsnmp•exe\n1188\n0:00:00\n1,868K\n2,884K\n2,140K\n20K\n19K\n、vl.ns.e>•æ\n1200\n0:00:00\n808K\n1,348K\n336\n396K\n13K\n2K\nmspmspw.exe\nfss\n1236\n0:000\n148K\n1,312K\n338\n376K\n12K\n10K\ndnS.exe\n1252\n0:00:00\n844K\n2,672K\n1,008K\n21K\n21K\n1284\n0:OO:01\n2,832K\n10,428K\n3,145\n12,012K\n59K\n113K\n1336\n000:00\n568K\n1,360K\n403\n524K\n12K\n10K\n8,360K\n6,556K\n26K\n1356\n0:00:01\n772K\n4,864\n7K\nnspm.exe\n376K\n3,272K\n1,444K\n19K\n70K\nNSUM\n1500\n01\nwmhIp32.exe\n1800\n1,758K\n1,772K\n472\n504K\n19K\n2K\n1896\n0:00:05\n1,924K\n6,104K\n6,683\n2,e16K\n38K\n14K\nexplorer.exe\n1936\n0:00:19\n14,480K\n15,160K\n11,467\n9,2昍K\n38K\n37K\nnetscapeexe\n2136\n376K\n1,656K\n4\n620K\n19K\n2K\n2164\n424K\n3,e20K\n2,074\n1,e84K\n24K\n5K\nvpå-ayexe\nrealplay.exe\n2188\n01\n0:00:06\n2,00eK\n6,416K\n6,542\n2,400K\n28K\n6K\n2196\n724K\n1,26eK\n3K\n17K\n1K\ninternat.e»\n2204\n988K\n1,564K\n437\n456K\n18K\n2K\n2236\n412K\n908K\n220K\n17K\n1K\nvpent.exe\nor2.exe\n2240\n0:00:01\n1,216K\n6,794K\n2,373\n2,656K\n31K\n5K\n,1q0\n41n\n結束處理程序)\nㄧ$-用167456K/310504K\n程序.45\nCPU使用\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process Management and Resource Usage"
+                            },
+                            "page_idx": 25
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n·lnter-ProcessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Operations on Processes, Inter-Process Communication, IPC in Shared-Memory Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 26
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Section": "Process Scheduling and Control Techniques",
+            "Starting_topic": 3,
+            "Topics": [
+                {
+                    "Topic": "Process Scheduling and Queues",
+                    "Starting_page": 28,
+                    "Pages": [
+                        {
+                            "Original_text": "ProcessScheduling\n·TermDefinition\n-Processscheduler()rCPUscheduler)\n·SelectsareadyprocessesforexecutiononaCPUcore\n-Degree0fmultiprogramming\n·ThenumberOfprocessescurrentlyinmemory\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Scheduling Overview",
+                                    "Content": "• Definition of process scheduler (CPU scheduler)\n• Selects ready processes for execution on a CPU core\n• Degree of multiprogramming indicates number of processes in memory"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process scheduling and multiprogramming"
+                            },
+                            "page_idx": 27
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n-SchedulingQueues\n一CPUScheduIing\n一ContextSwitch\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Scheduling Queues, CPU Scheduling, Context Switch, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 28
+                        }
+                    ]
+                },
+                {
+                    "Topic": "CPU Scheduling Algorithms",
+                    "Starting_page": 30,
+                    "Pages": [
+                        {
+                            "Original_text": "CPUSchedu1er(CPU排程演算法)需要什麼\n資料結構?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "CPU Scheduling Algorithms and Data Structures"
+                            },
+                            "page_idx": 29
+                        },
+                        {
+                            "Original_text": "SchedulingQueues\n·OSmaintainsschedulingqueues\nofprocesses\n-setOfallprocessesresidinginmainmemoryready\n-Readyqueue\nandwaitingtOexecute\n一AsetOfwaitqueues一setofprocesseswaitingforevents,e.g.,\ncompletionofI/O\n一Processesmigrateamongthereadyqueue\nand\nvar10LlSwaitqueues\n(see\nfollowingtwoslides)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Scheduling Queues in OS",
+                                    "Content": "• OS maintains scheduling queues of processes\n• Ready queue contains processes ready to execute\n• Waiting queues for processes waiting on events (e.g., I/O completion)\n• Processes migrate between the ready queue and various wait queues"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Scheduling queues in operating systems"
+                            },
+                            "page_idx": 30
+                        },
+                        {
+                            "Original_text": "TheReadyQueueandWaitQueues\nready\nqueue\nwait\nqueue\nqueueheader\nhead\ntail\nhead\ntail\nPCB\n7\nregisters\nPCB3\nPCB14\nPCB\n2\nregisters\nPCB6\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Ready Queue and Wait Queues"
+                            },
+                            "page_idx": 31
+                        },
+                        {
+                            "Original_text": "Diagram0fProcessState\nnew\nadmitted\ninterrupt\nready\nexit\nrunmng\nterminated\nschedulerdispatch\n|/0oreventcompletion\n|/0oreventwait\nwaiting\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process State Diagram"
+                            },
+                            "page_idx": 32
+                        },
+                        {
+                            "Original_text": "VariousI/OWaitQueues\nTheremaybeasetofwait\nready\nmag\ntape\nunit0\nmag\ntape\nunit1\ndisk\nunit0\nerminal\nunit0\nhead\ntail\nhead\ntail\nhead\ntail\nhead\ntail\nhead\ntail\nPCB\n7\nregisters\nPCB3\nPCB5\nPCBI\nPCB2\nregisters\nPCB6\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Wait Queues in I/O Management"
+                            },
+                            "page_idx": 33
+                        },
+                        {
+                            "Original_text": "Queuing-DiagramRepresentation0fProcess\nScheduling\n·OnceaprocessISexecuting,oneOffollowingeventswould\nOCCLlr(seethefollowingslide)\n一TheprocessissueanI/Orequest\n·TheprocessisplacedinanI/Owaitqueue\n一Theprocesscreatesanewchildprocess\n·Theprocessisplacedina\nwaitqueue\nwaitingforchild'stermination\n一TheprocessisremovedfromthecoreduetOinterrupt\n·Theprocessisplacedintheinterruptwaitqueue\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Queuing and Process Scheduling",
+                                    "Content": "• Process execution events lead to Queuing\n• I/O request places process in I/O wait queue\n• Creating a child process puts it in wait queue for termination\n• Interrupts remove process to interrupt wait queue"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Queuing Diagram Representation of Process"
+                            },
+                            "page_idx": 34
+                        },
+                        {
+                            "Original_text": "Queuing-DiagramRepresentation0fProcess\nScheduling\nreadyqueue\nchild\nterminates\ninterrupt\nOCClffS\n|/0waitqueue\ntermination\nwaitueue\ninterrupt\nwaitueue\nFreePCB\nterminate\nand\nCPU\nresources\n|/0request\ntimeslice\nexpired\ncreatechild\nprocess\nwaitforan\ninterrupt\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Queuing Diagram Overview",
+                                    "Content": "• Represents process scheduling\n• Components: ready queue, wait queue, free PCB\n• Events: child terminates, interruption occurs, timeslice expired\n• Actions: create child process, request for resources, termination"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Queuing Diagram Representation of Process"
+                            },
+                            "page_idx": 35
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n一SchedulingQueues\n-CPUScheduIing\n一ContextSwitch\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "ProcessConcept, ProcessScheduling, SchedulingQueues, CPUScheduling, ContextSwitch, OperationsonProcesses, InterprocessCommunication, IPCinShared-MemorySystems, ExamplesofIPCSystems, CommunicationinClient-ServerSystems"
+                            },
+                            "page_idx": 36
+                        },
+                        {
+                            "Original_text": "什麼是CPUScheduler?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "the concept of CPUScheduler"
+                            },
+                            "page_idx": 37
+                        },
+                        {
+                            "Original_text": "CPUScheduling\n·CPUScheduler()rProcessScheduler)\n一SelectaprocessfromreadyqueuesandallocatesaCPUcoretOit\nSeethefollowingtwoslides\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "CPU Scheduling Overview",
+                                    "Content": "• CPU scheduler selects a process from the ready queue\n• Allocates a CPU core to the selected process\n• Refer to the next two slides for more details"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "CPU Scheduling and Process Allocation"
+                            },
+                            "page_idx": 38
+                        },
+                        {
+                            "Original_text": "CPUScheduler\na=a+1,·\nUserMode\nUser\nChangeexecuteerppc\nApplication\nKernel\nMode\nCPUscheduler\nIf(currentprocessexecutes勿g)\nselectanotherprocesstOr\nHardware\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "CPU Scheduling and User Mode"
+                            },
+                            "page_idx": 39
+                        },
+                        {
+                            "Original_text": "Example:\nSchedulerislnvokedwhenaTimerlnterruptOccurs\n,eax,\ninterrup\nTimer\nCPUScheduler\nlnterruptService\nRoutine(ISR)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Scheduler invoked on Timer Interrupt"
+                            },
+                            "page_idx": 40
+                        },
+                        {
+                            "Original_text": "衤甫充:CPUschedulerisnotonlyinvoked\nwhentimerinterruptsfire.\n第五章會介紹\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "第五章會介紹"
+                            },
+                            "page_idx": 41
+                        },
+                        {
+                            "Original_text": "CPUScheduling(CPU)\n·CPUschedulerisinvokedveryfrequently\n一Atleastoncevery100milliseconds\n·But,CPUschedulercannotbelnvokedextremelytoofrequently\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "CPU Scheduling Frequency",
+                                    "Content": "• CPU scheduler is invoked very frequently\n• At least once every 100 milliseconds\n• Cannot be invoked too frequently"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "CPU Scheduling Basics"
+                            },
+                            "page_idx": 42
+                        },
+                        {
+                            "Original_text": "CPUScheduling\n·SomeOSintroducesanintermediatefromOfscheduling\n-Swapping\n·Swapping\n一Removesprocesses丘ormemoryWhenmemoryspaceiSnotenough\n·Reducethedegreeofmultiprogramming\n一Atsomelatertime,theprocesscanbere-introducedintOmemory\n·lncreasethedegreeofmultiprogramming\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Swapping in CPU Scheduling",
+                                    "Content": "• Removes processes from memory when memory space is not enough\n• Reduces the degree of multiprogramming\n• Processes can be re-introduced into memory later\n• Increases the degree of multiprogramming"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "CPU Scheduling and Swapping Mechanisms"
+                            },
+                            "page_idx": 43
+                        },
+                        {
+                            "Original_text": "SwapOutandSwapln\nprogram\nprogram\nmaln\nmemorv\nswapout\nswapln\n0囗1囗2囗3囗\n4\n5\n6\n7\n8囗9囗10囗11囗\n12囗13囗14囗15囗\n16囗171819\n20囗21囗22囗23囗\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Swap Out and Swap In memory management"
+                            },
+                            "page_idx": 44
+                        },
+                        {
+                            "Original_text": "CPU排程演算法會在第五章介紹!\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "CPU scheduling algorithms introduction"
+                            },
+                            "page_idx": 45
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n一SchedulingQueues\n一CPUScheduIing\n-ContextSw'ch\n·Operationsonrocesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Scheduling Queues, CPU Scheduling, Context Switch, Operations on processes, Interprocess Communication, IPC in Shared-Memory Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 46
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Context Switching Mechanisms",
+                    "Starting_page": 48,
+                    "Pages": [
+                        {
+                            "Original_text": "CPU排程演算法會伴隨c皿textswitch!\n亻十麼是ContextSwitch?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context Switch in CPU Scheduling"
+                            },
+                            "page_idx": 47
+                        },
+                        {
+                            "Original_text": "ContextSwitch\nCxscCPUswitchesfromoneprocesstoanotherprocess\nOSmustsavethestate(context)oftheoldprocessinitsPCB\nThenOSmustestorethesavedstate(context)ofthenewprocessfromPCB\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Context Switching in OS",
+                                    "Content": "• CPU switches from one process to another\n• OS saves the state of the old process in its PCB\n• OS restores the saved state of the new process from PCB"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context Switch in Operating Systems"
+                            },
+                            "page_idx": 48
+                        },
+                        {
+                            "Original_text": "複習:\n問題:Whatisastate?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "What is a state?"
+                            },
+                            "page_idx": 49
+                        },
+                        {
+                            "Original_text": "複習:Storage-DeviceHierarchy\nstoragecapacity\naccesstime\nregisters\n1öllP-WS\npnmary\ncache\nstorage\nvolatile\nstorage\nmalnmemory\nnonvolatile\nnonvolatilememory\nstorage\nsecondary\nstorage\nhard-diskdrives\nopticaldisk\n」0一S\ntertiary\nstorage\nmagnetictapes\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Storage Device Hierarchy",
+                                    "Content": "• Types of storage: primary, secondary, tertiary\n• Storage capacities vary\n• Access times differ between types\n• Role of volatile vs. non-volatile memory\n• Examples: hard disk drives, optical disks, magnetic tapes"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Storage Device Hierarchy"
+                            },
+                            "page_idx": 50
+                        },
+                        {
+                            "Original_text": "ContextSwitch(Cont,)\n一CPUregisters(includingProgramCounter),\n一Memoryareas\n一Varioustables\n一Theyconstittetheenvironment\nOfarocess.\norcontext\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Context Switching Essentials",
+                                    "Content": "• CPU registers (including Program Counter) are involved\n• Memory areas are utilized during context switching\n• Various tables contribute to the process environment\n• These elements constitute the context of a process"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context switch in operating systems"
+                            },
+                            "page_idx": 51
+                        },
+                        {
+                            "Original_text": "複習:\n問題:為什麼要儲存state?然後復原state?\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "儲存與復原state的原因",
+                                    "Content": "• 方便回溯到之前的狀態\n• 可以應對意外錯誤或崩潰\n• 增加系統的穩定性和可靠性"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Importance of saving and restoring state"
+                            },
+                            "page_idx": 52
+                        },
+                        {
+                            "Original_text": "複習\n:WithoutStateSaveandRestore\neax\nebx\nteax,\neax\n59\n,ebx,\nOS\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Without State Save and Restore"
+                            },
+                            "page_idx": 53
+                        },
+                        {
+                            "Original_text": "ContextSwitch\nP1's\n=0x1000\neax=10,ex=5\n=9,edx=11\nsave\nconte\nprocessPI\ncontext\nprocessPI\nrestore\nCPU\n=10,ebx=5,\neax\n=9,edx=11\neCX\npc=0x1000…\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context Switch in Process Management"
+                            },
+                            "page_idx": 54
+                        },
+                        {
+                            "Original_text": "所以,切換ProcessB$(ContextSwitch),\n必須要儲存當下process的state,然後復原\n接下來要執行的process的state!\n儲存的state記錄會在PCB當中(Page18)·\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Context Switching",
+                                    "Content": "• 切換ProcessB需要儲存當前process的state\n• 需復原即將執行的process的state\n• 儲存的state記錄在PCB當中"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process state saving and restoration"
+                            },
+                            "page_idx": 55
+                        },
+                        {
+                            "Original_text": "ContextSwitch\nt0\nP0's\nprgmCtr\nregisters\netc.\nprocessor\nprocess\nSave\nContextswitch\nprgmCtr\nregisters\netC-\nRestore\nTime\nprocess\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Context Switching Process",
+                                    "Content": "• Saving process state\n• Updating program counter\n• Restoring process state"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context Switching in Process Management"
+                            },
+                            "page_idx": 56
+                        },
+                        {
+                            "Original_text": "ContextSwitch1\nouteax,\n,eax,\n59\nouteax,)x3\nebx\nebx,e\ncontext\neax\nPIPCB\n=10;ebx=50\nP2PCB\neax=59;\nOS\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context switching in operating systems"
+                            },
+                            "page_idx": 57
+                        },
+                        {
+                            "Original_text": "context\neax\nebx\nContextSwitch2\neax,0x60;\n\"~eax,e\n\"eax,e\nPIPCB\n—IO;ebx=5•\neax¯\nP2PCB\neax=100•\nOS\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context switching in operating systems"
+                            },
+                            "page_idx": 58
+                        },
+                        {
+                            "Original_text": "asn0statet0Be\nsaved/Restored\nPO's\nprocessPO\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "asn0statet0Be saved and Restored PO's"
+                            },
+                            "page_idx": 59
+                        },
+                        {
+                            "Original_text": "ContextSwitch(Cont.)\n·Context-switchtime1S\noverhead\nSystemdoes\nexecuteuserapplicat•onswhileswitching\nnot\n·Hardwaresupportforreucingcontextswitchoverhead\nExistenceOfspecialinstructions\n·AsingleinstructiontOsave/loadallregisters\n·(Seep.13inChapter5ofAssemblyLanguage)\nSunUItraSPARCprovidesmultiplesetsofregisters\n·Contentswitch丶changetOusethecurrentregisterset\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Context Switch Overview",
+                                    "Content": "• Context switch time overhead\n• System executes user applications while switching\n• Hardware support reduces context switch overhead\n• Special instructions exist for saving/loading all registers\n• Example: Sun UltraSPARC provides multiple sets of registers\n• Context switch changes to use the current register set"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Context switching and hardware support"
+                            },
+                            "page_idx": 60
+                        },
+                        {
+                            "Original_text": "複習:ReIatedlnstructions\nUSHFDndOPFD\nPushandpoptheELAGSregister\npushes32-bite\n-purposeregistersonstack\nS\nrd·EAX,ECX,EDX,EBX,ESP,EB,ESI,EDI\nPOPADopsthesameregistersoffstckinreverseorder\nHAandPOPAdothesamefor16-biregisters\n.data\nsaveFIagsDWORD?\n.code\npushfd\npushflagsonstack\npopsaveFlags;copyintOavariable\nushsaveFlags;pushsavedflagvalues\nopfd\n;copyintOavariable\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "旗標處理",
+                                    "Content": "• 使用 PUSHFD 和 POPFD 操作來管理32位標誌寄存器\n• PUSHAD 和 POPAD 用於16位寄存器\n• 將標誌寄存器推入堆疊以保存狀態\n• 從堆疊彈出標誌寄存器以恢復狀態"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Stack operations for register manipulation"
+                            },
+                            "page_idx": 61
+                        },
+                        {
+                            "Original_text": "MultipleSetsofRegisters\nCP\neax1\n=8;\n=6·\nprocessor\nprocessP1\neax2\n=4;\nebx2=3·\necx2\n=7;\nedx2=8•\nContextswitch\nTime\nprocessP2\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Multiple Sets of Registers",
+                                    "Content": "• Multiple sets of registers facilitate context switching\n• Each process has its own register values\n• Reduces time needed for context switching"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Multiple Sets of Registers in Context Switching"
+                            },
+                            "page_idx": 62
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n-Processcreation\n一Processtermination\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "ProcessConcept, ProcessScheduling, OperationsonProcesses, Processcreation, Processtermination, InterprocessCommunication, IPCinShared-MemorySystems, ExamplesofIPCSystems, CommunicationinClient-ServerSystems"
+                            },
+                            "page_idx": 63
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Process Creation and Termination",
+                    "Starting_page": 65,
+                    "Pages": [
+                        {
+                            "Original_text": "問題:當Doub1eC1ick某一個應用程式,\n發生了什麼事情呢?\n角合:Windowstä条,官(orSheIIinLinux)會\ncreate—亻固process()r青OScreates—亻固process),\n執行應用程式\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "應用程式啟動過程",
+                                    "Content": "• 當Doub1eC1ick某應用程式，OS開始執行過程\n• Windows 或 Shell in Linux 建立新進程\n• OS 負責創建及執行應用程式"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Double Click application process creation"
+                            },
+                            "page_idx": 64
+                        },
+                        {
+                            "Original_text": "ProcessCreation\n·Aprocessmaycreateseveralnewprocesses\n一Thecreatingprocessiscalledparent\n一Thenewprocessesarecalled\nchildrenofthatprocess\n一Forminga\nofprocesses(nextslide)\ntree\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Creation Overview",
+                                    "Content": "• A process can create several new processes\n• The creating process is called the parent\n• The new processes are called children\n• Forms a tree structure of processes"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process creation and parent-child relationships"
+                            },
+                            "page_idx": 65
+                        },
+                        {
+                            "Original_text": "ATree\nbash\npid=8416\nOfProcessesinLinux\nlogind\npid=8415\nSYSm\npid1\npython\npid=2808\nPS\npid=9298\nVlm\npid=9204\nsshd\npid=3028\nsshd\npid=3610\ntcsh\npid=4005\nOSidentifyprocessesaccordingtoauniqueprocessidentifier(or\npid)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Processes and their identifiers in Linux"
+                            },
+                            "page_idx": 66
+                        },
+                        {
+                            "Original_text": "ProcessCreation(Cont,)\n·Execution\nParentandchildrenexecuteconcurrently,or\nParentwaitsuntilchildrenterminate\n·wait()systemcallinLinux\n·Addressspace\nChildduplicateofparent(hastheameprogramanddataastheparent),or\n·fork()systemcallcreatesanewprocssinLinux\nChildhasanewprogramloadeditoit\n·exec()systemcallreplacestheprocess'memoryspacewithanewprograminLinux\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Creation in Linux",
+                                    "Content": "• Parent and children execute concurrently or parent waits for children to terminate\n• wait() system call in Linux for waiting on child processes\n• Child process is a duplicate of the parent or has a new program loaded\n• fork() system call creates a new process in Linux\n• exec() system call replaces the process's memory space with a new program in Linux"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process creation and execution in Linux"
+                            },
+                            "page_idx": 67
+                        },
+                        {
+                            "Original_text": "The page is empty.\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Empty Page"
+                            },
+                            "page_idx": 68
+                        },
+                        {
+                            "Original_text": "0\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Lecture 0: Introduction to Concepts"
+                            },
+                            "page_idx": 69
+                        },
+                        {
+                            "Original_text": "UNIXProcessCreation\n·Seethefollowingslide!\n·Eachprocesshasaunique\nprocessidPID\n·Anewprocessiscreatedbythefork()systemcall\nThenew(child)proces\nlicatestheaddressspaceOftheparentprocess\nChiIdandparentcontinueexec\nattheinstructionafterthefork()\nsystecall\nChi:returnvalueofforkis0\narenreturnvalueofforkisPIDofthechildprocess\n·Theexeclp()systemcallisusedtoloadanewbinaryfileintomemory一\ndestroyingtheoldcode\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "UNIX Process Creation",
+                                    "Content": "• Each process has a unique process ID (PID) \n• A new process is created by the fork() system call \n• The new (child) process replicates the address space of the parent process \n• Child and parent continue execution after the fork() system call \n• Return value of fork() is 0 for the child process; PID of the child for the parent process \n• The execlp() system call is used to load a new binary file into memory, destroying the old code"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "UNIX process creation and management"
+                            },
+                            "page_idx": 70
+                        },
+                        {
+                            "Original_text": "CProgramForkingProcess\n<stdio.h>\n#include\nmain(intargc,char*argv囗)\nintpid;\n/*fork\ntherprocess*/\npidfork(\nif(pid<0){/*erroroccurred*/\nfprintf(stderr,\"ForkFaiIed\");\nexit(—l);\n0)/*chi1dprocess*/\nelse主工(P1d==\n\"IS\",NULL);\nexeclp(\"/bin/ls\"\ne1se{/*parentprocess*/\n/*parent主1工waitforthechildtOcomplete*/\nvait(NULL);\nprintf(\"Chi1dComp1ete\");\nexit(O);\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "C Program Forking Process"
+                            },
+                            "page_idx": 71
+                        },
+                        {
+                            "Original_text": "pid=15\n3\npid=\n0\n/*forkanotherprocess*/\nfork();\nifCpid<0){/*erroroccurred*/\n'ForkFaiIed\")\nfprintfCstderr,\nex主(一1);\n0)/*childprocess\nexeclp(\"/bin/ls'\n\"IS\",NULL);\nwaitCNULL);\nprintf(\"\nd\nCompIete\");\nmemory\nparent'\nCOde\nchild'\nCOde\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Management Concepts",
+                                    "Content": "• Use of fork() to create a new process\n• Handling errors in fork() with error messages\n• Executing a command in child process using execlp\n• Parent process waits for child to complete"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process creation and management in C"
+                            },
+                            "page_idx": 72
+                        },
+                        {
+                            "Original_text": "ProcessCreation\nresumes\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process Creation"
+                            },
+                            "page_idx": 73
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n一Processcreation一\n-Processtermination\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Operations on Processes, Process creation, Process termination, Interprocess Communication, IPC in Shared-Memory Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 74
+                        },
+                        {
+                            "Original_text": "ProcessTermination\n·Processinvokesexit()systemcall\nReturnastatusvaluewith\nitsprocessidentifiertOparent\nParentobtainsthestatusvalueandthe\nprocessidentifier\nofthechildviathe\nwait()systemcall\nThen,process'byOS\n#include<sys/wait.h>\n#include<stdlib·h>\npid\nint\nvoidexit(intstatus)\npid\npid;\n七\nstatus;\n七wait(int*stat10c);\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Termination Overview",
+                                    "Content": "• Process invokes exit() system call\n• Returns status value and process identifier to parent\n• Parent uses wait() system call to obtain status value and child's process identifier\n• Necessary includes: <sys/wait.h>, <stdlib.h>"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process Termination in Operating Systems"
+                            },
+                            "page_idx": 75
+                        },
+                        {
+                            "Original_text": "主n七main()(\nintstatus;\nif(fork()==0)/*childprocess*/\n}else{\nif(execlp(xxxx)<0){\nexit(2);\neⅩ主七(0);\n/*parentprocess*/\nintchildpid=wait(&status);\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process creation and management in C"
+                            },
+                            "page_idx": 76
+                        },
+                        {
+                            "Original_text": "ProcessTerminationinLinux\n·Whenaprocessterminatesandbeforeparentcallswait()\n(殭屍)process\n一Theterminatedprocessbecomesa\nzombie\n·Sinceitsprocesscontrolblock(PCB)stillexistsforstoringthe\nexitstatus\nvalue\n·Seethefollowingtwoslides\n·But,ifpar\nOtinvokewait()andisterminated\n一Thechildprocessbecomesasorphans\n一Thus,Linuxsetthechild'sparenttothe\ninit\nprocessperiodicallycallswait()t0collectchildren'sexitstatusvalue\ninit\n·Seethefollowingnextslide\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Process Termination in Linux",
+                                    "Content": "• Terminated process becomes a zombie until parent calls wait()\n• Zombie stores exit status in process control block (PCB)\n• If parent does not invoke wait(), child becomes an orphan\n• Orphan's parent is set to init process which periodically calls wait() to collect exit status"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Process termination and zombie processes in Linux"
+                            },
+                            "page_idx": 77
+                        },
+                        {
+                            "Original_text": "ZombieProcess\nwait()\nfork(\nex\nvalue\nstatus\nzombie\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Zombie Process in Operating Systems"
+                            },
+                            "page_idx": 78
+                        },
+                        {
+                            "Original_text": "ZombieProcess\nA=A+1;\nexit(l);\nZombie2coces\nPIPCB\nP2PCB\nexitstatus=1\nOS\nOS\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Zombie Process in Operating Systems"
+                            },
+                            "page_idx": 79
+                        },
+                        {
+                            "Original_text": "The page is empty.\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Empty",
+                                "Content": "The page is empty."
+                            },
+                            "page_idx": 80
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\nlnterprocessCommunication\n·IPCinShared-MemorySystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 81
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Section": "Interprocess Communication Methods",
+            "Starting_topic": 7,
+            "Topics": [
+                {
+                    "Topic": "Interprocess Communication Techniques",
+                    "Starting_page": 83,
+                    "Pages": [
+                        {
+                            "Original_text": "CooperatingProcesses\n·Processesmaysharedatawitheachothercooperating\nprocesses\n一E.g.,forinformat•\nsharing\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Cooperating Processes",
+                                    "Content": "• Processes may share data with each other\n• Example: for information sharing"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Cooperating Processes in Data Sharing"
+                            },
+                            "page_idx": 82
+                        },
+                        {
+                            "Original_text": "lnterprocessCommunication(IPC)\n·Cooperatingprocessesreqtllrean\ninterprocesscommunication(IPC)\nmechanism\n·TWOcommonmodels\nMessagepassing\nSharedmemory\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Interprocess Communication (IPC)",
+                                    "Content": "• Mechanism for cooperating processes\n• Two common models: Message passing; Shared memory"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Interprocess Communication (IPC) models"
+                            },
+                            "page_idx": 83
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Message Passing and Shared Memory",
+                    "Starting_page": 85,
+                    "Pages": [
+                        {
+                            "Original_text": "CommunicationsModels\nprocessA\nprocessB\nmessagequeue\nm0m1m2m3\nkeel\n(a)\nprocessA\nsharedmemory\nprocessB\nkernel\n(b)\n(a)Messagepassing.(b)Shared\nmemory\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Communication Models",
+                                    "Content": "• Message Passing: involves processes communicating through a message queue\n• Shared Memory: involves processes communicating through shared memory segment\n• Process A and Process B can use either method to exchange information"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Communication Models with Message Passing and Shared Memory"
+                            },
+                            "page_idx": 84
+                        },
+                        {
+                            "Original_text": "問題:如何實ihMessagePassing?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "the concept of iMessage Passing"
+                            },
+                            "page_idx": 85
+                        },
+                        {
+                            "Original_text": "Process\nPcess\nmemory\nCO\nMessagePassing\nreceive_msg()\nsendmsg()\nmemory\nCO\nmessagequeue\nkernel\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Message Passing in Processes"
+                            },
+                            "page_idx": 86
+                        },
+                        {
+                            "Original_text": "問題:如何實ihSharedMemory?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "如何實現共享記憶體"
+                            },
+                            "page_idx": 87
+                        },
+                        {
+                            "Original_text": "SharedMemory\nprocessA\nsharedmemory\nprocessB\nkernel\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Shared memory in inter-process communication"
+                            },
+                            "page_idx": 88
+                        },
+                        {
+                            "Original_text": "lnterprocessCommunication(IPC)(Cont,)\n·Compar1sons\nMessagepassing\n·UsefuIforexchangingsmalleramountsofdata\n·EasiertOimplement\n·SIower;reqmressystemcallsforsending/receivmgmessages(viamemorycopying)\n·NOconflictneedtobeavoided\nSharedmemory\n·Faster;requiresnosystemcallswhenreading/writingdata\n·Butneedprotectionandsynchronization\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Comparisons of IPC Methods",
+                                    "Content": "• Message passing is useful for exchanging smaller amounts of data\n• Easier to implement but slower due to system calls for sending/receiving messages\n• No conflict needs to be avoided in message passing\n• Shared memory is faster, requiring no system calls for reading/writing data\n• Shared memory needs protection and synchronization"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Interprocess Communication comparisons"
+                            },
+                            "page_idx": 89
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Section": "Advanced Topics in Process Management",
+            "Starting_topic": 9,
+            "Topics": [
+                {
+                    "Topic": "Microkernel Concepts and Comparisons",
+                    "Starting_page": 91,
+                    "Pages": [
+                        {
+                            "Original_text": "複習:Microkerne\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel concept description"
+                            },
+                            "page_idx": 90
+                        },
+                        {
+                            "Original_text": "Micr0kernelSystemStructure\napplication\nprogram\ninterprocess\ncommunication\nmessages\nsystem\nmessages\nmemory\nmanagment\nmicrokernel\nhardware\ndevice\ndriver\nCPU\nscheduling\nuser\nmode\nkernel\nmode\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Microkernel System Structure",
+                                    "Content": "• Applications communicate via interprocess communication\n• Uses messages for communication between processes\n• Microkernel handles memory management and CPU scheduling\n• Device drivers operate in user mode and kernel mode"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel System Structure"
+                            },
+                            "page_idx": 91
+                        },
+                        {
+                            "Original_text": "問題:為何Microkerne1效能不好?\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel performance issues"
+                            },
+                            "page_idx": 92
+                        },
+                        {
+                            "Original_text": "Micr0kernel(Cont,)\nAdvantages:\nEasiertoextendtheOS\nByaddingnewservicestOuserspaceanddOnotrequirekernelmodification\nEasiertOpotheOStOnewarchitectures\nThekernelissmallandthechangestendtobefewer\nMorereliableand1oresecure\n·MOStservlcesarerunmngasuserprocesses\nIfaservicefailed,therestoftheOSremamsuntouched\nDisadvantages:\nPerformance\"e\"\netweences\nmessagepassmg\nWindowNT:microkernel,WindowsXP:amonolithickernel\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Advantages of Microkernel",
+                                    "Content": "• Easier to extend the OS by adding new services to user space without kernel modification\n• Easier to port the OS to new architectures due to small kernel and fewer changes\n• More reliable and secure as most services run as user processes; if a service fails, the rest of the OS remains untouched"
+                                },
+                                {
+                                    "Title": "Disadvantages of Microkernel",
+                                    "Content": "• Performance overhead due to message passing\n• Example comparison: Windows NT uses microkernel, whereas Windows XP has a monolithic kernel"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel advantages and disadvantages"
+                            },
+                            "page_idx": 93
+                        },
+                        {
+                            "Original_text": "複習結束:Micr0kerne1\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel review"
+                            },
+                            "page_idx": 94
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\nIPCinShared-MemorySystems\n·IPCinMessagePassingSystems\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, IPC in Message Passing Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 95
+                        },
+                        {
+                            "Original_text": "Shared-Memory\n·Sharedmemory\ntherestrictionthatoneprocesscannot\nremove\naccessanotherprocess'Smemory\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Shared Memory Restrictions",
+                                    "Content": "• One process cannot access another process's memory\n• Access is restricted for protection"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Shared-Memory in Processes"
+                            },
+                            "page_idx": 96
+                        },
+                        {
+                            "Original_text": "SharedMemory\nprocessA\nsharedmemory\nprocessB\nkernel\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Shared Memory in Process Communication"
+                            },
+                            "page_idx": 97
+                        },
+                        {
+                            "Original_text": "Example:Producer-ConsumerPr0blem(Skip!)\n·Aparadigmfor\ncooperatingprocesses\n一Producerprocessproducesinformationthatisconsumedbya\nconsumerprocess\n·UseabuffertOcontajnthedataitems\nbufferinand'o»tvariablesusesharedmemory\n一Andthe\n#defineBUFFERzIO\ntypedefstruct(\nitem;\n//insharedmemory\nitembuffer【BUFRSIZ〕;\nintin=0;\nintout\n//insharedmemory\n//insharedmemory\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Producer-Consumer Problem",
+                                    "Content": "• Paradigm for cooperating processes\n• Producer creates information consumed by a consumer\n• Uses a buffer to contain data items\n• Utilizes shared memory for buffer and variables"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Producer-Consumer Problem"
+                            },
+                            "page_idx": 98
+                        },
+                        {
+                            "Original_text": "Bounded-Buffer-Shared-MemorySolution\n(Skip!)\n:nextfreeposition\n#defineBUFFERSIZE10\nTypedefstruct\n:firstⅡposition\nout\nBufferisemÜ\nitem;\nitembuffer[BUFFER_SlZE];\n111==out\nintin=0;\nBufferis\nintout=0;\n((in+1/OBUFFERSIZE)=1e\nout\nln\nO囗囗囗囗O口\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Bounded Buffer Shared Memory Solution"
+                            },
+                            "page_idx": 99
+                        },
+                        {
+                            "Original_text": "Bounded-Buffer一Shared-MemorySolution(Skip!)\nitemnextProduced•\nwhile(1Ⅱ\nwhile(((in+1)%BUFFER_SIZE)=\n;/、donothing、/\nbufferfin]:nextProduced;\nin:()n+1)%BUFFER_SIZE;\nProduce\nitemnextConsumed;\nwhile(1Ⅱ\n;/、d0nothing+/\nnextConsumed:buffer[out];\n011t:(out+1)%BUFFERSIZE;\nConsumer\nProblem?Bothprocessesattempttoaccessthebufferconcurrently?\n=>AddressedinChapter6andChapter7\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Bounded-Buffer Solution Overview",
+                                    "Content": "• Shared memory solution for producer-consumer problem\n• Producer and consumer access a shared buffer\n• Addresses synchronization issues in concurrent access\n• Referenced in Chapters 6 and 7"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Bounded Buffer Shared Memory Solution"
+                            },
+                            "page_idx": 100
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\nIPCinMessagePassingSystems(skip!)\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, IPC in Message Passing Systems, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 101
+                        },
+                        {
+                            "Original_text": "Message-PassingSystems\nMessage-passingprovidestWOoperations:\nsend(message)\nreceive(message)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Message-Passing Operations",
+                                    "Content": "• Two main operations: send(message) \n• Two main operations: receive(message)"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Message-Passing Systems Operations"
+                            },
+                            "page_idx": 102
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\nIPCinMessagePassingSystems\n-Synchronousorasynchronouscommunication\n·ExamplesofIPCSystems\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Process Concept, Process Scheduling, Operations on Processes, Interprocess Communication, IPC in Shared-Memory Systems, IPC in Message Passing Systems, Synchronous or asynchronous communication, Examples of IPC Systems, Communication in Client-Server Systems"
+                            },
+                            "page_idx": 103
+                        },
+                        {
+                            "Original_text": "SynchronousorAsynchronous\n·Messagepassingmaybeeitherblockingornon-blocking\n一Alsoknownas\nsynchronousorasynchronous\n·Blockmg-processsuspendeduntilI/Ocompleted\n一EasytOusebutinsufflcientforsomeneeds\n·Nonblocking-I/Ocallreturnsimmediatelywithasmuchas\ndataavailable\n一Withreturnvaluindicatinghowmanybytesweretransferred\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Synchronous vs Asynchronous",
+                                    "Content": "• Message passing can be blocking or non-blocking\n• Blocking: process suspended until I/O is completed; easy to use but insufficient for some needs\n• Non-blocking: I/O call returns immediately with available data; includes return value indicating number of bytes transferred"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Synchronous and Asynchronous Message Passing"
+                            },
+                            "page_idx": 104
+                        },
+                        {
+                            "Original_text": "SynchronousorAsynchronousI/OExample\nProgram1\nProgram2\nrecvfrom(\nrecvfrom()\nOS\n網路卡\nNeÅ#el\nMode\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Synchronous or Asynchronous I/O, Example, Program1, Program2, recvfrom(), OS, 網路卡, NeÅ#el, Mode"
+                            },
+                            "page_idx": 105
+                        },
+                        {
+                            "Original_text": "BlockingI/O\napplication\nprocessbl«ks\na|ltOrecvfrom\ndatagram\n罒datagramready\nwaitfordata\nm記y\ncopydatagram\nkerneluser\ncopyp\nreturnOK\nFigure6·1ockmngI/Om(\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Blocking I/O operations in applications"
+                            },
+                            "page_idx": 106
+                        },
+                        {
+                            "Original_text": "Non-BlockingI/O\nprocessrey\ncallsrecvfro\ns••'tiforanOK\nurn(ing)\napplicat•on\nrecvfrom\nrecvfrom\nreCVf\ndatagram\n$temcall\nEI•X)ULDBLCCK\nE&X)ULDBLCCK\nsystem|\nE%•R)ULDBI...OCK\nsystem|\nreturnOK\nFigure2Nonbl«king|/0\nkernel\nnodatagramready\n0dy\nwaitforda\nnodatagramready\ndatagramready\ncopydatagram\ncopydata“、\nkcrneltouser\ncopycomplete\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Non-Blocking I/O Operation"
+                            },
+                            "page_idx": 107
+                        },
+                        {
+                            "Original_text": "BIockingandNonblockingI/O\n·Blockingisconsideredsynchronous\n一Blockingsend:senderblockeduntilthemessageisreceivedbythe\nrecelver\n一Blockingreceive:receiverblocksuntilamessageisavailable\n·Non-blockingisconsideredasynchronous\n一Non-bIockingsend:sendersendsthemessageandresumesoperation\n一Non-blockingreceive:receiverretrieveseitheravalidmessageora\nnull\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Blocking and Non-Blocking I/O",
+                                    "Content": "• Blocking is synchronous\n• Blocking send: sender blocked until message received\n• Blocking receive: receiver blocked until message available\n• Non-blocking is asynchronous\n• Non-blocking send: sender sends message and resumes operation\n• Non-blocking receive: receiver retrieves valid message or null"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Blocking and Non-blocking I/O"
+                            },
+                            "page_idx": 108
+                        },
+                        {
+                            "Original_text": "Outline\n·ProcessConcept\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\n·IPCinShared-MemorySystems\n·IPCinMessagePassingSystems\n·ExamplesofIPCSystems(Skip!)\n·CommunicationinClient-ServerSystems\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "ProcessConcept, ProcessScheduling, OperationsonProcesses, lnterprocessCommunication, IPCinShared-MemorySystems, IPCinMessagePassingSystems, ExamplesofIPCSystems(Skip!), CommunicationinClient-ServerSystems"
+                            },
+                            "page_idx": 109
+                        },
+                        {
+                            "Original_text": "POSIXSharedMemory\n·shm_open():\n一createoropenasharedmemoryObject\n·mmap():\n一memorymapthesharedmemory0bject\n一Then,accessthesharedmemoryasordinarymemory\n·shmunlink():\n一removethesharedmemoryObject\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "POSIX Shared Memory Functions",
+                                    "Content": "• shm_open(): create or open a shared memory object\n• mmap(): memory map the shared memory object; access the shared memory as ordinary memory\n• shmunlink(): remove the shared memory object"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "POSIX Shared Memory Operations"
+                            },
+                            "page_idx": 110
+                        },
+                        {
+                            "Original_text": "POSIXSharedMemory:\n#c工、ie\n:#〕nc工11d.e\n:#nc工、id.e\n:#nc工1.id.e\n:#nc工、id.e\n#c工、ie\n/*thesize(主bytes)0sh「a.redmemoryobject\nconstSIZE4096·\n/*〔.,e0thesharedmemoryObject*/\n\"OS\"\n/*stringstOsharedmemory*/\nProducer\nC「Ch「SSage一一0\nC亠」Ch「\n\"He工工0\",\n/*sharedmemory工edescriptor*/\nn.shm—fd-\n/*pointert0sharedmemoryobect*/\n•04.*ptr;\n/*createthesharedmemory0ject*/\n-一opeCna-me,O—CREAT|O—RDRW,0666)\nshm—fd\n/*CO皿gurethesize0thesharedmemoryObject*/\nftruncate(shm—fd,SIZE),\n/*memorymapthesharedmemoryObject*/\nmmap(0,SIZE,PROTWRITE,MAP—SHARED,\nptr\nspr士(ptr,\"%S\",message—O)\n(message0)\nsprintf(ptr,\"%S\",message—l);\nptr」+-strlen(message—l)\nreturn0·\nshm—fd\n0);\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "POSIX Shared Memory Overview",
+                                    "Content": "• Process creation for shared memory involves functions like 'open' and 'ftruncate'\n• Memory mapping done using 'mmap' with specified protection and sharing attributes\n• Data can be written and formatted using 'sprintf' on the mapped memory"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "POSIX Shared Memory Implementation"
+                            },
+                            "page_idx": 111
+                        },
+                        {
+                            "Original_text": "POSIXSharedMemory:\n#include<stdio·五>\n#include<stlib·五>\n#include<fcntl·h>\n#include<sys/shm·五>\n#include<SYS/stat·h>\nintmain()\nConsumer\n/*thesize()nbytes)0sharedmemoryobject*/\nconstintSIZE4096;\n/*name0thesharedmemoryObject*/\nC0StChar*.\n/*sharedmemory工ee\nintshm—fd;\n/*POintertOsharedmemoryObeCt*/\nvoid*ptr,\n/*openthesharedmemoryobject*/\nshm—fd=s一ope(e,O-RDONLY,0666);\n/*memorymapthesharedmemoryobject*/\nptr=mmap(0,SIZE,PROT-READ,MAPSHARED\n/*readrothesharedmemorv01ect*/\nprintf(t'%st',(char*)ptr);\n/*removethesharedmemory0bject*/\nshm—unlink(name);\nreturn0;\nshm-fd,\n0);\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "POSIX Shared Memory Example",
+                                    "Content": "• Includes necessary headers for shared memory; \n• Defines constants for size and name of shared memory object; \n• Opens shared memory object in read-only mode; \n• Maps shared memory object to process's address space; \n• Reads data from shared memory; \n• Unlinks (removes) shared memory object at the end."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Using POSIX Shared Memory in C"
+                            },
+                            "page_idx": 112
+                        },
+                        {
+                            "Original_text": "Chapter3:\n·OverV1ew\n·ProcessScheduling\n·OperationsonProcesses\n·lnterprocessCommunication\n·ExamplesofIPCSystems\nProcesses\n·CommunicationinClient-ServerSystems(Skip!)\n-Sockets\n-RemoteProceduæ-Calls(RPC)\n-pipe()\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Chapter 3",
+                                    "Content": "• Process Scheduling\n• Operations on Processes\n• Interprocess Communication\n• Examples of IPC Systems\n• Communication in Client-Server Systems\n• Sockets\n• Remote Procedure Calls (RPC)\n• pipe()"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Overview, Process Scheduling, Operations on Processes, Interprocess Communication, Examples of IPC Systems, Communication in Client-Server Systems, Sockets, Remote Procedure Calls (RPC), pipe()"
+                            },
+                            "page_idx": 113
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

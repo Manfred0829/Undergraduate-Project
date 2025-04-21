@@ -1,0 +1,56 @@
+[
+    {
+        "Topic": "Concepts of Process Management",
+        "k_start": 0,
+        "k_end": 10,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Process Control Block and Management",
+        "k_start": 10,
+        "k_end": 13,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Process Scheduling and Queues",
+        "k_start": 13,
+        "k_end": 14,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "CPU Scheduling Algorithms",
+        "k_start": 14,
+        "k_end": 20,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Context Switching Mechanisms",
+        "k_start": 20,
+        "k_end": 29,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Process Creation and Termination",
+        "k_start": 29,
+        "k_end": 36,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Interprocess Communication Techniques",
+        "k_start": 36,
+        "k_end": 38,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Message Passing and Shared Memory",
+        "k_start": 38,
+        "k_end": 40,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Microkernel Concepts and Comparisons",
+        "k_start": 40,
+        "k_end": 53,
+        "Wrong_count": 0
+    }
+]

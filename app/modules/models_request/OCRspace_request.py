@@ -161,3 +161,4 @@ class OCRspaceRequest(LazySingleton):
 
     def _change_token(self):
         self.TOKEN_INDEX = (self.TOKEN_INDEX + 1) % self.TOKEN_NUM
+        print(f"==> Changing token to: {self.TOKEN_LIST[self.TOKEN_INDEX][:6]}")

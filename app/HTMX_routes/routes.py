@@ -309,7 +309,12 @@ def htmx_delete_subject():
     else:
         return jsonify(result), 500
 
-'''
+
+# 重點查詢片段
+@htmx_bp.route('/query_keypoint')
+def query_keypoint_fragment():
+    return render_template('HTMX_templates/query_keypoint.html')
+
 @htmx_bp.route('query_keypoint/<subject>/<lecture_name>')
 def query_keypoint(subject, lecture_name):
     """API端點：查詢指定講義的重點"""
@@ -326,4 +331,3 @@ def query_keypoint(subject, lecture_name):
     except Exception as e:
         print('error:', e)
         return jsonify({'success': False, 'error': str(e)}), 500
-'''

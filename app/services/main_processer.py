@@ -184,7 +184,7 @@ def processing_lecture(subject, pdf_path):
         
         # 限制處理頁數，防止API成本過高 (測試用)
         max_pages = min(120, len(img_list))
-        pages_list = OCRspace.processing_handouts_OCR(img_list[0:max_pages],language='cht')
+        pages_list = OCRspace.processing_handouts_OCR(img_list,language='cht')
         logger.info(f"✅ OCR識別完成，共處理 {len(pages_list)} 頁")
     
         # extract keypoints process
@@ -733,3 +733,31 @@ def processing_get_history(subject, lecture_name):
 
     logger.info(f'歷史數據處理完成: \n{result}')
     return result
+
+
+def processing_query_keypoint(subject, lecture_name, query_text):
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+
+    OpenAI = OpenAI_request()
+    query_embedding = OpenAI.processing_embedding([query_text])
+    query_embedding = query_embedding[0]
+
+    # 計算每個重點的餘弦相似度
+    keypoints_embedding = [keypoint["Embedding"] for keypoint in keypoints_json]
+    target_k_idx = similarity.get_most_similar_index(query_embedding, keypoints_embedding)
+    target_keypoint = keypoints_json[target_k_idx]
+
+    # 生成重點解釋
+    explanation = OpenAI.processing_keypoint_explanation(subject, target_keypoint)
+
+    result = {
+        "Title": target_keypoint["Title"],
+        "Content": target_keypoint["Content"],
+        "Explanation": explanation["Explanation"]
+    }
+
+    return result
+
+

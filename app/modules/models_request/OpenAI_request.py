@@ -515,3 +515,27 @@ class OpenAIRequest(LazySingleton):
         
         return self.generate_embedding(text_list_trans)
 
+
+    
+    def processing_keypoint_explanation(self, subject, keypoint_json):
+        prompt = f"""
+        You are given one of the keypoints in the subject {subject}, please complete below tesk:
+
+        Create a clear and concise explanation for the keypoint to show the student, output it in the following JSON format:
+        {{
+        "Explanation": "explanation text"
+        }}
+
+        Below is a keypoint about the subject {subject}:
+        """
+
+        keypoint_prompt = "Title: " + keypoint_json["Title"] + "\nContent: " + keypoint_json["Content"]+ "\n"
+
+        notes_from_keypoint = file_service.get_notes_from_keypoint(subject, keypoint_json)
+        notes_prompt = ""
+        if notes_from_keypoint != []:
+            for note in notes_from_keypoint:
+                notes_prompt += "Student Note: " + note["Content"] + "\n"
+
+        response = self.generate_content(prompt + keypoint_prompt + notes_prompt, return_json=True)
+        
