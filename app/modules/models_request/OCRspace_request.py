@@ -2,7 +2,7 @@ import requests
 import json
 from io import BytesIO
 from PIL import Image
-
+import config 
 from app.modules.module_template import LazySingleton
 
 class OCRspaceRequest(LazySingleton):
@@ -10,15 +10,16 @@ class OCRspaceRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        import config 
 
         # 獲取 Api key
-        self.TOKEN_NUM = config.get_env_variable("OCRSPACE_API_TOKEN_NUM")
+        self.TOKEN_NUM = int(config.get_env_variable("OCRSPACE_API_TOKEN_NUM"))
         self.TOKEN_LIST = [config.get_env_variable(f"OCRSPACE_API_TOKEN_{i}") for i in range(1, self.TOKEN_NUM + 1)]
         self.TOKEN_INDEX = 0
 
         # 設定已初始化
         self._initialized = True
+
+    
 
     def _check_and_compress_image(self, image, max_size_mb=1, p_idx=-1):
         """

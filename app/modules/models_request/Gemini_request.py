@@ -1,7 +1,7 @@
 import concurrent.futures
 import time
 import json
-
+import config
 from app.modules.module_template import LazySingleton
 
 class GeminiRequest(LazySingleton):
@@ -10,7 +10,6 @@ class GeminiRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        import config 
         import google.generativeai as genai
 
         # 獲取 Api key
