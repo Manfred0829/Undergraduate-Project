@@ -20,7 +20,7 @@ class OCRspaceRequest(LazySingleton):
         # 設定已初始化
         self._initialized = True
 
-    def _check_and_compress_image(self, image, max_size_mb=1):
+    def _check_and_compress_image(self, image, max_size_mb=1, p_idx=-1):
         """
         檢查圖片大小並在需要時進行壓縮
         :param image: PIL Image 物件
@@ -37,6 +37,8 @@ class OCRspaceRequest(LazySingleton):
         
         # 如果大小超過限制，進行壓縮
         if size_mb > max_size_mb:
+            print(f"The page {p_idx+1} is too large.")
+            print("==> Compressing the image...")
             # 計算壓縮比例
             compression_ratio = (max_size_mb / size_mb) ** 0.5
             new_width = int(image.width * compression_ratio)
@@ -78,8 +80,6 @@ class OCRspaceRequest(LazySingleton):
         :param filename: The filename to send to API (can be anything with proper extension).
         :return: Result in JSON string.
         """
-        # 檢查並壓縮圖片
-        image = self._check_and_compress_image(image)
         
         # 將圖片轉為 BytesIO 格式
         img_byte_arr = BytesIO()
@@ -117,7 +117,9 @@ class OCRspaceRequest(LazySingleton):
     def processing_handouts_OCR(self, img_list, language='eng'):
         OCR_results = []
 
-        for img in img_list:
+        for i, img in enumerate(img_list):
+            # 檢查並壓縮圖片
+            img = self._check_and_compress_image(img,p_idx=i)
             
             # 嘗試使用所有可用的token
             for i in range(self.TOKEN_NUM):
@@ -131,6 +133,7 @@ class OCRspaceRequest(LazySingleton):
                         raise Exception(f"No parsed results.")
                     
                     if 'TextOverlay' not in OCR_result_json['ParsedResults'][0]:
+                        print(f"The page {i+1} is empty, using default text.")
                         page_lines = ['The page is empty.']
                     else:
                         page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
@@ -139,14 +142,14 @@ class OCRspaceRequest(LazySingleton):
                     break
                     
                 except Exception as e:
-                    print(f"OCRspace encounter error with token {self.TOKEN_INDEX}: {str(e)}")
+                    print(f"OCR page {i+1} encounter error with token {self.TOKEN_INDEX+1}: {str(e)}")
                     print(OCR_result_json)
                     
                     if i != self.TOKEN_NUM - 1:
-                        print("Trying next token...")
+                        print("==> Trying next token...")
                         self._change_token()
                     else:
-                        print("All tokens have been tried and failed.")
+                        print("==> All tokens have been tried and failed.")
                         raise e
             
 
