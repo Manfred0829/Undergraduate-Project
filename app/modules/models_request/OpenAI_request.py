@@ -2,6 +2,7 @@ import concurrent.futures
 import time
 import json
 import re
+import config
 
 from app.modules.module_template import LazySingleton
 
@@ -10,7 +11,6 @@ class OpenAIRequest(LazySingleton):
 
     def initialize(self):
         """初始化方法"""
-        import config 
         from openai import OpenAI
 
         client = OpenAI(

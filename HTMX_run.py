@@ -29,12 +29,12 @@ if __name__ == "__main__":
     app = create_app()
     
     # 1️⃣ 啟動 ngrok 並取得公開網址
-    ngrok_url = start_ngrok(PORT)
+    #ngrok_url = start_ngrok(PORT)
     
     # 2️⃣ 更新 Rebrandly 短網址
-    update_rebrandly(ngrok_url)
+    #update_rebrandly(ngrok_url)
     
     # 3️⃣ 啟動 Flask 伺服器
     print("HTMX 版本伺服器已啟動，訪問 http://localhost:5001 查看效果")
-    print(f"公網網址: {ngrok_url}")
+    #print(f"公網網址: {ngrok_url}")
     app.run(debug=False, host='0.0.0.0', port=PORT) 
