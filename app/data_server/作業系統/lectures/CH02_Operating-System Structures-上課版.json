@@ -2,138 +2,19 @@
     "Chapter": "Chapter 2: Operating System Structures",
     "Sections": [
         {
-            "Section": "Introduction and Overview of Operating Systems",
+            "Section": "Overview of Operating System Concepts",
             "Starting_topic": 1,
             "Topics": [
                 {
-                    "Topic": "Introduction to Operating Systems",
-                    "Starting_page": 1,
-                    "Pages": [
-                        {
-                            "Original_text": "Chapter 2\nOperating-System Structures\n",
-                            "Keypoints": [],
-                            "Info": {
-                                "Type": "Title",
-                                "Content": "Operating-System Structures"
-                            },
-                            "page_idx": 0
-                        },
-                        {
-                            "Original_text": "Outline\nOperating System Services\nUser and Operating-System Interface\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
-                            "Keypoints": [
-                                {
-                                    "Title": "Overview of Operating System",
-                                    "Content": "Outline of operating system components"
-                                },
-                                {
-                                    "Title": "Key Services Provided",
-                                    "Content": "Operating system services overview"
-                                },
-                                {
-                                    "Title": "User Interface",
-                                    "Content": "User and operating-system interface"
-                                },
-                                {
-                                    "Title": "System Interaction",
-                                    "Content": "System calls and services"
-                                },
-                                {
-                                    "Title": "Linking Applications",
-                                    "Content": "Role of linkers and loaders"
-                                },
-                                {
-                                    "Title": "Application Specificity",
-                                    "Content": "Why applications depend on OS"
-                                },
-                                {
-                                    "Title": "Design Considerations",
-                                    "Content": "Operating-system design and implementation"
-                                },
-                                {
-                                    "Title": "Structural Aspects",
-                                    "Content": "Overview of operating-system structure"
-                                },
-                                {
-                                    "Title": "System Startup",
-                                    "Content": "Building and booting an OS"
-                                },
-                                {
-                                    "Title": "Debugging Process",
-                                    "Content": "Operating system debugging techniques"
-                                }
-                            ],
-                            "Info": {
-                                "Type": "Outline",
-                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
-                            },
-                            "page_idx": 1
-                        },
-                        {
-                            "Original_text": "Outline\nOperating System Services\nUser and Operating-System Interface\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
-                            "Keypoints": [
-                                {
-                                    "Title": "Operating System Services",
-                                    "Content": "Overview of services provided by the OS"
-                                },
-                                {
-                                    "Title": "User and Operating-System Interface",
-                                    "Content": "Interaction between users and OS"
-                                },
-                                {
-                                    "Title": "System Calls",
-                                    "Content": "APIs for user applications to access OS"
-                                },
-                                {
-                                    "Title": "System Services",
-                                    "Content": "Essential services provided by the OS"
-                                },
-                                {
-                                    "Title": "Linkers and Loaders",
-                                    "Content": "Tools for managing program execution"
-                                },
-                                {
-                                    "Title": "Applications and OS Specificity",
-                                    "Content": "Why applications depend on specific OS"
-                                },
-                                {
-                                    "Title": "Design and Implementation",
-                                    "Content": "How OS is designed and built"
-                                },
-                                {
-                                    "Title": "Operating-System Structure",
-                                    "Content": "Components and organization of OS"
-                                },
-                                {
-                                    "Title": "Building and Booting",
-                                    "Content": "Processes of creating and starting OS"
-                                },
-                                {
-                                    "Title": "Operating System Debugging",
-                                    "Content": "Techniques for troubleshooting OS issues"
-                                }
-                            ],
-                            "Info": {
-                                "Type": "Outline",
-                                "Content": "Operating System Services; User and Operating-System Interface; System Calls; System Services; Linkers and Loaders; Why Applications Are Operating-System Specific; Operating-System Design and Implementation; Operating-System Structure; Building and Booting an Operating System; Operating System Debugging"
-                            },
-                            "page_idx": 2
-                        }
-                    ]
-                },
-                {
-                    "Topic": "Overview of Operating System Services",
+                    "Topic": "Operating System Services and Interfaces",
                     "Starting_page": 4,
                     "Pages": [
                         {
-                            "Original_text": "Operating System Services\n' OS provides\nto programs and users\nservices\nE.g.,\n• Program execution\n• Manage hardware\n",
+                            "Original_text": "OperatingSystemServices\n·OSprovides\ntOprogramsandusers\nservzces\n·Programexecution\n·Managehardware\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Program execution service",
-                                    "Content": "OS facilitates execution of programs."
-                                },
-                                {
-                                    "Title": "Hardware management service",
-                                    "Content": "OS manages and allocates hardware resources."
+                                    "Title": "Operating System Services",
+                                    "Content": "OS provides services to programs and users, including program execution and hardware management."
                                 }
                             ],
                             "Info": {
@@ -143,112 +24,43 @@
                             "page_idx": 3
                         },
                         {
-                            "Original_text": "Program 1\nProgram 2\nUser\nprogram\nexecution\noperations\nerror\ndetection\nhardware I\nfile\nsystems\ncommunication\nservices\nos\nhardware 2\nresource\nallocation\naccounting\nprotection\nand\nsecurity\nhardware\n3\n",
-                            "Keypoints": [
-                                {
-                                    "Title": "Programs Overview",
-                                    "Content": "Program 1 and Program 2"
-                                },
-                                {
-                                    "Title": "User Operations",
-                                    "Content": "User program execution operations"
-                                },
-                                {
-                                    "Title": "Error Management",
-                                    "Content": "Error detection in operations"
-                                },
-                                {
-                                    "Title": "Hardware Interaction",
-                                    "Content": "Communication services with hardware"
-                                },
-                                {
-                                    "Title": "File Management",
-                                    "Content": "File systems in operations"
-                                },
-                                {
-                                    "Title": "Resource Management",
-                                    "Content": "Resource allocation and accounting"
-                                },
-                                {
-                                    "Title": "Security Measures",
-                                    "Content": "Protection and security protocols"
-                                }
-                            ],
+                            "Original_text": "Program1\nProgram2\nUser\nprogram\nexecution\noperations\nerror\ndetection\nsystems\nresource\ncommunication\na|location\nservices\nOS\naccounting\nprotection\nand\nsecurity\nhardware3-\n",
+                            "Keypoints": [],
                             "Info": {
                                 "Type": "Outline",
-                                "Content": "Program 1, Program 2, User, program execution, operations, error detection, hardware I, file systems, communication services, os, hardware 2, resource allocation, accounting, protection and security, hardware 3"
+                                "Content": "Program1, Program2, User, program, execution, operations, error detection, systems, resource communication, allocation, services, OS, accounting, protection and security, hardware"
                             },
                             "page_idx": 4
                         },
                         {
-                            "Original_text": "Outline\nOperating System Services\nOperating-System Interface to Users\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
+                            "Original_text": "Outline\nOperatingSystemServices\nOperating-Systemlnterfacet0Users\nSystemCalls\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSystemDebugging\n",
                             "Keypoints": [],
                             "Info": {
                                 "Type": "Outline",
-                                "Content": "Operating System Services, Operating-System Interface to Users, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                                "Content": "OperatingSystemServices, Operating-Systemlnterfacet0Users, SystemCalls, SystemServices, LinkersandLoaders, WhyAppIicationsAreOperating-SystemSpecific, Operating-SystemDesignandlmplementation, Operating-SystemStructure, BuildingandBootinganOperatingSystem, OperatingSystemDebugging"
                             },
                             "page_idx": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Section": "User Interaction with Operating Systems",
-            "Starting_topic": 3,
-            "Topics": [
-                {
-                    "Topic": "User and Operating System Interface",
-                    "Starting_page": 7,
-                    "Pages": [
+                        },
                         {
-                            "Original_text": "User Operating System Interface\n' For users, fundamental approaches to interface with the OS (see\nthe following slide)\nCommand-line interface (CLI) (or command interpreter)\n— Batch interface\nGraphical User Interface (GUI)\nTouch-Screen Interface\n",
+                            "Original_text": "UserOperatingSystemlnterface\n·ForusersfundamentalapproachestointerfacewiththeOS(…\nthefollowingslide)\n一Command-lineinterface(CLI)()rcommandinterpreter)\n一Batchinterface\nGraphicalUserlnterface(GUI)\nTouch-Screenlnterface\n",
                             "Keypoints": [
                                 {
-                                    "Title": "User Interfaces Overview",
-                                    "Content": "Fundamental approaches to interface with the OS."
-                                },
-                                {
-                                    "Title": "Command-line Interface",
-                                    "Content": "CLI or command interpreter for users."
-                                },
-                                {
-                                    "Title": "Batch Interface",
-                                    "Content": "A method of executing a series of commands."
-                                },
-                                {
-                                    "Title": "Graphical User Interface",
-                                    "Content": "GUI allows interaction through visual elements."
-                                },
-                                {
-                                    "Title": "Touch-Screen Interface",
-                                    "Content": "Allows users to interact via touch."
+                                    "Title": "Types of User Interfaces",
+                                    "Content": "Users have fundamental approaches to interface with the operating system, including the following types: Command-line interface (CLI) or command interpreter, Batch interface, Graphical User Interface (GUI), and Touch-Screen Interface."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "User Operating System Interface"
+                                "Content": "User Operating System Interfaces"
                             },
                             "page_idx": 6
                         },
                         {
-                            "Original_text": "User Operating System Interface\n• For us rs, fundamental approaches to interface with the OS (see\nthe followi g slide)\nCo\n- Bat\n— Gra\n- Tou\nmand-line interface (CLI) or command interpreter)\nh interface\nhical User Interface (GUI)\nh-Screen Interface\n",
+                            "Original_text": "UserOperatingSystemlnterface\n·Forusrs,fundamentalapproachestointerfacewiththeOS(…\nthefollowigslide)\nmand-lineinterface(CLI)()rcommandinterpreter)\n-CO\n一Bathinterface\n一GrahicalUserlnterface(GUI)\n一Touh-Screenlnterface\n",
                             "Keypoints": [
                                 {
-                                    "Title": "User Interface Approaches",
-                                    "Content": "Fundamental approaches to interface with the OS"
-                                },
-                                {
-                                    "Title": "Command-Line Interface",
-                                    "Content": "Command-line interface (CLI) or command interpreter"
-                                },
-                                {
-                                    "Title": "Graphical User Interface",
-                                    "Content": "Graphical User Interface (GUI)"
-                                },
-                                {
-                                    "Title": "Touch-Screen Interface",
-                                    "Content": "Touch-Screen Interface"
+                                    "Title": "User Operating System Interfaces",
+                                    "Content": "For users, fundamental approaches to interface with the OS include command-line interface (CLI) or command interpreter, batch interface, graphical user interface (GUI), and touch-screen interface."
                                 }
                             ],
                             "Info": {
@@ -258,81 +70,20 @@
                             "page_idx": 7
                         },
                         {
-                            "Original_text": "program\nexecution\nuser 1\nGUI\n1/0\noperations\nerror\ndetection\nhardware I\ntouch screen\nuser interfaces\nfile\nsystems\nresource\nallocation\nline\naccounting\nprotection\ncommunication\nservices\nos\nhardware 2\nand\nsecurity\nhardware 3\n",
-                            "Keypoints": [
-                                {
-                                    "Title": "Program Execution",
-                                    "Content": "program execution"
-                                },
-                                {
-                                    "Title": "User Interfaces",
-                                    "Content": "user 1, GUI, touch screen"
-                                },
-                                {
-                                    "Title": "Error Detection",
-                                    "Content": "1/0 operations error detection"
-                                },
-                                {
-                                    "Title": "File Systems",
-                                    "Content": "file systems"
-                                },
-                                {
-                                    "Title": "Resource Allocation",
-                                    "Content": "resource allocation"
-                                },
-                                {
-                                    "Title": "Accounting",
-                                    "Content": "line accounting"
-                                },
-                                {
-                                    "Title": "Protection",
-                                    "Content": "protection"
-                                },
-                                {
-                                    "Title": "Communication Services",
-                                    "Content": "communication services"
-                                },
-                                {
-                                    "Title": "Operating System (OS)",
-                                    "Content": "os"
-                                },
-                                {
-                                    "Title": "Hardware Components",
-                                    "Content": "hardware I, hardware 2, hardware 3"
-                                },
-                                {
-                                    "Title": "Security",
-                                    "Content": "security"
-                                }
-                            ],
+                            "Original_text": "program\nexecution\nuser1\nG(丿|\noperations\ndetection\nsystems\nSC\ncommunication\nservices\nOS\nresource\nallocation\naccounting\nprotection\nand\nsecurity\n",
+                            "Keypoints": [],
                             "Info": {
-                                "Type": "Outline",
-                                "Content": "program execution, user interfaces, error detection, resource allocation, protection, communication services, hardware and security"
+                                "Type": "Concept",
+                                "Content": "program execution in operating systems"
                             },
                             "page_idx": 8
                         },
                         {
-                            "Original_text": "User Operating System Interface :\n( Command LMC Infnfaæ)\nCLI\n• Command interpreter (CLI) allows directly typing commands\n— Fetch a command from user and execute\n— Implemented as a system program\n' Not part of OS\n— In Linux, multiple choices are implemented — shells\n' Bourne shell (bash), C shell (csh), Korn shell (ksh)\n",
+                            "Original_text": "UserOperatingSystemlnterface:\nCLV\n·Commandinterpreter(CLI)allowsdirectlytypingcommands\n一Fetchacommand丘userandexecute\n一lmplementedasasystemprogram\n7\n·NotpartofOS\n一lnLinux,multiplechoicesareimplemented一shells\n·Bourneshell(bash),Cshell(csh),Kornshell(ksh)\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Command Interpreter Functionality",
-                                    "Content": "CLI allows directly typing commands."
-                                },
-                                {
-                                    "Title": "Execution Process",
-                                    "Content": "Fetch a command from user and execute."
-                                },
-                                {
-                                    "Title": "System Program Definition",
-                                    "Content": "Implemented as a system program."
-                                },
-                                {
-                                    "Title": "OS Independence",
-                                    "Content": "Not part of OS."
-                                },
-                                {
-                                    "Title": "Linux Shell Options",
-                                    "Content": "Multiple choices: bash, csh, ksh."
+                                    "Title": "Command Line Interface Overview",
+                                    "Content": "The Command Line Interface (CLI) allows users to type commands directly for execution. It functions as a command interpreter, which is implemented as a system program but is not part of the operating system itself. In Linux, multiple choices of shells are available, including Bourne shell (bash), C shell (csh), and Korn shell (ksh)."
                                 }
                             ],
                             "Info": {
@@ -340,213 +91,73 @@
                                 "Content": "User Operating System Interface"
                             },
                             "page_idx": 9
-                        }
-                    ]
-                },
-                {
-                    "Topic": "Shell and Command Interfaces",
-                    "Starting_page": 11,
-                    "Pages": [
+                        },
                         {
-                            "Original_text": "Croot@r6181-d5-usØ1\nuptime\nup 16 days,\n10:52, 3 users,\nCroot@r6181-d5-us01\nFilesystem\n/dev/mapper/vg_ks-lv_root\nShell Command Interpreter\n1. (ssh)\n0.0\n0.0\n-r-x------\nX root@r6181-d5-u... X\nssh\n-82 X root@r6181-d5-us01...\nLast login: Thu Jul 14 on ttysØØ2\niMacPro:— pbg$ ssh root@r6181-d5-us01\nroot@r6181-d5-us01's password:\nLast login: Thu Jul 14 2016 from 172.16.16.162\nload average: 129.52,\nUse% Mounted on\n1% /dev/shm\n16% /boot\n47% /dssd—xfs\n47% /mnt/orangefs\n5% /mnt/gpfs\n80.33,\n56.55\ndf\nSize\n50G\n127G\n477M\nI.ØT\n-kh\nUsed Avail\ntmpfs\n/dev/sdal\n/dev/dssdØØØØ\ntcp://192.168.150.1.\n/dev/gpfs-test\nCroot@r6181-d5-us01\nCroot@r6181-d5-usØ1\n19G\n520K\n71M\n480G\n• 3334/orangefs\nIZT 5.7T\n23T I.IT\n28G\n127G\n381M\n54SG\n6.4T\n22T\nps aux I sort -nrk 3,3 1 head -n 5\n6.6 42665344 17520636? S<LI Ju113 166:23\nroot\nroot\nroot\nroot\nroot\n97653 11.2\n69849 6.6\n69850 6.4\n3829 3.0\n3826 3.0\n0\n0\ns\nJu112 181:54\ns\nJull? 177:42\ns\nJun27 730:Ø4\ns\nJun27 728:08\n/usr/lpp/mfs/bin/mfsd\nCvpthread-l-l]\n[vpthread-1-2]\n[rp_thread 7:01\n[rp_thread 6:01\nCroot@r6181-dS-usØ1\nIs -l /usr/lpp/mfs/bin/mfsd\n1 root root 20667161 Jun 3 2015 /usr/lpp/mfs/bin/mfsd\nCroot@r6181-d5-usØ1\n",
+                            "Original_text": "SheIICommandlnterpreter\n1.root@「6181一d5一us01:~(ssh)\n×丨00t@r6181-d5-u…1×\nssh\n2×root@r6181-dus01…3\nLastlogin:Thu〕ul14:47:01onttysØØ2\niMacPro:—pbg$sshroot@r6181一d5一u591\nroot@r6181-d5-us01'spassword:\nLastlogin:Thu」ul1406:ØI:11Z016from17乙1616,16Z\n〔root@r6181一d5一us01~〕#uptime\n06:57:48up16days,10:52,3users,\n〔root@r6181一d5一us01~〕#df-kh\nFiIesystem\n/dev/mapper/vg-ks-lv—\nSize\nroot\n5\n丄27(\n471\n1.\nloadaverage:129.52,8033,56·55\nUsedAvai1Use%Mountedon\n41%/\n1%/dev/shm\n16%/boot\n4/dssd—xfs\ntmpfs\n/dev/sdal\n/dev/dssdØØØØ\ntcp://19乙168、150、1:3334/0ngefs\nIZT丌\n/dev/gpfs-test\n23T1、IT\n〔root@r6181一d5一us01\n19G\n52\n71M\n48\n28G\n127G\n381M\n545(\n6·4T\n22T\n4/mnt/orangefs\n5%/mnt/gpfs\n〔root@r6181一d5一usØ1~〕#psaux丨sort-nrk3,3丨head-n5\nroot\nroot\nroot\nroot\nroot\n9765311.2\n6984966\n698506、4\n38293,0\n38263,\n6,64266534417520636?S1Ju113166:23/usr/lpp/mfs/bin/mfsd\n5\nS\nS\nS\n〕u112181:54〔vpthread-l-l]\n」u112177:42[vpthread-1-2]\nJun27730:〔rp-thread7:〕\nJun27728:08[rp-thread6:0〕\n〔root@r6181一dS-us01~〕#ls一1/usr/lpp/mfs/bin/mfsd\n一1rootroot267161Jun32015/usr/lpp/mfs/bin/mfsd\n〔root@r6181一d5一us01~〕#\n",
                             "Keypoints": [
                                 {
-                                    "Title": "System Uptime",
-                                    "Content": "up 16 days, 10:52, 3 users"
-                                },
-                                {
-                                    "Title": "Last Login Information",
-                                    "Content": "Last login: Thu Jul 14 on ttysØØ2"
-                                },
-                                {
-                                    "Title": "Shell Command",
-                                    "Content": "ssh root@r6181-d5-us01"
-                                },
-                                {
-                                    "Title": "Load Average",
-                                    "Content": "load average: 129.52"
-                                },
-                                {
-                                    "Title": "Filesystem Usage",
-                                    "Content": "1% /dev/shm, 16% /boot, 47% /dssd—xfs"
-                                },
-                                {
-                                    "Title": "Top Processes",
-                                    "Content": "ps aux | sort -nrk 3,3 | head -n 5"
-                                },
-                                {
-                                    "Title": "Executable File Details",
-                                    "Content": "1 root root 20667161 Jun 3 2015 /usr/lpp/mfs/bin/mfsd"
+                                    "Title": "SSH Command Line Interface",
+                                    "Content": "The text illustrates a session using SSH to connect to a remote system with various commands executed. For example, the command 'uptime' shows system uptime, the number of users, and load averages. The 'df -kh' command provides a summary of disk usage across different filesystems. Additionally, 'ps aux | sort -nrk 3,3 | head -n 5' reveals the top resource-consuming processes."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "Shell command interpreter and system monitoring"
+                                "Content": "Shell Command Interpreter usage and examples"
                             },
                             "page_idx": 10
                         },
                         {
-                            "Original_text": "Use\nShell\nO\nhardwa e\nThompson Shea —\n1971\nBourne (sh)\nKorn (ksh) - 1983\nKorn (ksh93) - 1993\n- 1977\nZ - 1990\nBourne-Again (bash) - 1987\nC (csh) - 1978\nTENEX C (tcsh) - 1981\nAlmquist (ash) - 1989\n",
-                            "Keypoints": [
-                                {
-                                    "Title": "Shell Variants Overview",
-                                    "Content": "Different shells and their years"
-                                },
-                                {
-                                    "Title": "Thompson Shell",
-                                    "Content": "First shell introduced in 1971"
-                                },
-                                {
-                                    "Title": "Bourne Shell",
-                                    "Content": "Developed in 1977, foundational shell"
-                                },
-                                {
-                                    "Title": "C Shell",
-                                    "Content": "Introduced in 1978, supports C-like syntax"
-                                },
-                                {
-                                    "Title": "TENEX C Shell",
-                                    "Content": "Enhanced version of C shell in 1981"
-                                },
-                                {
-                                    "Title": "Bourne-Again Shell",
-                                    "Content": "Popular shell created in 1987"
-                                },
-                                {
-                                    "Title": "Korn Shell",
-                                    "Content": "Developed in 1983 with advanced features"
-                                },
-                                {
-                                    "Title": "Korn Shell 93",
-                                    "Content": "Updated version released in 1993"
-                                },
-                                {
-                                    "Title": "Almquist Shell",
-                                    "Content": "Lightweight shell released in 1989"
-                                },
-                                {
-                                    "Title": "Z Shell",
-                                    "Content": "Introduced in 1990, feature-rich shell"
-                                }
-                            ],
+                            "Original_text": "Use\nSheIl\n0\nhardwae\nThompsonSheU一1971\nBourne\nKorn(ksh)一183\nKocn(ksh93)一1993\n一1977\n0(csh)一1978\n",
+                            "Keypoints": [],
                             "Info": {
-                                "Type": "Concept",
-                                "Content": "Shell programming and history"
+                                "Type": "Outline",
+                                "Content": "Use Shell hardware"
                             },
                             "page_idx": 11
                         },
                         {
-                            "Original_text": "User Operating System Interface\n• For users, fundamental approaches to interface with the OS (see\nthe following slide)\n— Command-line interface (CLI) (or command interpreter)\nBatch interface\n— Graphical User Interface (GUI)\n— Touch-Screen Interface\n",
+                            "Original_text": "UserOperatingSystemlnterface\n·ForusersfundamentalapproachestointerfacewiththeOS(…\nthefollowingslide)\n一Command-lineinterface(CLI)()rcommandinterpreter)\n-Batchinterface\n一GraphicalUserlnterface(GUI)\n一Touch-Screenlnterface\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Fundamental User Interface Approaches",
-                                    "Content": "User interfaces with the OS."
-                                },
-                                {
-                                    "Title": "Command-Line Interface",
-                                    "Content": "CLI or command interpreter."
-                                },
-                                {
-                                    "Title": "Batch Interface",
-                                    "Content": "Process commands in batches."
-                                },
-                                {
-                                    "Title": "Graphical User Interface",
-                                    "Content": "Visual interface with graphics."
-                                },
-                                {
-                                    "Title": "Touch-Screen Interface",
-                                    "Content": "User interaction via touch."
+                                    "Title": "User Interfaces with Operating Systems",
+                                    "Content": "For users, fundamental approaches to interface with the OS include the following: Command-line interface (CLI or command interpreter), Batch interface, Graphical User Interface (GUI), and Touch-Screen interface."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "User Operating System Interface"
+                                "Content": "User Operating System Interface Types"
                             },
                             "page_idx": 12
                         },
                         {
-                            "Original_text": "User Operating System Interface :\nBatch Interfaces\ns) 4b 4 tLiA.flfe 4tRt,i\ncc -g -c menu.c\ncc -g -o driver driver.c menu.o\ndriver < test data > test out\nIpr -PthePrinter test out\ntar cvf driver test.tar menu.c driver.c test data test out\nuuencode driver test.tar driver test.tar >driver test.encode\nA \"shell script\" batch\nFile\nfrom \"Operating Systems by NUTT\"\n",
-                            "Keypoints": [
-                                {
-                                    "Title": "User Operating System Interface",
-                                    "Content": "Batch Interfaces"
-                                },
-                                {
-                                    "Title": "Compilation Commands",
-                                    "Content": "cc -g -c menu.c"
-                                },
-                                {
-                                    "Title": "Linking Commands",
-                                    "Content": "cc -g -o driver driver.c menu.o"
-                                },
-                                {
-                                    "Title": "Execution Command",
-                                    "Content": "driver < test data > test out"
-                                },
-                                {
-                                    "Title": "Printing Output",
-                                    "Content": "Ipr -PthePrinter test out"
-                                },
-                                {
-                                    "Title": "Creating Archive",
-                                    "Content": "tar cvf driver test.tar menu.c driver.c test data test out"
-                                },
-                                {
-                                    "Title": "Encoding Archive",
-                                    "Content": "uuencode driver test.tar driver test.tar >driver test.encode"
-                                },
-                                {
-                                    "Title": "Shell Script Batch",
-                                    "Content": "A 'shell script' batch File"
-                                }
-                            ],
+                            "Original_text": "UserOperatingSystemlnterface:\nBatchlnterfaces\nCC-g-Cme11LI.C\nCC-g-0driverdriver.cme11U.O\ndriver<testdata>testout\nlpr-PthePrintertestout\ntarcvfdrivertest.tarmenu.cdriver.ctestdatatestout\nuuencodedrivertest.tardrivertest.tar>drlvertest.encode\nA\"shellscript”batch\nFile\n0'OperatingSystemsⅣU\n",
+                            "Keypoints": [],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "User Operating System Interface Batch Interfaces"
+                                "Content": "User Operating System Interfaces and Batch Interfaces"
                             },
                             "page_idx": 13
                         },
                         {
-                            "Original_text": "User Operating System Interface\n• For users, fundamental approaches to interface with the OS (see\nthe following slide)\n— Command-line interface (CLI) (or command interpreter)\n— Batch interface\nGraphical User Interface (GUI)\n— Touch-Screen Interface\n",
+                            "Original_text": "UserOperatingSystemlnterface\n·Forusers,fundamentalapproachestointerfacewiththeOS(…\nthefollowingslide)\n一Command-lineinterface(CLI)()rcommandinterpreter)\n一Batchinterface\n-GraphicalUserlnterface(GUI)\n一Touch-Screenlnterface\n",
                             "Keypoints": [
                                 {
-                                    "Title": "User OS Interface Approaches",
-                                    "Content": "For users, fundamental approaches to interface with the OS."
-                                },
-                                {
-                                    "Title": "Command-Line Interface",
-                                    "Content": "Command-line interface (CLI) (or command interpreter)."
-                                },
-                                {
-                                    "Title": "Batch Interface",
-                                    "Content": "Batch interface for user operations."
-                                },
-                                {
-                                    "Title": "Graphical User Interface",
-                                    "Content": "Graphical User Interface (GUI) for easier interaction."
-                                },
-                                {
-                                    "Title": "Touch-Screen Interface",
-                                    "Content": "Touch-Screen Interface for direct interaction."
+                                    "Title": "User Operating System Interfaces",
+                                    "Content": "For users, fundamental approaches to interface with the OS include the following: Command-line interface (CLI) or command interpreter, Batch interface, Graphical User Interface (GUI), and Touch-Screen interface."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "User Operating System Interface approaches"
+                                "Content": "User operating system interfaces"
                             },
                             "page_idx": 14
                         },
                         {
-                            "Original_text": "User Operating System Interface :\nGUI\n• User-friendly desktop interface\n— Mouse-based window-and-menu\n",
+                            "Original_text": "UserOperatingSystemlnterface:\nGUI\n·User-friendlydesktopinterface\n一Mouse-basedwindow-and-menu\n",
                             "Keypoints": [
                                 {
-                                    "Title": "User-friendly Interface",
-                                    "Content": "User-friendly desktop interface"
-                                },
-                                {
-                                    "Title": "Mouse-based Interaction",
-                                    "Content": "Mouse-based window-and-menu"
+                                    "Title": "Graphical User Interface (GUI)",
+                                    "Content": "User-friendly desktop interface with a mouse-based window-and-menu system."
                                 }
                             ],
                             "Info": {
@@ -556,45 +167,25 @@
                             "page_idx": 15
                         },
                         {
-                            "Original_text": "User Operating System Interface\n' For users, fundamental approaches to interface with the OS (see\nthe following slide)\n— Command-line interface (CLI) (or command interpreter)\n— Batch interface\n— Graphical User Interface (GUI)\nTouch-Screen Interface\n",
+                            "Original_text": "UserOperatingSystemlnterface\n·ForusersfundamentalapproachestointerfacewiththeOS(…\nthefollowingslide)\n一Command-lineinterface(CLI)()rcommandinterpreter)\n一Batchinterface\n一GraphicalUserlnterface(GUI)\n-Touch-Screenlnterface\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Operating System Interfaces",
-                                    "Content": "Fundamental approaches to interface with the OS"
-                                },
-                                {
-                                    "Title": "Command-line Interface",
-                                    "Content": "CLI or command interpreter"
-                                },
-                                {
-                                    "Title": "Batch Interface",
-                                    "Content": "Processing commands in batches"
-                                },
-                                {
-                                    "Title": "Graphical User Interface",
-                                    "Content": "Visual interface for user interaction"
-                                },
-                                {
-                                    "Title": "Touch-Screen Interface",
-                                    "Content": "User interaction through touch technology"
+                                    "Title": "User Operating System Interfaces",
+                                    "Content": "For users, fundamental approaches to interface with the OS are Command-line interface (CLI) or command interpreter, Batch interface, Graphical User Interface (GUI), and Touch-Screen interface."
                                 }
                             ],
                             "Info": {
                                 "Type": "Concept",
-                                "Content": "User Operating System Interface approaches"
+                                "Content": "User Operating System Interfaces"
                             },
                             "page_idx": 16
                         },
                         {
-                            "Original_text": "User Operating System Interface :\nTouchscreen Interfaces\n• Touchscreen devices\n• Voice commands\n",
+                            "Original_text": "UserOperatingSystemlnterface:\nTouchscreenlnterfaces\n·Touchscreendevices\n·Voicecommands\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Touchscreen Devices",
-                                    "Content": "Touchscreen devices"
-                                },
-                                {
-                                    "Title": "Voice Commands",
-                                    "Content": "Voice commands"
+                                    "Title": "User Operating System Interface",
+                                    "Content": "Touchscreen interfaces include various touchscreen devices that allow users to interact with the operating system through touch. Additionally, voice commands provide an alternative method for users to control the operating system, enhancing usability."
                                 }
                             ],
                             "Info": {
@@ -604,54 +195,1073 @@
                             "page_idx": 17
                         },
                         {
-                            "Original_text": "Outline\nOperating System Services\nOperating-System Interface to Users\nSystem Calls\nSystem Services\nLinkers and Loaders\nWhy Applications Are Operating-System Specific\nOperating-System Design and Implementation\nOperating-System Structure\n• Building and Booting an Operating System\nOperating System Debugging\n",
+                            "Original_text": "Outline\nOperatingSystemServices\nOperating-Systemlnterfacet0Users\nSystemCaIIs\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSystemDebugging\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "OperatingSystemServices, Operating-Systemlnterfacet0Users, SystemCaIIs, SystemServices, LinkersandLoaders, WhyAppIicationsAreOperating-SystemSpecific, Operating-SystemDesignandlmplementation, Operating-SystemStructure, BuildingandBootinganOperatingSystem, OperatingSystemDebugging"
+                            },
+                            "page_idx": 18
+                        },
+                        {
+                            "Original_text": "Beforediscussingsystemcall,我亻門先複習Library\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Library and system calls"
+                            },
+                            "page_idx": 19
+                        },
+                        {
+                            "Original_text": "補充:\nExample0fProgramsUsingLibrariesin\nintadd(intarg)(\nreturnarg,\nintsub(intarg)(\narg-\nreturnarg,\nintabc0(\nintsum(intargl,intarg2)\nreturn(arg1+arg2》,\nintxyz0\na.C\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Example of Programs Using Libraries"
+                            },
+                            "page_idx": 20
+                        },
+                        {
+                            "Original_text": "衤甫充:ExamleofProgramsUsingLibrariesin\nLinux(Cont,)\na.C\nCompiler\nCompiler\na.O\n0\nlinkutility\na.O\nCreatingalibrarycalled\nlibtmp,a\n22\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Programs Using Libraries in Linux"
+                            },
+                            "page_idx": 21
+                        },
+                        {
+                            "Original_text": "衤甫充:ExampIeofProgramsUsingLibrariesin\nLinux(Cont,)\n·CompilesourceprogramstOobjectprograms\ngCC—Cmam.C\ngCC—Ca.C\ngcc—cb.c\n·Create/add/replaceobjectprogramsintolibrary\nar—rlibtmp.aa.o\nar—rlibtmp.ab.o\n·Listcontentsoflibrary\nar—tlibtmp.a\n·Deleteobjectprogramsfromlibrary\nar—dlibtmp.ab.o\n23\n",
                             "Keypoints": [
                                 {
-                                    "Title": "Operating System Services",
-                                    "Content": "Services provided by operating systems."
+                                    "Title": "Library Management in Linux",
+                                    "Content": "在Linux中，使用库的程序包括几个关键操作。首先，通过使用gCC命令将源程序编译为目标程序，例如执行gCC -C mam.C、gCC -C a.C或gCC -C b.c。此外，可以创建、添加或替换库中的目标程序，使用ar命令，例如ar -r libtmp.a a.o和ar -r libtmp.a b.o。还可以列出库的内容，使用ar -t libtmp.a命令。最后，可以从库中删除目标程序，使用ar -d libtmp.ab.o命令。"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Example of Programs Using Libraries in Linux"
+                            },
+                            "page_idx": 22
+                        },
+                        {
+                            "Original_text": "衤甫充:ExampIeofProgramsUsingLibrariesin\nLinuxCont.\naoC\n#include<stdio.h>\nexternintadd(int);\nexternintsub(int),\nexternintsum(int,\nmain0\nintretl,ret2\nint);\nret3·\nmam.c\nretl);\nret2);\nret3);\nintadd(intarg)(\narg++,\nreturnarg,\nintsub(int\narg-\nreturnarg,\nintabc0(\narg)(\nretl\nret2\nret3\nadd(5》;\nsub(5》;\nsum(retl,ret2);\nprintf(\"\\nretfromadd()=\nprintf(\"\\nretfromsub0=\nprintf(\"\\nretfromsum()=\nintsum(intargl,intarg2)\nreturn(arg1+arg2》;\nintxyz0\n24\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Example of Library Functions in C",
+                                    "Content": "#include<stdio.h>\nextern int add(int);\nextern int sub(int);\nextern int sum(int, int);\n\nmain() {\n    int ret1, ret2, ret3;\n    ret1 = add(5);\n    ret2 = sub(5);\n    ret3 = sum(ret1, ret2);\n    printf(\"\\nret from add() = %d\", ret1);\n    printf(\"\\nret from sub() = %d\", ret2);\n    printf(\"\\nret from sum() = %d\", ret3);\n}\n\nint add(int arg) {\n    arg++;\n    return arg;\n}\n\nint sub(int arg) {\n    arg--;\n    return arg;\n}\n\nint sum(int arg1, int arg2) {\n    return (arg1 + arg2);\n}\n"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Example of Programs Using Libraries in Linux"
+                            },
+                            "page_idx": 23
+                        },
+                        {
+                            "Original_text": "補充:ExampIeofProgramsUsingLibraries\ninLinux(Cont.)\nSourcefile\nmam.c\nCompiler\nObjectfile\nmam,o\nlinker\nlibtmp.a\na.O\nexecutablefile\nmam.o\nlibtmp.a\na.O\nLinkwithlibtmp,atOcreatetheexecutable\nfile\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Program Compilation Process in Linux",
+                                    "Content": "在Linux中，程序的编译过程包括源文件mam.c的编译，通过编译器生成目标文件mam.o。接下来，使用链接器将目标文件mam.o与库文件libtmp.a和目标文件a.O链接以创建可执行文件。最终得到的可执行文件是通过将libtmp.a和a.O与mam.o链接生成的。"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Programs using libraries in Linux"
+                            },
+                            "page_idx": 24
+                        },
+                        {
+                            "Original_text": "複習:Linker主要的工作是resolveexternal\nreferences(組合語言與系統程式)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Linker and External References",
+                                    "Content": "複習:Linker主要的工作是resolve external references(組合語言與系統程式)"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Linker resolves external references"
+                            },
+                            "page_idx": 25
+                        },
+                        {
+                            "Original_text": "衤甫充:ExampIeofProgramsUsingLibrariesin\nLinux(Cont,)\n·CompilesourceprogramstOobjectprograms\ngCC¯Cmam.c\n·Usinglibraryinprograms\nEx.gccmain.olibtmp.a—0prog\nEx.gccmain.o—L.一tmp—0prog\n·Linkingeditor\ndunderLiunx\n·References\nunderLinux\nman\nrunderLinux\nman\nunderLinux\nman\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Using Libraries in Linux",
+                                    "Content": "在Linux中，使用库的程序示例包括将源代码程序编译为目标程序，使用命令如gCC来完成这些任务。例如，使用命令gcc main.o -ltmp -o prog来链接库，并创建可执行文件prog。"
                                 },
                                 {
-                                    "Title": "Operating-System Interface to Users",
-                                    "Content": "How users interact with OS."
+                                    "Title": "Linking Editor in Linux",
+                                    "Content": "在Linux中，链接编辑器的参考资料通常可以通过手册命令man来获取，这为用户提供了关于如何使用链接编辑器的相关信息。"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Programs using libraries in Linux"
+                            },
+                            "page_idx": 26
+                        },
+                        {
+                            "Original_text": "WealsohaveanOSLabdiscussinghowto\ncreatealibrary,\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Creating a library in OS Lab"
+                            },
+                            "page_idx": 27
+                        },
+                        {
+                            "Original_text": "複習結束\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "複習結束"
+                            },
+                            "page_idx": 28
+                        }
+                    ]
+                },
+                {
+                    "Topic": "System Calls and APIs in Operating Systems",
+                    "Starting_page": 30,
+                    "Pages": [
+                        {
+                            "Original_text": "SystemCalls\n·Systemcalls\n-sproOSproserviceuserppcs\n一Example:open(),read(),write(),close()\n一Evensimpleprogram(seethefollowingexample)maymakeheavyuseOf\nthesystemcalls\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Understanding System Calls",
+                                    "Content": "System calls are the means by which a program communicates with the operating system to perform various functions. Examples of system calls include open(), read(), write(), and close(). Even a simple program may make heavy use of these system calls."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System calls in operating systems"
+                            },
+                            "page_idx": 29
+                        },
+                        {
+                            "Original_text": "Example\n#include<stdio.h>#include<sys/types.h>#include<sys/stat.h>\n#include<fcntl.h>#include<unistd.h>\n#include<stdlib.h>//forexit()\n#include<string.h>//forstrlen()\nintmain(){\nintfd;\nfd=0en\"mile.txt\"0CREAT0WRONLY0600·\nif()d<0)(\nprintf(\"FaiIedtoopenthefild.\\n\");exit(l);\nintSiZ\nSlZe=\nclose(\nprintf(\"length0fwritedata=%d\\n\",strlen(\"e\"));\nprintf(\"Number0fbyteswrittenonsuccess=%d\\n\\n\"\nexit(0),\n,size);\n31\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "C programming file handling example"
+                            },
+                            "page_idx": 30
+                        },
+                        {
+                            "Original_text": "按照程式執行的規則,當呼叫open()時,\n程式應該會跳到對應的open()function。\n這個例子:open()就是一個systemcall\n問題:open()function在哪裡?\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Understanding Open() Function",
+                                    "Content": "按照程式執行的規則,當呼叫open()時,程式應該會跳到對應的open()function。這個例子:open()就是一個systemcall。問題:open()function在哪裡?"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "The concept of system calls in programming"
+                            },
+                            "page_idx": 31
+                        },
+                        {
+                            "Original_text": "User\nMode\nopen()\nread()\nProgram2\nopen(),\nread()\nOS\nStora\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User Mode and Program Interaction"
+                            },
+                            "page_idx": 32
+                        },
+                        {
+                            "Original_text": "Examp!T?VindowsandUnixSystemCalls\nControl\nFile\nManipulation\nWindows\nCreateProcess()\nExitProcess()\nWaitForSing1eObject()\nCreateFiIe()\nReadFiIe()\nWriteFiIe()\nC10seHand1e()\nUnix\n士ork()\nexit()\nwait()\nopen()\nread()\nwrite()\nclose()\n問題呼為亻pmcall介面不?\nlnformation\nProtection\nGetCurrentProcessID()\nSetTimer()\nS1eep()\nCreateFi1eMapping()\nMapViewOfFi1e()\nSetFiIeSecurity()\nInit1ia1izeSecurityDescriptor()\nSetSecurityDescriptorGroup()\ngetpid()\nalarm()\nsleep()\nshmget()\nmmap()\nchmod()\numask()\nchown()\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "File Manipulation System Calls",
+                                    "Content": "In Windows, file manipulation system calls include CreateProcess(), ExitProcess(), WaitForSingleObject(), CreateFile(), ReadFile(), WriteFile(), and CloseHandle(). In Unix, the corresponding system calls are fork(), exit(), wait(), open(), read(), write(), and close()."
                                 },
                                 {
-                                    "Title": "System Calls",
-                                    "Content": "Methods for programs to request services."
+                                    "Title": "Process Control System Calls",
+                                    "Content": "For process control, Windows uses GetCurrentProcessID(), SetTimer(), Sleep(), CreateFileMapping(), MapViewOfFile(), SetFileSecurity(), InitializeSecurityDescriptor(), and SetSecurityDescriptorGroup(). Unix has similar functions such as getpid(), alarm(), sleep(), shmget(), mmap(), chmod(), umask(), and chown()."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Windows and Unix System Calls"
+                            },
+                            "page_idx": 33
+                        },
+                        {
+                            "Original_text": "stemCalls(Cont,)\nisassociateditheachsystemcall\n·Typically,a\nnumber\nOSmaintainatableindexedaccordingtOthesenumbers\nuserapplication\nopen()\nuser\nmode\nsystemcallinterface\nkernel\nmode\nopen()\nlmplementation\n0fopen()\nsystemcall\nreturn\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System call interface and implementation"
+                            },
+                            "page_idx": 34
+                        },
+                        {
+                            "Original_text": "mode\nstemCalls(Cont,)\n=1\ntra\nOS\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Mode in Stem Calls"
+                            },
+                            "page_idx": 35
+                        },
+                        {
+                            "Original_text": "APIs\n·However,syemcallsaretenaccessedindirectlyviaaAppIication\nProgramlnterface(API)\n一Ratherthandirectlycallingthesystem。。Ⅱ一∕cal)\n一fopen(),fread(),fwrite(),printf()·…areAPIs\nSeethefollowingslide\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Understanding Application Programming Interfaces",
+                                    "Content": "System calls are accessed indirectly via an Application Programming Interface (API). Instead of directly calling the system, functions like fopen(), fread(), fwrite(), and printf() serve as APIs."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding Application Programming Interfaces (APIs)"
+                            },
+                            "page_idx": 36
+                        },
+                        {
+                            "Original_text": "Program2\nProgram1\nfopen(){\nClibrary\nopen();\nUser\nMode\nopen()\nStorage\nCprograminvokingfopen()librarycall,whichinturncalls\n()system\nopen\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "File handling in C programming"
+                            },
+                            "page_idx": 37
+                        },
+                        {
+                            "Original_text": "Example:StandardCLibrary\n#include<stdio·h>\nintmain()\nprintf(、、Greeting\nrintf0\nint0x80;\nwrite0\nHardware\nApplicati0\nCLibrary\n(libcprovidesawrapper\nsystemcalls.)\nOS\nHardware\n39\nCprograminvokingprintf()librarycall,whichinturncallswrite()system\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "C Standard Library Functions",
+                                    "Content": "C program invoking printf() library call, which in turn calls write() system calls. The C Library (libc) provides a wrapper for system calls."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "C Library and system calls"
+                            },
+                            "page_idx": 38
+                        },
+                        {
+                            "Original_text": "在上述的例子,fopen()'fread()'\n就是API\nprintf()\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "API examples with fopen and fread"
+                            },
+                            "page_idx": 39
+                        },
+                        {
+                            "Original_text": "SystemCallandAPIs\nApp1icationProgram\nOSFunction\nHardware\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "System Call and APIs, Application Program, OS Function, Hardware"
+                            },
+                            "page_idx": 40
+                        },
+                        {
+                            "Original_text": "CallingSystemCallandAPIs:Example\n#include<stdio.h>#include<sys/types.h>#include<sys/stat.h>\n#include<fcntl.h>#include<unistd.h>\n#include<stdlib.h>//forexit()\n#include<string.h>//forstrlen()\nintfd;\nfd=oen\"mile.txt\"0CREAT0WRONLY0600·\nntf(\"Failedtoopenthefild.\\n\");e丶i(1);\nintsize;\nsize=writefd\"e\"strlen\"e\"\nclose(d\nprintf(\"ength0fwritedata=%d\\n\",strlen(\"e\"));\n乀Vprintf(\"umber0fbyteswrittenonSUccess=0/od\\n\\n\",size);\nexit(0);\n42\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "System Call and APIs Example",
+                                    "Content": "#include<stdio.h>#include<sys/types.h>#include<sys/stat.h>\n#include<fcntl.h>#include<unistd.h>\n#include<stdlib.h>//forexit()\n#include<string.h>//forstrlen()\nintfd;\nfd=oen\"mile.txt\"0CREAT0WRONLY0600·\nntf(\"Failedtoopenthefild.\\n\");e丶i(1);\nintsize;\nsize=writefd\"e\"strlen\"e\"\nclose(d\nprintf(\"ength0fwritedata=%d\\n\",strlen(\"e\"));\n乀Vprintf(\"umber0fbyteswrittenonSUccess=0/od\\n\\n\",size);\nexit(0);"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Using system calls and APIs in C"
+                            },
+                            "page_idx": 41
+                        },
+                        {
+                            "Original_text": "SystemCallandAPIs\nUserm()(le\nKernelmode\nSystem-call:\nSys-xyz()\nSys-xyz(){\nreturn-from—sys—call:\nSystemcall\nlnvocatlOll\napplication\nP「0gram\nX丷\nint8(\nWrapperroutlne\nⅢ1CSall\nlibrary\n.lret;\nhandler\nSystemcall\nservlcerotltlne\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System Calls and APIs"
+                            },
+                            "page_idx": 42
+                        },
+                        {
+                            "Original_text": "APIs(Cont,)\n·API:asetoffunctionsthatcanbecalledbytheprograms\n一ThreemostcommonAPIs\n·Win32AP4-f0FAå4ndows\nPOSIXAPIforPOSIX-basedsystems\n一AIIversionsofUNIX,Linux,andMacOSⅩ\nJavaAPIfortheJavavirtualmachine(JVM)\n一SupportedbyI\"\n·Kerne132.libisthelibraryofWin32API(seethefollowingslide)\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Common APIs",
+                                    "Content": "API: a set of functions that can be called by the programs. The three most common APIs are: Win32 API for Windows, POSIX API for POSIX-based systems (including all versions of UNIX, Linux, and MacOS X), and Java API for the Java virtual machine (JVM), which is supported by I. Kernel32.lib is the library of Win32 API."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Common types of APIs"
+                            },
+                            "page_idx": 43
+                        },
+                        {
+                            "Original_text": "複習:組合語ä(LinkingtoaLibrary)\n·ThetwoLIBfiles:irvine32.lib,andkerne132.lib\nTheirvine32.libisprovidedbybooksauthor\nThekerne132.libispartoftheMicrosoft\"32SoftwareDe//Kit(SDK)\nYourprogram\nlinks\nIrvine32.lib\nlinksto\ncanlinktO\nkerne132.Iib\nkerne132.dlI\n45\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "LIB Files Overview",
+                                    "Content": "The two LIB files: irvine32.lib and kerne132.lib. The irvine32.lib is provided by the book's author. The kerne132.lib is part of the Microsoft '32 Software Development Kit (SDK). Your program can link to both irvine32.lib and kerne132.lib, as well as kerne132.dll."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Linking to Libraries in Programming"
+                            },
+                            "page_idx": 44
+                        },
+                        {
+                            "Original_text": "SomeofPOSIXAPIs\nMutex\npthread\npthread\npthread\npthread\npthread\npthread\npthread\nOSioctl\npthread\npthread\npthread\npthrea\npthrea\npthrea\npthread\nPOSIXAPI\nmutextimedlock\nPOSIXAPI\nDevice/0一ANSI\nSpLocks\npthreadmutexattrgetprotocol\nmutexgetprioceiling\nmutexcetprioceiling\nmutexattrgetprioceiling\nmutexattrcefprioceiling\nmutexattrcetprotocol\nmutexattrgetpchared\nmutexattrcetpchared\npthreadmutexdectroy\nmutexinit\npthreadmutexlocl<\npt卜「eamufexfrylock\nmutexunlock\npthread\npthread\npthread\npthread\npthread\nTimers\nCPln\nCPln\nCPln\nCPln\ndectroy\ninit\nlock\ntrylock\nunlock\nmr\nmutexattr\nmutexattr\nro\ninit\ncettype\ntimercreate\ntimerdelete\ntimergettime\ntimer\nMisceIIaneous\n9|ob\nglobfree\n9etenv\nenv\nclockgetcpuclockid\nOSCreat\nOSunlink\nremove\nopen\nCIOte\nrename\nwrite\nOSl:eek\nOSchdir\nOSgetcwd\nOSgetwd\nOSPrintf\nOSSprintf\nMemoryManagement·ANSI\nOSmalloc\nOSfree\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "POSIX API Concepts",
+                                    "Content": "The slide covers various aspects of POSIX APIs, including threading functions like pthread, mutex management such as mutexinit, mutexlock, and mutexunlock, and timer functions including timercreate and timerdelete. It also mentions miscellaneous functions for file and memory management such as open, remove, malloc, and free."
                                 },
                                 {
-                                    "Title": "System Services",
-                                    "Content": "Core functionalities of an OS."
+                                    "Title": "Mutex Management Functions",
+                                    "Content": "The mutex management section highlights key functions like pthreadmutexdestroy, mutexattrgetprotocol, mutexgetprioceiling, and the various attributes associated with mutexes. These functions allow for detailed control of mutex behavior and priority in thread management."
                                 },
                                 {
-                                    "Title": "Linkers and Loaders",
-                                    "Content": "Tools for program execution management."
+                                    "Title": "Timer API Functions",
+                                    "Content": "Under timer-related APIs, important functions are listed, including timercreate, timerdelete, and timergettime, which facilitate the creation and management of timers within the POSIX framework."
                                 },
                                 {
-                                    "Title": "Applications Specific to OS",
-                                    "Content": "Reasons for OS-specific software."
+                                    "Title": "Miscellaneous POSIX Functions",
+                                    "Content": "Additional functions are presented that pertain to miscellaneous operations, including file handling operations like OSunlink and OSrename, as well as environment management with functions like getenv and globfree, and clock management with clockgetcpuclockid."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "POSIX APIs and Mutex Operations"
+                            },
+                            "page_idx": 45
+                        },
+                        {
+                            "Original_text": "Example:StandardCLibrary\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Standard C Library"
+                            },
+                            "page_idx": 46
+                        },
+                        {
+                            "Original_text": "APIs(Cont,)\n·WhyuseAPIsratherthansystemcalls?\n·ApplicationusingAPIscanbecompiledandrunonanotherplatformusingthe\nsameAP\n·SeetheOW1ngtrees1es\n-一SiertOuse\nSystemcalloftenbemoredetailedanddifficulttousethanAPIs\nE.g.pritf()functionprovidesoutputformattingwhereasthewsystemcalljust\noutputsablock0fbytes\n·Programmerknowsnothingabouthowthesystemcallisimplemented\nDetailsofsystemcallsarehiddenbyAPIs\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Benefits of Using APIs",
+                                    "Content": "Application using APIs can be compiled and run on another platform using the same API. System calls often are more detailed and difficult to use than APIs. For example, the printf() function provides output formatting while the system call just outputs a block of bytes. Additionally, programmers know nothing about how the system call is implemented, as the details of system calls are hidden by APIs."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Advantages of Using APIs over System Calls"
+                            },
+                            "page_idx": 47
+                        },
+                        {
+                            "Original_text": "ExamplesofWindowsandUnixSystemCalls\nContr01\nFile\nManipulation\n1Ce\nlnforrnation\nC011111Tu11icati011\nProtection\nWindows\nCreateProcess()\nExitProcess()\nWaitForSing1eObject()\nCreateFiIe()\nReadFi1e()\nWriteFi1e()\nC10seHand1e()\n011s00\nWriteCons01e()\nGetCurrentProcessID()\nSetTimer()\nS1eep()\nCreatePipe()\nCreateFiIeMapping()\nMapViewOfFi1e()\nSetFiIeSecurity()\n工nit1ia1izeSecurityDescriptor()\nSetSecurityDescriptorGroup()\nUnix\n士ork()\nexit()\nwait()\nopen()\nread()\nwrite()\nclose()\n工。t1()\nwrite()\ngetpid()\nalarm()\nsleep()\npipe()\nshmget()\nmmap()\nchmod()\numask()\nchown()\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Windows System Calls",
+                                    "Content": "Windows system calls include functions for process and file manipulation, such as CreateProcess(), ExitProcess(), WaitForSingleObject(), CreateFile(), ReadFile(), WriteFile(), CloseHandle(), WriteConsole(), GetCurrentProcessID(), SetTimer(), Sleep(), CreatePipe(), CreateFileMapping(), MapViewOfFile(), SetFileSecurity(), InitializeSecurityDescriptor(), and SetSecurityDescriptorGroup."
                                 },
                                 {
-                                    "Title": "OS Design and Implementation",
-                                    "Content": "Creating and structuring an OS."
-                                },
+                                    "Title": "Unix System Calls",
+                                    "Content": "Unix system calls include functions like fork(), exit(), wait(), open(), read(), write(), close(), getpid(), alarm(), sleep(), pipe(), shmget(), mmap(), chmod(), umask(), and chown, which facilitate process control and file operations."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Examples of Windows and Unix System Calls"
+                            },
+                            "page_idx": 48
+                        },
+                        {
+                            "Original_text": "PortabiIity(Cont,)\nCreateProcess()\n、ows\nChanget\nsourceCOde\nsincesallce\ndifferent\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Portability and Process Creation"
+                            },
+                            "page_idx": 49
+                        },
+                        {
+                            "Original_text": "Portability\nChanger\npthreadcreate()\nDon'needO~,\nsourceCOde\nPOSIXLibrarY\nPOSIXLibrary\nnew戺\"d()\nVxWorks\nLinux\nsystemce\ndifferent\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Portability and POSIX Library"
+                            },
+                            "page_idx": 50
+                        },
+                        {
+                            "Original_text": "Summary\nLibra1YCode\nexcept1011S\nSystemCalllnterface\n(enortraps)\ntrap\n80h\nsystem\nboot\nscheduler\ncall\nmtelüll)t\ntable\ntable\nKemel\nIPI:inter-\nprocessor\nCleVICe\npagefaults\nllltenupt\nllltenupt\nalog\nL)eVICes\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Summary, Libra1YCode, SystemCallInterface, zero traps, system boot, scheduler, call table, Kernel, IPI: inter-processor, page faults, interrupts, devices"
+                            },
+                            "page_idx": 51
+                        },
+                        {
+                            "Original_text": "問題:當呼叫系統呼叫(systemcall)時,如\n何傳遞參數?\n如下圖:應用程式如何傳遞參數給作業系統?\n",
+                            "Keypoints": [
                                 {
-                                    "Title": "Operating-System Structure",
-                                    "Content": "Framework within an OS."
-                                },
+                                    "Title": "傳遞參數的方式",
+                                    "Content": "問題:當呼叫系統呼叫(systemcall)時,如何傳遞參數?如下圖:應用程式如何傳遞參數給作業系統?"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "parameter passing in system calls"
+                            },
+                            "page_idx": 52
+                        },
+                        {
+                            "Original_text": "SYS_XYZ(…\nOS\nSYS_XYZ()\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "SYS_XYZ function overview"
+                            },
+                            "page_idx": 53
+                        },
+                        {
+                            "Original_text": "ldea:StorageHierarchy\nstoragecapacity\naccesstime\nregisters\n1öllP-WS\nQ.J\npnmary\ncache\nstorage\nvolatile\nstorage\nrnalnmemory\nnonvolatile\nnonvolatilememory\nstorage\nsecondary\nstorage\nhard-diskdrives\nopticaldisk\n」ö0一S\ntertiary\nstorage\nmagnetictapes\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Storage Hierarchy and Types of Memory"
+                            },
+                            "page_idx": 54
+                        },
+                        {
+                            "Original_text": "SystemCT?l&ameterPassing\nThreemethodsusedtopassparameterstotheOS\neparametersinregisters\n·lns01ecases,maybemoreparametersthanregisters\nParameters\nparameteri\n·TakenbyLinuxandSolaris\nckpassedasa\nParameterspushedontOthe\nbytheprogramandpoppedoffthestackbythe\nstack\nOS\n·Blockandstackmethodsdonotlimitthenumberorlengthofparameters\n",
+                            "Keypoints": [
                                 {
-                                    "Title": "Building and Booting an OS",
-                                    "Content": "Creating and starting an operating system."
-                                },
+                                    "Title": "Parameter Passing Methods",
+                                    "Content": "Three methods are used to pass parameters to the OS: parameters in registers, parameters pushed onto the stack by the program and popped off by the OS. In some cases, there may be more parameters than registers available. The block and stack methods do not limit the number or length of parameters."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Methods for Passing Parameters to OS"
+                            },
+                            "page_idx": 55
+                        },
+                        {
+                            "Original_text": "PassingParameters\nmoveax,10\nmovebx,20\nintSYSXYZ;\na=10;\nb=20;\nt0SystemCalls:CPU\nrMode\nters\nsystemcal\n1\nSYSXYZ:\nmova,eax;\nmovb,ebx;\nKernel\nMode\n",
+                            "Keypoints": [
                                 {
-                                    "Title": "Operating System Debugging",
-                                    "Content": "Finding and fixing OS issues."
+                                    "Title": "Passing Parameters in System Calls",
+                                    "Content": "The process of passing parameters to system calls involves specific instructions where the values are moved into registers. For example, moving '10' into the 'eax' register and '20' into the 'ebx' register are shown with the commands 'moveax,10' and 'movebx,20'. After setting up the parameters, the system call is executed with 'intSYSXYZ;'. In the system's kernel mode, the parameters can be accessed, demonstrated by moving the values from these registers."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Passing parameters in system calls"
+                            },
+                            "page_idx": 56
+                        },
+                        {
+                            "Original_text": "PassingParameterst0SystemCalls:CPU\neax\nebx\nRegisters\neax,\nebx,2\n//SYSXYZ;\n20\nOS\nSYS_XYZ()\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Passing Parameters to System Calls"
+                            },
+                            "page_idx": 57
+                        },
+                        {
+                            "Original_text": "PassingParameterst0SystemCalls:Memory\nUserMode\nKernel\nMode\nSYS\nmoveax,0x1000\nintSYSXYT\nsystem\n1\nBlock\neax\n0x100\n0x1000\ncal\nuserparameterspointedbyeax\ngreetings\nmor\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Passing Parameters to System Calls"
+                            },
+                            "page_idx": 58
+                        },
+                        {
+                            "Original_text": "PassingParameterst0SystemCalls:Memory\neax\n0x1000\nBlock\neax,\ngreetings\nSYS_XYZ()\nreadparameter\nfrom[eaxl\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Passing Parameters to System Calls"
+                            },
+                            "page_idx": 59
+                        },
+                        {
+                            "Original_text": "Passing\nParameters\npush10\ntSYSXYZ;\n//b=10;\ntoSystemCalls:Stack\nUserMode\nsystemcal\nKernel\nMode\npopb;\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Passing parameters in system calls"
+                            },
+                            "page_idx": 60
+                        },
+                        {
+                            "Original_text": "PassirezpmeterstoSystemCalls.\n·Stack\npush\npush2\n//SYSXYZ;\nSYS\n20\nOS\nXYZ()\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System Calls and Stack Operations"
+                            },
+                            "page_idx": 61
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices(Skip!)\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSysteDebugging\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services (Skip!), Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                            },
+                            "page_idx": 62
+                        },
+                        {
+                            "Original_text": "SystemPrograms\neservices\nProvideaconvenientenvironmentforprogramdevelopmentandexecution\n·Categories:thecanbedividedinto:\nFilemanagement一Windows礻當条、吕(filemanager)·\nstatusinformationWindows工作管理員·\nFilemodification一Texteditors\nProgramminglanguagesupport一Compiler,assembler,interpreter…\nProgramloa\nCommumcIOIIS一Email,talk,webbrowsing\nBackgroundservlces一systemprogramlaunchedatbOOttime\n·Usuallycalledservices,subsystems,ordaemons\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Categories of System Programs",
+                                    "Content": "System programs can be categorized into several types: File management includes tools like Windows file manager; Status information refers to utilities such as Windows Task Manager; File modification involves text editors; Programming language support covers compilers, assemblers, and interpreters; Communication services include email, chat, and web browsing; Background services are system programs launched at boot time, commonly referred to as services, subsystems, or daemons."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System programs and their categories"
+                            },
+                            "page_idx": 63
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices\nLinkersandLoaders(Skip!)\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSysteDebugging\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders (Skip!), Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                            },
+                            "page_idx": 64
+                        },
+                        {
+                            "Original_text": "kersandLoaders\nma丄·C\n一C\nprogram\ncompil\nobject\nfile\nother\nobject\nfiles\ndynamically\nlibraries\nlinker\nfi|\ngcc\n一0\nma工-C\ngenerates\n工·0\nma工Ⅰ1\nma工·0\ngenerates\n·/吖土n.\n-1m\nble\nloader\nprogram\nlnmemory\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Linking and loading in programming"
+                            },
+                            "page_idx": 65
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific(Skip!)\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSyste\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System"
+                            },
+                            "page_idx": 66
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSyste\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System"
+                            },
+                            "page_idx": 67
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Section": "Operating System Design and Development",
+            "Starting_topic": 3,
+            "Topics": [
+                {
+                    "Topic": "Operating System Design and Implementation",
+                    "Starting_page": 69,
+                    "Pages": [
+                        {
+                            "Original_text": "OperatiäYtemDesignandlmplementation\n·TheproblemsindesigningandimplementinganOS\n一Designgoal\n一Mechanismandpolicies\n一lmplementation\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "OS Design and Implementation Issues",
+                                    "Content": "The problems in designing and implementing an OS include several critical aspects: the design goals, the mechanisms and policies to be used, and the actual implementation of the OS."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Title",
+                                "Content": "Operating System Design and Implementation"
+                            },
+                            "page_idx": 68
+                        },
+                        {
+                            "Original_text": "OperatiäYtemDesignandlmplementation\n·TheproblemsindesigningandimplementinganOS\n-Designgoal\n一Mechanismandpolicies\n一lmplementation\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Challenges in OS Design",
+                                    "Content": "The problems in designing and implementing an OS include the design goals, mechanisms and policies, and the actual implementation."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Operating System Design and Implementation"
+                            },
+                            "page_idx": 69
+                        },
+                        {
+                            "Original_text": "DesignGoal\nStartOSbydefininggoal\nAffectedby\nwa\ne、e··traditionaldesktop/laptop,mobile,ordistributed.\nUsergoals\nand2goals\nUsergoals一OSshouldbeconvenientuse,easylearn,reliable,safe,andfast\nSystemgoals一OSshouldbeeasyg\",/,anda,aswellasflexible,reliable,\nerror-free,and€/\nThereisnounlqewatOacleveallgoalscompromisesmaybetaken\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Design Goals",
+                                    "Content": "Start OS by defining goals that are affected by the traditional desktop/laptop, mobile, or distributed environments. User goals for the OS should include convenience, ease of learning, reliability, safety, and speed. System goals should focus on ease of use, flexibility, reliability, and being error-free. There is no unique way to achieve all goals; compromises may need to be made."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Operating System Design Goals"
+                            },
+                            "page_idx": 70
+                        },
+                        {
+                            "Original_text": "Operati\ntemDesignandlmplementation\n·TheproblemsindesigningandimplementinganOS\n一Designgoal\n-Mechanismandpolicies\n一lmplementation\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Challenges in OS Design",
+                                    "Content": "The problems in designing and implementing an OS include setting design goals, establishing mechanisms and policies, and the process of implementation."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Operating System Design and Implementation Problems"
+                            },
+                            "page_idx": 71
+                        },
+                        {
+                            "Original_text": "hanismsandPolicies\n·Example:\nMechanism:priority-basedsystems\nPOlicy:AprogramhavepriorityoverBprogramorV1ceversa.\n·lmportantprincipletOseparatemechanismandpolicies\nMechanism\ntodoit?\n·Shouldbeinsensitivetochangesinpolicy\nPolicy\nwill\n·LikelytOcangeacrossplcesorovertime\nSeparationOPOICYrommechanismfor\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Separation of Mechanisms and Policies",
+                                    "Content": "It is important to separate mechanisms from policies. A mechanism like priority-based systems indicates that one program has priority over another (e.g., program A has priority over program B, or vice versa). Mechanisms should be insensitive to changes in policy, whereas policies are likely to change across places or over time."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Separation of Mechanisms and Policies"
+                            },
+                            "page_idx": 72
+                        },
+                        {
+                            "Original_text": "Operati\ntemDesignandlmplementation\n·TheproblemsindesigningandimplementinganOS\n一Designgoal\n一Mechanismandpolicies\n-lmplementation\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Challenges in OS Design",
+                                    "Content": "The problems in designing and implementing an OS include various aspects such as design goals, mechanisms and policies, as well as the actual implementation."
                                 }
                             ],
                             "Info": {
                                 "Type": "Outline",
-                                "Content": "Operating System Services, Operating-System Interface to Users, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging"
+                                "Content": "Design goal, Mechanism and policies, Implementation"
                             },
-                            "page_idx": 18
+                            "page_idx": 73
+                        },
+                        {
+                            "Original_text": "mplementation\n·OSlmplementation\n一lnearlydays,OSwerewritteninassemblylanguages\n·MS-DOSwaswritteninlntel8088assemblylanguage\n一lnnowadays,OSarenowwritteninhigh-levellanguages\n·Linux:90%OfLinuxcodewaswritteninC\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Evolution of Operating System Languages",
+                                    "Content": "In the early days, operating systems (OS) were written in assembly languages. For instance, MS-DOS was written in Intel 8088 assembly language. Nowadays, operating systems are primarily written in high-level languages, with 90% of Linux code being written in C."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Operating System Implementation"
+                            },
+                            "page_idx": 74
+                        },
+                        {
+                            "Original_text": "lementation(Cont,)\n·Advantagesofusinghigh-levellanguage\n一TheCOdecanbewrittenfaster,iSmorecompact,andiSeasiertO\nunderstandanddebug\n一lmproveportability:tOmovetOsomeOtherhardwareplatform\n·Seethefollowingtwoslids\n·Disadvantagesofusinghigh-levellanguage\n一Reduceds\ncreasedstoragerequirements\n一Solvedbyodernsmrtcompiler\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Advantages of High-Level Languages",
+                                    "Content": "The code can be written faster, is more compact, and is easier to understand and debug. It also improves portability, allowing for easy movement to some other hardware platform."
+                                },
+                                {
+                                    "Title": "Disadvantages of High-Level Languages",
+                                    "Content": "Reduced storage requirements can be a disadvantage, but this issue has been solved by modern smart compilers."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Advantages and disadvantages of high-level languages"
+                            },
+                            "page_idx": 75
+                        },
+                        {
+                            "Original_text": "oorPortability\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "The concept of oorPortability"
+                            },
+                            "page_idx": 76
+                        },
+                        {
+                            "Original_text": "GoodPortability\na=a十ㄥ·\nx86\na=a十ㄥ·\nARM\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Good Portability in x86 and ARM"
+                            },
+                            "page_idx": 77
+                        },
+                        {
+                            "Original_text": "lmplementation(Cont,)\n·lnfact,maJorperformancelmprvement\n丘orusingtheass\nylanguage\n-NOT\n·BecauseOfadvancecompilertechniques\n·OnIybottleneckroutinearewritteninassemblylanguage\n一ltshouldbebetter\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Performance Improvement Insights",
+                                    "Content": "In fact, major performance improvement is achieved through the use of assembly language; this is a result of advanced compiler techniques. Only bottleneck routines are typically written in assembly language, as this approach should yield better performance."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Performance improvement using assembly language"
+                            },
+                            "page_idx": 78
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSyste\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System"
+                            },
+                            "page_idx": 79
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Operating System Structures and Approaches",
+                    "Starting_page": 81,
+                    "Pages": [
+                        {
+                            "Original_text": "OperatingSystemStructure\n·Operatingsystemstructure\n一Mon01ithic(龐大的)st\nre\n一Layeredapproach\n一Microkernels\n一Modules\n一Hybridsystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Structures",
+                                    "Content": "The structures of operating systems include several approaches: Monolithic systems, which are large and complex; Layered approaches, which organize the system into layers for better management; Microkernels, which aim to minimize the core functionalities; Modules, which allow flexible addition of functions; and Hybrid systems, which combine aspects of various structures."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Monolithic structure, Layered approach, Microkernels, Modules, Hybrid systems"
+                            },
+                            "page_idx": 80
+                        },
+                        {
+                            "Original_text": "OperatingSystemStructure\n·Operatingsystemstructure\n(龐大的)s\n-Monolithic\nure\n一Layeredapproach\n一Microkernels\n一Modules\n一Hybridsystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Structure Types",
+                                    "Content": "The structure of operating systems can be classified into several types: Monolithic, Layered approach, Microkernels, Modules, and Hybrid systems."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Operating System Structure"
+                            },
+                            "page_idx": 81
+                        },
+                        {
+                            "Original_text": "MonolithicStructure\n·Donothavewell-definedstrucres\n·Examples\n一MS-DOS:\n一OriginalUNIX-\n·Evehingbetweenthesystemcallinterfaceandphysicalhardwareisthe\nernel.\n0c(大rnel\n·一A11enormousamountOffunctionsinonelevel=>\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Monolithic Structure Overview",
+                                    "Content": "Monolithic structures do not have well-defined structures. Examples of such systems include MS-DOS and original UNIX. Everything between the system call interface and physical hardware is the kernel. This structure encompasses an enormous amount of functions in one level."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Monolithic Structure in Operating Systems"
+                            },
+                            "page_idx": 82
+                        },
+                        {
+                            "Original_text": "OriginaIUNIXArchitecture\n(theusers)\nshellsandcommands\ncompilersandinterpreters\nsystemlibraries\nsystem-üTrnerfacetOthekernel\nfilesystem\nCPUscheduling\nsignalsterminal\nlél-L19)l\nswappingblockI/Opagereplacement\nhandling\ncharacterI/Osystem\ndemandpaging\nsystem\nterminaldrivers\ndiskandtapedrivers\nvirtualmemory\nkernelinterfacethehardware\nterminalcontrollers\ndevicecontrollers\nmemorycontrollers\nterminals\ndisksandtapes\nphysicalmemory\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Original UNIX Architecture Components",
+                                    "Content": "The Original UNIX Architecture consists of multiple key components such as the users' shells and commands, compilers and interpreters, system libraries, and the system call interface to the kernel. Additionally, it includes the filesystem, CPU scheduling, signals, and terminal management. Other important functionalities include swapping, block I/O, page replacement handling, character I/O systems, demand paging, terminal drivers, disk and tape drivers, virtual memory management, and interactions between the kernel and hardware through terminal controllers, device controllers, and memory controllers."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "OriginaIUNIXArchitecture, Shells and Commands, Compilers and Interpreters, System Libraries, System-üTrnerfacetOthekernel, Filesystem, CPU Scheduling, Signals Terminal, Swapping Block I/O Page Replacement, Handling, Character I/O System, Demand Paging, System, Terminal Drivers, Disk and Tape Drivers, Virtual Memory, Kernel Interface the Hardware, Terminal Controllers, Device Controllers, Memory Controllers, Terminals, Disks and Tapes, Physical Memory"
+                            },
+                            "page_idx": 83
+                        },
+                        {
+                            "Original_text": "Mon01ithiFStructure\n·MonolithicStructure\n一Bad:DifficuIttoimplementandextend\n一GOOd:Haveadistinctperformanceadvantage\n·Verylittleoverheadinthesystem-callinterfaceandcommunicationwithin\nthekernelisfast\n·Discussedlater\n一Thus,\nⅠ\ninuandWindowsremonolithickernels\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Monolithic Structure Overview",
+                                    "Content": "A Monolithic Structure has both advantages and disadvantages. On the negative side, it is difficult to implement and extend. However, it has a distinct performance advantage due to very little overhead in the system-call interface, allowing for fast communication within the kernel. The concepts of monolithic kernels in UNIX and Windows will be discussed later."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Monolithic Structure advantages and disadvantages"
+                            },
+                            "page_idx": 84
+                        },
+                        {
+                            "Original_text": "OperatingSyrtemStructure\n·Operatingsystemstructure\n一Monolithicstructure\n-Layeredapproach\n一Microkernels\n一Modules\n一Hybridsystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Structures",
+                                    "Content": "The operating system can be structured in various ways, including monolithic structures, layered approaches, microkernels, modules, and hybrid systems."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Monolithic structure, Layered approach, Microkernels, Modules, Hybrid systems"
+                            },
+                            "page_idx": 85
+                        },
+                        {
+                            "Original_text": "LayeredApproach\nOSisdividedintoanumberoflayers\n·Layerapproach:eachlayeruses\nfunctionsandservicesOonlylower-\nleve//ers\n·Advantages:\nSimplicityofconstructionanddebugging\n·Starts丘omthelowestlayer\nlnformationhiding\n·DOnothavetoknowthedetailsoftheotherlayers\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Layered OS Architecture",
+                                    "Content": "OS is divided into a number of layers. The layered approach allows each layer to use functions and services only from lower-level layers."
+                                },
+                                {
+                                    "Title": "Advantages of Layered Approach",
+                                    "Content": "Advantages include simplicity of construction and debugging. It starts from the lowest layer, promoting information hiding, as there is no need to know the details of the other layers."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Layered approach in operating systems"
+                            },
+                            "page_idx": 86
+                        },
+                        {
+                            "Original_text": "Figure2一15\nApplication\nPresentation\nSession\nTransport\nNetwork\nDatalink\nPhysical\nTCP/IPandOSIModel\nApplications\nSMTP\nFTP\nDNS\nTCP\nSNMP\nNFS\nRPC\nUDP\nTFTP\nIP\nProtocolsdefinedby\ntheunderlyingnetworks\nTheMcGraw-HiIlCompanies,lnc,2000\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "TCP/IP and OSI Model Overview",
+                                    "Content": "This section presents an overview of the TCP/IP and OSI models, which are frameworks that describe the different layers involved in network communication. It includes various protocols defined by the underlying networks, showcasing how they facilitate connections and data exchange across different layers."
+                                },
+                                {
+                                    "Title": "Key Network Protocols",
+                                    "Content": "Important protocols within the TCP/IP model include SMTP, FTP, DNS, TCP, SNMP, NFS, RPC, UDP, TFTP, and IP. These protocols serve various functions from file transfer to remote procedure calls, and they are fundamental for network operations."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "TCP/IP and OSI Model"
+                            },
+                            "page_idx": 87
+                        },
+                        {
+                            "Original_text": "LayeredFileSystem:FileSystemOrganizedinto\nLayers\napplicationprograrns\nlogicalfilesystern\nile—organization\nbasicfile\n|/control\ndevices\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Layered File System Organization"
+                            },
+                            "page_idx": 88
+                        },
+                        {
+                            "Original_text": "LayeredApproach(Cont,)\n·Difficulties\n一Hardtodeterminethenumberoflayers\n一Hardtodefinefunctionalityofeachlayer\n一Lessefficient\n·Aserucemayinvolvemultiplelayers\n·Buteachlayeraddsoverhead\n·Trend:fewerlayerswithmorefunctionality\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Difficulties in Layered Approach",
+                                    "Content": "The layered approach presents several difficulties, such as the challenge of determining the number of layers needed and defining the functionality of each layer. It is also less efficient overall. Additionally, a service may involve multiple layers, but each layer adds overhead to the process. A current trend is to move towards fewer layers with more functionality."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Layered Approach Difficulties and Trends"
+                            },
+                            "page_idx": 89
+                        },
+                        {
+                            "Original_text": "OperatingSystemStructure\n·Operatingsystemstructure\n一Monolithicstructure\n一Layeredapproach\n-Microkernel\n一Modules\n一Hybridsystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Structures",
+                                    "Content": "The different structures of operating systems include: Monolithic structure, Layered approach, Microkernel, Modules, and Hybrid systems."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Monolithic structure, Layered approach, Microkernel, Modules, Hybrid systems"
+                            },
+                            "page_idx": 90
+                        },
+                        {
+                            "Original_text": "Microkernel\nM0tivation.duetoUNIXbecamelargeanddifficulttomanage\nldea:movesasmuchfromthekernelinto\nuserspace\nAsmallerkernel\nMach:thefirstmicrokernelbyCMU\nWhatamicrokernelshouldprovide?\nTypically,1lnilalprocessandmemorymanagement,andaCO~CO\nfacility\nWillbeintroducedinlaterchapters\nCommunicationfacility\nProvidecommunicationbetweenthe\nclientprogram\nandthevar10LlS\n(called\nservzces\nservers\nProvidedby\nmessagepassmg\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Microkernel Overview",
+                                    "Content": "Motivation: due to UNIX becoming large and difficult to manage. Idea: moves as much from the kernel into userspace, resulting in a smaller kernel. Mach: the first microkernel by CMU. What a microkernel should provide? Typically, initial process and memory management, and a communication facility. Communication facility: provides communication between the client program and the various services (called servers) provided by message passing."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel architecture and its features"
+                            },
+                            "page_idx": 91
+                        },
+                        {
+                            "Original_text": "Micr0kernelSystemStructure\napplication\nprogram\ninterprocess\ncommunication\nmessages\nsystem\nmessages\nmemory\nmanagment\nmicrokernel\nhardware\ndevice\ndriver\nCPU\nscheduling\nUSer\nmode\nkernel\nmode\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel System Structure"
+                            },
+                            "page_idx": 92
+                        },
+                        {
+                            "Original_text": "Micr0kernel(Cont,)\nAdvantages:\nEasiertoextendtheOS\n·Byadding\nanddOnotrequirekernelmodification\newservtces\nEasiertOpotheOStOnewarchitectures\nThekernelissmallandthechangestendtobefewer\nMorereliableand1oresecure\n·MOStservlcesarerunmngasuserprocesses\nIfaservicefailed,therestoftheOSremamsuntouched\nDisadvantages:良\nnceoverheadby\netweenservzces\nPer\nmessage\nindowNT•microkernel,WindowsXP:amonolithickernel\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Advantages of Microkernel Architecture",
+                                    "Content": "Easier to extend the OS by adding new services that do not require kernel modification. This architecture also makes it easier to port the OS to new architectures, as the kernel is small and the changes tend to be fewer. Additionally, it is more reliable and secure since most services are running as user processes; if a service fails, the rest of the OS remains untouched."
+                                },
+                                {
+                                    "Title": "Disadvantages of Microkernel Architecture",
+                                    "Content": "There is inherent overhead between services due to message passing."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Microkernel advantages and disadvantages"
+                            },
+                            "page_idx": 93
+                        },
+                        {
+                            "Original_text": "為什麼Messagepassing會造成很大的\noverhead呢?\n門ㄠn\n早,口\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Message passing overhead issues"
+                            },
+                            "page_idx": 94
+                        },
+                        {
+                            "Original_text": "OperatingSystemStructure\n·Operatingsystemstructure\n一Monolithicstructure\n一Layeredapproach\n一Microkernels\n-Modules\n一Hybridsystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Structures",
+                                    "Content": "The structure of operating systems can be categorized into several types: Monolithic structure, Layered approach, Microkernels, Modules, and Hybrid systems."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Monolithic structure, Layered approach, Microkernels, Modules, Hybrid systems"
+                            },
+                            "page_idx": 95
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Modern Operating System Methodologies",
+                    "Starting_page": 97,
+                    "Pages": [
+                        {
+                            "Original_text": "Modules\n·BestcurrentmethodologyinOSdesign\n·AnOSconsistsof\n一Acorekernel\n一Asetof勿\"一一一一(LKMs)thatcan\"\"\n勿atruntime\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Current Methodology in OS Design",
+                                    "Content": "Best current methodology in OS design involves creating an operating system composed of a core kernel and a set of Loadable Kernel Modules (LKMs) that can be loaded at runtime."
+                                },
+                                {
+                                    "Title": "Components of an Operating System",
+                                    "Content": "An OS consists of a core kernel and a set of Loadable Kernel Modules (LKMs) that can be loaded at runtime."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Best current methodology in OS design, An OS consists of, A core kernel, A set of Loadable Kernel Modules (LKMs) that can be loaded at runtime"
+                            },
+                            "page_idx": 96
+                        },
+                        {
+                            "Original_text": "User-spaceapplications\nModules\nUser-spaceapplications\nTheKernelCore\nModules\nTheLinuxkernel\n加,戺s戺hg\"eig戺\"\"-:-k\"-\",,s-\"r-\"\"\"figl2973758\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "User-space applications and modules in Linux"
+                            },
+                            "page_idx": 97
+                        },
+                        {
+                            "Original_text": "Example:S01arisM0dularApproach\nscheduling\nclasses\ndeviceand\nbusdrivers\ncoreSolaris\nkernel\nfilesystems\nloadable\nsystemcalls\nmiscellaneous\nmodules\nSTREAMS\nmodules\nexecutable\nformats\nSolarisiSorganizedaroundacorekernel\nwithseventypesofloadablekernel\nmodules\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Solaris Kernel Structure",
+                                    "Content": "Solaris is organized around a core kernel with seven types of loadable kernel modules."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Solaris kernel modular approach"
+                            },
+                            "page_idx": 98
+                        },
+                        {
+                            "Original_text": "OperatingSystemStructure\n·Operatingsystemstructure\n一Monolithicstructure\n一Layeredapproach\n一Microkernels\n一Modules\n-Hybridsystems\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Operating System Structures",
+                                    "Content": "There are different types of operating system structures including Monolithic structure, Layered approach, Microkernels, Modules, and Hybrid systems."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Monolithic structure, Layered approach, Microkernels, Modules, Hybrid systems"
+                            },
+                            "page_idx": 99
+                        },
+                        {
+                            "Original_text": "HybridSystems\n·Modernoperatingsystemsdonotadoptasinglestructure\n一Hybridsystemscombinemultiplestructures\nLinuxSmonolithic\n·+modulesfordynamicloadingoffunctionality\nindowismostlymonolithic\n·十personalities(user-levelservices)\n(microkernel)\n·十modularfordynamicloading0ffunctionality\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Hybrid Systems in Operating Systems",
+                                    "Content": "Modern operating systems do not adopt a single structure. Hybrid systems combine multiple structures. For instance, Linux is primarily monolithic but allows modules for dynamic loading of functionality. Windows is mostly monolithic as well, but includes personalities (user-level services) and is modular for dynamic loading of functionality."
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Hybrid systems in modern operating systems"
+                            },
+                            "page_idx": 100
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\nBuildingandB00tinganOperatingSystem(Skip!)\nOperatingSystemDebugging\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System (Skip!), Operating System Debugging"
+                            },
+                            "page_idx": 101
+                        },
+                        {
+                            "Original_text": "Outline\nOperatingSystemServices\nUserandOperating-Systemlnterface\nSystemCalls\nSystemServices\nLinkersandLoaders\nWhyAppIicationsAreOperating-SystemSpecific\nOperating-SystemDesignandlmplementation\nOperating-SystemStructure\n·BuildingandBootinganOperatingSystem\nOperatingSystemDebugging(Skip!)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Operating System Services, User and Operating-System Interface, System Calls, System Services, Linkers and Loaders, Why Applications Are Operating-System Specific, Operating-System Design and Implementation, Operating-System Structure, Building and Booting an Operating System, Operating System Debugging (Skip!)"
+                            },
+                            "page_idx": 102
                         }
                     ]
                 }
