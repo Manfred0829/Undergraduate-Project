@@ -1,6 +1,7 @@
 import requests
 import json
 from io import BytesIO
+from PIL import Image
 
 from app.modules.module_template import LazySingleton
 
@@ -12,11 +13,59 @@ class OCRspaceRequest(LazySingleton):
         import config 
 
         # 獲取 Api key
-        self.OCRSPACE_API_TOKEN = config.get_env_variable("OCRSPACE_API_TOKEN")
+        self.TOKEN_NUM = config.get_env_variable("OCRSPACE_API_TOKEN_NUM")
+        self.TOKEN_LIST = [config.get_env_variable(f"OCRSPACE_API_TOKEN_{i}") for i in range(1, self.TOKEN_NUM + 1)]
+        self.TOKEN_INDEX = 0
 
         # 設定已初始化
         self._initialized = True
 
+    def _check_and_compress_image(self, image, max_size_mb=1):
+        """
+        檢查圖片大小並在需要時進行壓縮
+        :param image: PIL Image 物件
+        :param max_size_mb: 最大允許的圖片大小 (MB)
+        :return: 壓縮後的 PIL Image 物件
+        """
+        # 轉為 BytesIO 檢查大小
+        img_byte_arr = BytesIO()
+        image.save(img_byte_arr, format='JPEG')
+        img_byte_arr.seek(0)
+        
+        # 計算大小 (MB)
+        size_mb = len(img_byte_arr.getvalue()) / (1024 * 1024)
+        
+        # 如果大小超過限制，進行壓縮
+        if size_mb > max_size_mb:
+            # 計算壓縮比例
+            compression_ratio = (max_size_mb / size_mb) ** 0.5
+            new_width = int(image.width * compression_ratio)
+            new_height = int(image.height * compression_ratio)
+            
+            # 調整圖片大小
+            compressed_image = image.resize((new_width, new_height), Image.LANCZOS)
+            
+            # 再次檢查大小
+            img_byte_arr = BytesIO()
+            compressed_image.save(img_byte_arr, format='JPEG', quality=85)
+            img_byte_arr.seek(0)
+            
+            new_size_mb = len(img_byte_arr.getvalue()) / (1024 * 1024)
+            
+            # 如果仍然超過大小，調整壓縮質量
+            if new_size_mb > max_size_mb:
+                for quality in [75, 65, 55, 45]:
+                    img_byte_arr = BytesIO()
+                    compressed_image.save(img_byte_arr, format='JPEG', quality=quality)
+                    img_byte_arr.seek(0)
+                    
+                    if len(img_byte_arr.getvalue()) / (1024 * 1024) <= max_size_mb:
+                        break
+            
+            return compressed_image
+        
+        # 如果不需要壓縮，返回原圖
+        return image
 
     def generate_img_OCR(self, image, overlay=True, language='eng', OCREngine=1, filename='image.jpg'):
         """
@@ -29,6 +78,9 @@ class OCRspaceRequest(LazySingleton):
         :param filename: The filename to send to API (can be anything with proper extension).
         :return: Result in JSON string.
         """
+        # 檢查並壓縮圖片
+        image = self._check_and_compress_image(image)
+        
         # 將圖片轉為 BytesIO 格式
         img_byte_arr = BytesIO()
         image.save(img_byte_arr, format='JPEG')  # 可以改成 'PNG' 根據你的圖片格式
@@ -36,7 +88,7 @@ class OCRspaceRequest(LazySingleton):
 
         payload = {
             'isOverlayRequired': overlay,
-            'apikey': self.OCRSPACE_API_TOKEN,
+            'apikey': self.TOKEN_LIST[self.TOKEN_INDEX],
             'language': language,
             'OCREngine': OCREngine,
         }
@@ -68,13 +120,29 @@ class OCRspaceRequest(LazySingleton):
         for img in img_list:
             OCR_result_str = self.generate_img_OCR(img)
             OCR_result_json = json.loads(OCR_result_str)
-            try:
-                page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
-                OCR_results.append(page_lines)
-            except Exception as e:
-                print("OCRspace encounter Limite or image size error:")
-                print(OCR_result_json)
-                raise Exception("OCRspace encounter Limite or image size error")
+            for i in range(self.TOKEN_NUM):
+                try:
+                    if 'TextOverlay' not in OCR_result_json['ParsedResults'][0]:
+                        page_lines = ['The page is empty.']
+                    else:
+                        page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
+                    OCR_results.append(page_lines)
+                    break
+                except Exception as e:
+                    if i != self.TOKEN_NUM - 1:
+                        print("OCRspace encounter error, try to change token:")
+                        print(OCR_result_json)
+                        self._change_token()
+                    else:
+                        print("OCRspace encounter error, all tokens are used:")
+                        print(OCR_result_json)
+                        raise e
+  
+                        
 
         pages_list = self._merge_words_to_pages(OCR_results)
         return pages_list
+
+
+    def _change_token(self):
+        self.TOKEN_INDEX = (self.TOKEN_INDEX + 1) % self.TOKEN_NUM
