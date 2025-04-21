@@ -1,18 +1,22 @@
 [
     {
         "id": "f9b3e5f4-e047-47d1-bdd2-3c9b05f8c5de",
-        "filename": "民主與憲政-9.jpg"
+        "filename": "民主與憲政-9.jpg",
+        "status": "processing"
     },
     {
         "id": "dd6c6990-99e3-4398-81c3-5e542ed58a61",
-        "filename": "民主與憲政-8.jpg"
+        "filename": "民主與憲政-8.jpg",
+        "status": "processing"
     },
     {
         "id": "48b126c8-58e1-4582-8ac9-9d4607d999c6",
-        "filename": "民主與憲政-10.jpg"
+        "filename": "民主與憲政-10.jpg",
+        "status": "processing"
     },
     {
         "id": "c452f0f4-7556-4c57-a129-4efb5f433e3a",
-        "filename": "民主與憲政-11.jpg"
+        "filename": "民主與憲政-11.jpg",
+        "status": "processing"
     }
 ]

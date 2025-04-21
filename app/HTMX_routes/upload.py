@@ -78,6 +78,7 @@ def upload_lecture_route(subject):
     if not subject:
         return jsonify({'success': False, 'error': '請提供科目名稱'}), 400
     
+    
     result = upload_lecture(file, subject)
     
     if result['success']:

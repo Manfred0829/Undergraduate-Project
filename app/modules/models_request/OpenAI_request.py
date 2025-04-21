@@ -24,7 +24,9 @@ class OpenAIRequest(LazySingleton):
         self._initialized = True
 
     def generate_content(self, user_msg, max_retries=3, return_json=False):
-
+        # 避免API頻率過高
+        time.sleep(0.1)
+        
         for attempt in range(max_retries):
             try:
                 # 呼叫 OpenAI API 進行聊天
@@ -217,7 +219,7 @@ class OpenAIRequest(LazySingleton):
         Below is the text of a ppt page:
         """
         '''
-        
+        '''
         prompt_prefix = """The content below is the text extracted from a page of lecture ppt.
 
         Task:
@@ -234,7 +236,26 @@ class OpenAIRequest(LazySingleton):
 
         Below is the text of a ppt page:
         """
+        '''
+        
+        prompt_prefix = """The content below is the text extracted from a page of lecture ppt.
 
+        Task:
+        1. Extract one or more key points. A key point should represent a meaningful concept or topic.
+        2. If multiple sentences describe the same topic (e.g., advantages of Message Passing), group them into a single key point.
+        3. For each key point:
+            - Use a short title (around 3–6 words) summarizing the concept.
+            - In the "Content", list main ideas **in a concise bullet-point style**, separated by line breaks or semicolons.
+            - Do not write long explanatory paragraphs.
+            - Avoid over-segmenting (do NOT treat each bullet as a separate key point).
+        4. Present the result in the following JSON format:
+            [{"Title": "short topic title", "Content": "• point one\\n• point two\\n• point three"}, {...}]
+        5. If the slide has no meaningful content (e.g., a title page, outline page, grading scale page, etc.), return an empty list: []
+        6. Use the **same language** as the input text (for both Title and Content).
+        7. Write like a student summarizing notes with brief bullet points.
+
+        Below is the text of a ppt page:
+        """
 
         return self.generate_content(prompt_prefix+text,return_json=True)
     

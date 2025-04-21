@@ -557,7 +557,7 @@
             <div class="note-meta">
                 ${tagsHTML}
             </div>
-            <p>${normalizedNote.content}</p>
+            <pre>${normalizedNote.content}</pre>
         `;
         
         // 如果是已修正的筆記，顯示原始錯誤內容
@@ -565,7 +565,7 @@
             noteHTML += `
                 <div class="corrected-note">
                     <div class="corrected-note-title">原始錯誤內容:</div>
-                    <p>${normalizedNote.wrong_content}</p>
+                    <pre>${normalizedNote.wrong_content}</pre>
                 </div>
             `;
         }

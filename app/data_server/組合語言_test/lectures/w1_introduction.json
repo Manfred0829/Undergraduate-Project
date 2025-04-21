@@ -1,0 +1,177 @@
+{
+    "Chapter": "Unit 1: Introduction to Assembly Language",
+    "Sections": [
+        {
+            "Section": "Overview of Assembly Language and System Programming",
+            "Starting_topic": 1,
+            "Topics": [
+                {
+                    "Topic": "Introduction to Assembly Language",
+                    "Starting_page": 4,
+                    "Pages": [
+                        {
+                            "Original_text": "WhatisAssembIyLanguage?\nAssemblylanguageisalow-levelprogramminglanguagethatisveryclosetO\nmachinelanguagebutprovidesamoreunderstandablerepresentation\n壮usesmnemonics(e.g.ADD,INC)tOrepresentmachineinstructions,\naddresses,andOtheropcodes,allowingprogrammerstOdirectlycontrolthe\nhardware\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Assembly Language Overview",
+                                    "Content": "• Low-level programming language\n• Close to machine language\n• Uses mnemonics (e.g., ADD, INC)\n• Represents machine instructions and opcodes\n• Enables direct hardware control"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding Assembly Language"
+                            },
+                            "page_idx": 3
+                        },
+                        {
+                            "Original_text": "WhatisAssembIyLanguage?\nspecifictOaparticularprocessorarchitecture\nAssemblylanguageis\nwhich\nmeansthattheassmblylanguagecodewillbedesigneddifferentlyfor\ndifferentprocessors\nAssemblylanguagesareusuallyusedinsituationswhere\nprecisecontrol\nhardwareisrequired,suchasembeddedsystems,driverdevelopment,\nsystemstartupprograms,etc.\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Assembly Language",
+                                    "Content": "• Specific to particular processor architecture\n• Designed differently for different processors\n• Used for precise control of hardware\n• Applications include embedded systems, driver development, and system startup programs"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Assembly Language and Its Uses"
+                            },
+                            "page_idx": 4
+                        }
+                    ]
+                },
+                {
+                    "Topic": "System Programming Concepts",
+                    "Starting_page": 6,
+                    "Pages": [
+                        {
+                            "Original_text": "WhatisSystemProgramming?\nSystemsprogrammingreferst0theprocess0fdesigning,developing,and\nmaintainingsystemsoftware\nthatprovidesabridgebetweenhardwareand\napplications(e.g.,operatingsystems,devicedrivers)\ninsystemprogrammingforcommunicating\nAssemblylanguageisabasictOOl\ndirectlywithhardware,whilesystemprogrammingreferstOthedevelopment\nOfunderlyingsoftwarethatenablesthehardwaretOexecuteapplications.\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of System Programming",
+                                    "Content": "• Designing, developing, and maintaining system software\n• Acts as a bridge between hardware and applications\n• Examples include operating systems and device drivers\n• Utilizes assembly language for direct hardware communication\n• Enables hardware to execute applications"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System Programming Definition and Importance"
+                            },
+                            "page_idx": 5
+                        },
+                        {
+                            "Original_text": "WhyShouIdWeLearnThese?\nUnderstandhowcomputerswork\nhOWtheprocessorexecutesinstructions,hOWmemoryiSmanagedandused,and\nhowtheinput/outputsystemworks.\nPerformanceoptimization\n○suchasinembeddedsystemsorhigh-performancecomputingapplications\nSystemprogramdevelopment\n○systemprograms,suchasoperatingsystems,drivers,etc.\nlnterview·\nThankstoChatGPT\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Reasons to Learn Computer Concepts",
+                                    "Content": "• Understand how computers work\n• Learn about processor instruction execution\n• Manage and utilize memory effectively\n• Understand input/output system functionality\n• Focus on performance optimization for embedded systems and high-performance computing\n• Gain skills for system program development like operating systems and drivers"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding Computer Systems and Performance Optimization"
+                            },
+                            "page_idx": 6
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Examinations and Assignments",
+                    "Starting_page": 3,
+                    "Pages": [
+                        {
+                            "Original_text": "Gradingpolicy\nMidtermexam(40%)\nTWOexamsforassemblylanguage,20%each\nFinalexam(30%)\nSystemprogramming\nAssignment(30%)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Grading policy, Midterm exam, Assembly language exams, Final exam, System programming, Assignment"
+                            },
+                            "page_idx": 2
+                        },
+                        {
+                            "Original_text": "WhatisAssembIyLanguage?\nAssemblylanguageisalow-levelprogramminglanguagethatisveryclosetO\nmachinelanguagebutprovidesamoreunderstandablerepresentation\n壮usesmnemonics(e.g.ADD,INC)tOrepresentmachineinstructions,\naddresses,andOtheropcodes,allowingprogrammerstOdirectlycontrolthe\nhardware\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Assembly Language Overview",
+                                    "Content": "• Low-level programming language\n• Close to machine language\n• Uses mnemonics (e.g., ADD, INC)\n• Represents machine instructions and opcodes\n• Enables direct hardware control"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding Assembly Language"
+                            },
+                            "page_idx": 3
+                        },
+                        {
+                            "Original_text": "WhatisAssembIyLanguage?\nspecifictOaparticularprocessorarchitecture\nAssemblylanguageis\nwhich\nmeansthattheassmblylanguagecodewillbedesigneddifferentlyfor\ndifferentprocessors\nAssemblylanguagesareusuallyusedinsituationswhere\nprecisecontrol\nhardwareisrequired,suchasembeddedsystems,driverdevelopment,\nsystemstartupprograms,etc.\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Assembly Language",
+                                    "Content": "• Specific to particular processor architecture\n• Designed differently for different processors\n• Used for precise control of hardware\n• Applications include embedded systems, driver development, and system startup programs"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Assembly Language and Its Uses"
+                            },
+                            "page_idx": 4
+                        },
+                        {
+                            "Original_text": "WhatisSystemProgramming?\nSystemsprogrammingreferst0theprocess0fdesigning,developing,and\nmaintainingsystemsoftware\nthatprovidesabridgebetweenhardwareand\napplications(e.g.,operatingsystems,devicedrivers)\ninsystemprogrammingforcommunicating\nAssemblylanguageisabasictOOl\ndirectlywithhardware,whilesystemprogrammingreferstOthedevelopment\nOfunderlyingsoftwarethatenablesthehardwaretOexecuteapplications.\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of System Programming",
+                                    "Content": "• Designing, developing, and maintaining system software\n• Acts as a bridge between hardware and applications\n• Examples include operating systems and device drivers\n• Utilizes assembly language for direct hardware communication\n• Enables hardware to execute applications"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "System Programming Definition and Importance"
+                            },
+                            "page_idx": 5
+                        },
+                        {
+                            "Original_text": "WhyShouIdWeLearnThese?\nUnderstandhowcomputerswork\nhOWtheprocessorexecutesinstructions,hOWmemoryiSmanagedandused,and\nhowtheinput/outputsystemworks.\nPerformanceoptimization\n○suchasinembeddedsystemsorhigh-performancecomputingapplications\nSystemprogramdevelopment\n○systemprograms,suchasoperatingsystems,drivers,etc.\nlnterview·\nThankstoChatGPT\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Reasons to Learn Computer Concepts",
+                                    "Content": "• Understand how computers work\n• Learn about processor instruction execution\n• Manage and utilize memory effectively\n• Understand input/output system functionality\n• Focus on performance optimization for embedded systems and high-performance computing\n• Gain skills for system program development like operating systems and drivers"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding Computer Systems and Performance Optimization"
+                            },
+                            "page_idx": 6
+                        },
+                        {
+                            "Original_text": "SyIIabus-AssembIyLanguage\nChapter1:BasicConcepts\nChapter2:x86ProcessorArchitecture\nChapter3:AssemblyLanguage\nFundamentals\nChapter4:DataTransfers,Addressing\nandArithmetic\nChapter5:Procedures\nChapter6:ConditionaIProcessing\nChapter7:IntegerArithmetic\nChapter8:AdvancedProcedure\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Chapter1:BasicConcepts, Chapter2:x86ProcessorArchitecture, Chapter3:AssemblyLanguage Fundamentals, Chapter4:DataTransfers,Addressing andArithmetic, Chapter5:Procedures, Chapter6:ConditionaIProcessing, Chapter7:IntegerArithmetic, Chapter8:AdvancedProcedure"
+                            },
+                            "page_idx": 7
+                        },
+                        {
+                            "Original_text": "SyIIabus-SystemProgramming\nChapter1:Background\nChapter2:Assemblers\nChapter3:LoadersandLinkers\nChapter4:\nMacroProcessors\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Chapter1:Background, Chapter2:Assemblers, Chapter3:LoadersandLinkers, Chapter4:MacroProcessors"
+                            },
+                            "page_idx": 8
+                        },
+                        {
+                            "Original_text": "ScheduIe\n2024/3/19:Self-studyweek\n2024/6/11:Finalexam\n2024/6/18:Self-studyweek\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Self-study week, Final exam, Self-study week"
+                            },
+                            "page_idx": 9
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

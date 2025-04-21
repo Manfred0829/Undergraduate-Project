@@ -1,4 +1,5 @@
 from app.utils import media_processer as media, text_processer as text, similarity_calculator as sim
+from app.services import file_service
 from app.modules.models_request.OCRspace_request import OCRspaceRequest
 from app.modules.models_local.EasyOCR_local import EasyOCRLocal
 from app.modules.models_request.OpenAI_request import OpenAIRequest
@@ -27,12 +28,12 @@ def processing_note(subject, lecture_name, img_path):
     Returns:
         dict: 處理結果
     """
+    # 從 img_path 中提取原始檔案名稱
+    original_filename = os.path.basename(img_path)
+    filename_without_ext = os.path.splitext(original_filename)[0]
+
     try:
-        logger.info(f"開始處理筆記: {img_path}, 科目: {subject}")
-        
-        # 從 img_path 中提取原始檔案名稱
-        original_filename = os.path.basename(img_path)
-        filename_without_ext = os.path.splitext(original_filename)[0]
+        logger.info(f"🔍 開始處理筆記: {img_path}, 科目: {subject}")
 
         # 確保目錄存在
         notes_output_dir = os.path.join("app", "data_server", subject, "notes")
@@ -42,12 +43,12 @@ def processing_note(subject, lecture_name, img_path):
         EasyOCR = EasyOCRLocal()
         img_PIL = media.read_image_to_PIL(img_path)
         if img_PIL is None:
-            logger.error(f"無法讀取圖片: {img_path}")
+            logger.error(f"❌ 無法讀取圖片: {img_path}")
             return {"success": False, "error": "無法讀取圖片檔案"}
         
         save_path = os.path.join("app", "data_server", subject, "notes", filename_without_ext + "_lines_bounding_box.png")
         cropped_images = EasyOCR.processing_lines_bounding_box(img_PIL, draw_result=True, save_path=save_path)
-        logger.info(f"已處理圖片並分割成 {len(cropped_images)} 個文字區域")
+        logger.info(f"✅ 已處理圖片並分割成 {len(cropped_images)} 個文字區域")
 
         # OCR process
         OpenAI = OpenAIRequest()
@@ -56,16 +57,16 @@ def processing_note(subject, lecture_name, img_path):
         for cropped_img in cropped_images:
             base64_img = media.convert_PIL_to_base64(cropped_img)
             OCR_result_text = OpenAI.generate_img_OCR(base64_img)
-            logger.info(f"OCR識別結果: {OCR_result_text[:30]}...")
+            #logger.info(f"OCR識別結果: {OCR_result_text[:30]}...")
             page_texts += OCR_result_text + "\n"
 
         # repair process
         repaired_page = OpenAI.processing_notes_repair(page_texts)
-        logger.info("筆記修復完成")
+        logger.info("✅ 筆記修復完成")
         
         # extract process
         notes_json = OpenAI.processing_notes_extract_keypoints(repaired_page)
-        logger.info("重點提取完成")
+        logger.info("✅ 重點提取完成")
 
         # correct process
         for note in notes_json:
@@ -76,7 +77,7 @@ def processing_note(subject, lecture_name, img_path):
             if result['isCorrected']:
                 note['Wrong_Content'] = note['Content']
                 note['Content'] = result['Corrected_Content']
-        logger.info("重點觀念修正完成")
+        logger.info("✅ 重點觀念修正完成")
 
 
         # embedding process
@@ -84,7 +85,7 @@ def processing_note(subject, lecture_name, img_path):
         vectors = OpenAI.processing_embedding(texts_for_embedding)
         for i in range(len(vectors)):
             notes_json[i]['Embedding'] = vectors[i]
-        logger.info("嵌入向量處理完成")
+        logger.info("✅ 嵌入向量處理完成")
 
 
         # simularity process
@@ -123,7 +124,7 @@ def processing_note(subject, lecture_name, img_path):
                 keypoints_json[k_idx]['Learning_Rate'] = _calculate_learning_rate(keypoints_json[k_idx]['Learning_Progress'],keypoints_json[k_idx]['Difficulty'])
         
         text.write_json(keypoints_json,keypoints_path) # 儲存更新後的keypoints資料
-        logger.info("相似度對應處理完成")
+        logger.info("✅ 相似度對應處理完成")
         
         # save
         #print(f"notes_json: {notes_json}")
@@ -131,12 +132,20 @@ def processing_note(subject, lecture_name, img_path):
         output_path = os.path.join(notes_output_dir, f"{filename_without_ext}.json")
         text.write_json(notes_save, output_path)
 
-        
-        logger.info(f"筆記處理完成，已保存到: {output_path}")
+        # index.json 更新
+        file_service.update_file_status(subject, "notes", original_filename, "done")
+
+        logger.info(f"✅ 筆記處理完成，已保存到: {output_path}")
         return {"success": True, "message": "筆記處理完成", "output_path": output_path}
         
     except Exception as e:
-        logger.error(f"處理筆記時發生錯誤: {str(e)}", exc_info=True)
+        try:
+            # index.json 更新
+            file_service.update_file_status(subject, "notes", original_filename, "error")
+        except Exception as e:
+            logger.error(f"❌ 更新 index.json 時發生錯誤: {str(e)}", exc_info=True)
+
+        logger.error(f"❌ 處理筆記時發生錯誤: {str(e)}", exc_info=True)
         return {"success": False, "error": str(e)}
 
 
@@ -151,11 +160,11 @@ def processing_lecture(subject, pdf_path):
     Returns:
         dict: 處理結果
     """
+    original_filename = os.path.basename(pdf_path)
+    filename_without_ext = os.path.splitext(original_filename)[0]
+
     try:
-        logger.info(f"開始處理講義: {pdf_path}, 科目: {subject}")
-        
-        original_filename = os.path.basename(pdf_path)
-        filename_without_ext = os.path.splitext(original_filename)[0]
+        logger.info(f"🔍 開始處理講義: {pdf_path}, 科目: {subject}")
         
         # 確保目錄存在
         lectures_output_dir = os.path.join("app", "data_server", subject, "lectures")
@@ -168,7 +177,7 @@ def processing_lecture(subject, pdf_path):
         # OCR procrss
         img_list = media.read_pdf_to_images(pdf_path)
         if not img_list or len(img_list) == 0:
-            logger.error(f"無法讀取PDF: {pdf_path}")
+            logger.error(f"❌ 無法讀取PDF: {pdf_path}")
             return {"success": False, "error": "無法讀取PDF檔案"}
             
         OCRspace = OCRspaceRequest()
@@ -176,7 +185,7 @@ def processing_lecture(subject, pdf_path):
         # 限制處理頁數，防止API成本過高 (測試用)
         max_pages = min(120, len(img_list))
         pages_list = OCRspace.processing_handouts_OCR(img_list[0:max_pages],language='cht')
-        logger.info(f"OCR識別完成，共處理 {len(pages_list)} 頁")
+        logger.info(f"✅ OCR識別完成，共處理 {len(pages_list)} 頁")
     
         # extract keypoints process
         OpenAI = OpenAIRequest()
@@ -189,15 +198,15 @@ def processing_lecture(subject, pdf_path):
             page_json['page_idx'] = i
             pages_json.append(page_json)
 
-        logger.info(f"已處理 {len(pages_json)} 頁並提取重點")
+        logger.info(f"✅ 已處理 {len(pages_json)} 頁並提取重點")
 
         # extract topic process
         topics_json = OpenAI.processing_handouts_extract_topic([page_json['Info'] for page_json in pages_json])
-        logger.info(f"已提取 {len(topics_json)} 個主題")
+        logger.info(f"✅ 已提取 {len(topics_json)} 個主題")
 
         # 確保至少有一個主題
         if not topics_json:
-            logger.warning("沒有找到任何主題，將建立預設主題")
+            logger.warning("❗ 沒有找到任何主題，將建立預設主題")
             topics_json = [{
                 "Topic": "預設主題",
                 "Starting_page": 1
@@ -220,11 +229,11 @@ def processing_lecture(subject, pdf_path):
 
         # extract sections process
         sections_json = OpenAI.processing_handouts_extract_section([topic['Topic'] for topic in topics_json])
-        logger.info(f"已提取 {len(sections_json)} 個章節")
+        logger.info(f"✅ 已提取 {len(sections_json)} 個章節")
 
         # 確保至少有一個段落
         if not sections_json:
-            logger.warning("沒有找到任何段落，將建立預設段落")
+            logger.warning("❗ 沒有找到任何段落，將建立預設段落")
             sections_json = [{
                 "Section": "預設段落",
                 "Starting_topic": 1
@@ -249,15 +258,15 @@ def processing_lecture(subject, pdf_path):
                 # 如果無法通過預期路徑獲取，則嘗試從 pages_json 獲取第一頁文本
                 if pages_json and pages_json[0].get('Original_text'):
                     first_page_text = pages_json[0]['Original_text']
-                    logger.warning("無法從章節層次獲取第一頁文本，使用直接的第一頁文本代替")
+                    logger.warning("❗ 無法從章節層次獲取第一頁文本，使用直接的第一頁文本代替")
             
             # 生成章節信息
             chapter_json = OpenAI.processing_handouts_extract_chapter(filename_without_ext, first_page_text)
-            logger.info("已提取章節信息")
+            logger.info("✅ 已提取章節信息")
 
         except Exception as e:
             # 如果提取章節過程中出錯，建立默認章節信息
-            logger.warning(f"提取章節信息時發生錯誤: {e}，使用默認章節信息")
+            logger.warning(f"❗ 提取章節信息時發生錯誤: {e}，使用默認章節信息")
             chapter_json = {"Chapter": filename_without_ext or "未命名章節"}
 
         # 將章節和段落信息關聯起來
@@ -266,7 +275,7 @@ def processing_lecture(subject, pdf_path):
         # 確保目標目錄存在
         path = os.path.join(lectures_output_dir, filename_without_ext + ".json")
         text.write_json(chapter_json, path)
-        logger.info(f"講義結構已保存到: {path}")
+        logger.info(f"✅ 講義結構已保存到: {path}")
 
         # embedding process
         keypoints_list = _extract_keypoints_hierarchy(chapter_json)
@@ -283,7 +292,7 @@ def processing_lecture(subject, pdf_path):
         
         # 檢查是否存在關鍵點
         if not keypoints_flatten:
-            logger.warning("沒有找到任何關鍵點，將使用預設值")
+            logger.warning("❗ 沒有找到任何關鍵點，將使用預設值")
             keypoints_flatten = ["本文件沒有提取到有效關鍵點"]
             # 創建一個具有預設值的關鍵點
             keypoints_list = [{
@@ -297,7 +306,7 @@ def processing_lecture(subject, pdf_path):
         
         # 確保向量和關鍵點列表長度匹配
         if len(vectors) != len(keypoints_list):
-            logger.warning(f"向量數量({len(vectors)})與關鍵點數量({len(keypoints_list)})不匹配")
+            logger.warning(f"❗ 向量數量({len(vectors)})與關鍵點數量({len(keypoints_list)})不匹配，使用零向量補齊")
             # 如果向量少於關鍵點，補充零向量
             while len(vectors) < len(keypoints_list):
                 vectors.append([0.0] * 1536)  # text-embedding-3-small的向量維度是1536
@@ -319,16 +328,16 @@ def processing_lecture(subject, pdf_path):
         # save
         keypoints_path = os.path.join(lectures_output_dir, filename_without_ext + "_keypoints.json")
         text.write_json(keypoints_list, keypoints_path)
-        logger.info(f"重點嵌入向量已保存到: {keypoints_path}")
+        logger.info(f"✅ 重點嵌入向量已保存到: {keypoints_path}")
         
         # tree diagram process
         tree_path = os.path.join(lectures_output_dir, filename_without_ext + "_tree")
         tree_img_path = tree_path + ".png"
         try:
             media.generate_chapter_hierarchy_graph(chapter_json, tree_path)
-            logger.info(f"樹狀結構圖已生成並保存到: {tree_img_path}")
+            logger.info(f"✅ 樹狀結構圖已生成並保存到: {tree_img_path}")
         except Exception as e:
-            logger.error(f"生成樹狀結構圖時出錯: {e}")
+            logger.error(f"❌ 生成樹狀結構圖時出錯: {e}")
             # 確保即使圖無法生成，整個過程也能繼續
         
 
@@ -336,9 +345,12 @@ def processing_lecture(subject, pdf_path):
         topics_json = _extract_topics_hierarchy(chapter_json)
         topics_path = os.path.join(lectures_output_dir, filename_without_ext + "_topics.json")
         text.write_json(topics_json, topics_path)
-        logger.info(f"主題嵌入向量已保存到: {topics_path}")
+        logger.info(f"✅ 主題嵌入向量已保存到: {topics_path}")
 
-        logger.info(f"講義{filename_without_ext}處理完成")
+        # index.json 更新
+        file_service.update_file_status(subject, "lectures", original_filename, "done")
+
+        logger.info(f"✅ 講義{filename_without_ext}處理完成")
         return {
             "success": True, 
             "message": "講義處理完成", 
@@ -346,9 +358,14 @@ def processing_lecture(subject, pdf_path):
             "keypoints_path": keypoints_path,
             "tree_path": tree_path
         }
-        
     except Exception as e:
-        logger.error(f"處理講義時發生錯誤: {str(e)}", exc_info=True)
+        try:
+            # index.json 更新
+            file_service.update_file_status(subject, "lectures", original_filename, "error")
+        except Exception as e:
+            logger.error(f"❌ 更新 index.json 時發生錯誤: {str(e)}", exc_info=True)
+        
+        logger.error(f"❌ 處理講義時發生錯誤: {str(e)}", exc_info=True)
         return {"success": False, "error": str(e)}
 
 

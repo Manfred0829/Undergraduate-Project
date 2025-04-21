@@ -1549,8 +1549,18 @@
         ],
         "Difficulty": 1,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -4,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "486115451_643296025332895_6834983261547287041_n.jpg",
+                "Note_Index": 1
+            },
+            {
+                "Notes_File_Name": "486115451_643296025332895_6834983261547287041_n.jpg",
+                "Note_Index": 3
+            }
+        ]
     },
     {
         "Title": "Types of User Interfaces",
@@ -26397,8 +26407,18 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -1,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "490414981_482313444877484_5940210791278696111_n.jpg",
+                "Note_Index": 0
+            },
+            {
+                "Notes_File_Name": "490414981_482313444877484_5940210791278696111_n.jpg",
+                "Note_Index": 1
+            }
+        ]
     },
     {
         "Title": "Understanding Open() Function",
@@ -46586,8 +46606,14 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -2,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "491008549_645966861635751_2188992481995249148_n.jpg",
+                "Note_Index": 1
+            }
+        ]
     },
     {
         "Title": "Windows System Calls",
@@ -52798,8 +52824,14 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": 1,
+        "Learning_Rate": 0.16666666666666666,
+        "Notes": [
+            {
+                "Notes_File_Name": "491027100_1984613218733424_4609046837439687720_n.jpg",
+                "Note_Index": 0
+            }
+        ]
     },
     {
         "Title": "Passing Parameters in System Calls",
@@ -69881,8 +69913,14 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -2,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "486115451_643296025332895_6834983261547287041_n.jpg",
+                "Note_Index": 2
+            }
+        ]
     },
     {
         "Title": "Performance Improvement Insights",
@@ -91623,8 +91661,14 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -2,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "482763211_1201596088139166_8275174946244680282_n.jpg",
+                "Note_Index": 0
+            }
+        ]
     },
     {
         "Title": "Advantages of Microkernel Architecture",
@@ -93176,11 +93220,15 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": -5,
+        "Learning_Progress": -7,
         "Learning_Rate": 0.0,
         "Notes": [
             {
                 "Notes_File_Name": "491246387_4142332459345336_1714508837184402981_n.jpg",
+                "Note_Index": 0
+            },
+            {
+                "Notes_File_Name": "491246387_4142332459345336_1714508837184402981_n_1745232175.jpg",
                 "Note_Index": 0
             }
         ]
@@ -94735,11 +94783,15 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": -8,
+        "Learning_Progress": -10,
         "Learning_Rate": 0.0,
         "Notes": [
             {
                 "Notes_File_Name": "491246387_4142332459345336_1714508837184402981_n.jpg",
+                "Note_Index": 1
+            },
+            {
+                "Notes_File_Name": "491246387_4142332459345336_1714508837184402981_n_1745232175.jpg",
                 "Note_Index": 1
             }
         ]
@@ -104059,7 +104111,17 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -4,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "486115451_643296025332895_6834983261547287041_n.jpg",
+                "Note_Index": 0
+            },
+            {
+                "Notes_File_Name": "491008549_645966861635751_2188992481995249148_n.jpg",
+                "Note_Index": 0
+            }
+        ]
     }
 ]
