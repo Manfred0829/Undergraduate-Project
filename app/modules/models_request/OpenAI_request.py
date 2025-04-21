@@ -151,6 +151,7 @@ class OpenAIRequest(LazySingleton):
         return self.generate_content(prompt_prefix+text)
     
     def processing_notes_extract_keypoints(self,text):
+        '''
         prompt_prefix = """The content below is the text extracted from a student notes.
 
         Task:
@@ -163,6 +164,25 @@ class OpenAIRequest(LazySingleton):
 
         text of a student notes:
         """
+        '''
+
+        prompt_prefix = """The content below is the text extracted from a page of lecture ppt.
+
+        Task:
+        1. Identify one or more **key points** from the text. A key point should represent a **complete concept or topic**, not just a single sentence.
+        2. If multiple sentences describe the **same topic**, group them into one key point.
+        3. Avoid over-segmenting. Do **not** treat every sentence as a separate key point unless they are clearly unrelated.
+        4. For each key point, give it:
+            - A short title (around 5 words) summarizing the concept.
+            - The full content (may include several related sentences).
+        5. Present the output in JSON format: [{"Title": "brief title", "Content": "detailed explanation"}, {...}]
+        6. If the text includes no key points (e.g., a title or agenda slide), return an empty JSON: []
+        7. Output must use the **same language** as the input slide (for both title and content).
+        8. Your role is like a student summarizing the slide into meaningful study notes.
+
+        Below is the text of a ppt page:
+        """
+
 
         return self.generate_content(prompt_prefix+text,return_json=True)
     
