@@ -366,22 +366,19 @@ def delete_note(note_id):
     except Exception as e:
         return {'success': False, 'error': str(e)}
 
-# 獲取特定講義的所有相關筆記
-def get_notes_for_lecture(lecture_id):
-    """獲取與特定講義相關的所有筆記"""
-    '''
-    json_path = os.path.join(current_app.root_path, 'data_json', 'notes.json')
-    notes = read_json(json_path, default_content={})
-    related_notes = []
-    
-    for subject in notes:
-        for note in notes[subject]:
-            if note.get('lecture_id') == lecture_id:
-                related_notes.append(note)
-    
-    return related_notes
-    '''
-    return None
+def get_notes_from_keypoint(subject, keypoint_json):
+    result_notes = []
+    for note_kp in keypoint_json["Notes"]:
+        note_name_without_ext = os.path.splitext(note_kp["Notes_File_Name"])[0]
+        notes_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
+        try:
+            notes_json = text.read_json(notes_path)
+            result_notes.append(notes_json["Notes"][note_kp["Note_Index"]])
+        except Exception as e:
+            print(f"Error reading notes file {notes_path}: {e}")
+            continue  # 讀取錯誤則跳過此筆資料
+
+    return result_notes  # 確保有返回結果
 
 # 創建科目資料夾
 def create_subject_folders(subject_name):
