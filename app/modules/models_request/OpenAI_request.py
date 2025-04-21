@@ -521,7 +521,7 @@ class OpenAIRequest(LazySingleton):
         prompt = f"""
         You are given one of the keypoints in the subject {subject}, please complete below tesk:
 
-        Create a clear and concise explanation for the keypoint to show the student, output it in the following JSON format:
+        Create a clear and concise explanation for the keypoint to show the student using traditional chinese, output it in the following JSON format:
         {{
         "Explanation": "explanation text"
         }}
@@ -538,4 +538,4 @@ class OpenAIRequest(LazySingleton):
                 notes_prompt += "Student Note: " + note["Content"] + "\n"
 
         response = self.generate_content(prompt + keypoint_prompt + notes_prompt, return_json=True)
-        
+        return response

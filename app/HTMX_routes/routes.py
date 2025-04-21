@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, send_file, redir
 import os
 import json
 from app.services.file_service import get_subjects, get_lectures, get_notes, create_subject_folders, delete_subject_folders
-from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions, processing_update_weights, processing_get_notes, processing_get_history, processing_update_topics
+from app.services.main_processer import processing_get_keypoints, processing_get_page_info, processing_get_questions, processing_update_weights, processing_get_notes, processing_get_history, processing_update_topics, processing_query_keypoint
 from app.utils.media_processer import get_num_pages
 # 創建 Blueprint
 htmx_bp = Blueprint('htmx', __name__, url_prefix='/htmx')
@@ -315,7 +315,7 @@ def htmx_delete_subject():
 def query_keypoint_fragment():
     return render_template('HTMX_templates/query_keypoint.html')
 
-@htmx_bp.route('query_keypoint/<subject>/<lecture_name>')
+@htmx_bp.route('query_keypoint/<subject>/<lecture_name>', methods=['POST'])
 def query_keypoint(subject, lecture_name):
     """API端點：查詢指定講義的重點"""
 
@@ -323,7 +323,6 @@ def query_keypoint(subject, lecture_name):
 
     try:
         result = processing_query_keypoint(subject, lecture_name, query_text)
-
         return jsonify({
             'success': True,
             'result': result
