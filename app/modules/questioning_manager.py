@@ -53,7 +53,8 @@ class QuestioningManager():
         # 使用 numpy.random.choice 根據 softmax 機率抽選一個 index
         selected_index = np.random.choice(self.N, p=softmax_values)
 
-        return selected_index
+        # 確保返回標準Python整數類型，而非np.int64
+        return int(selected_index)
 
 
     """ 權重更新 """

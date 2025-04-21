@@ -27,6 +27,28 @@ def create_app():
     
     return app
 
+def check_process():
+    '''
+    from app.utils import text_processer
+    # 讀取keypoints.json
+    keypoints_path = r"app\data_server\作業系統\lectures\CH02_Operating-System Structures-上課版_keypoints.json"
+    keypoints_json = text_processer.read_json(keypoints_path)
+
+    # Note被意外重複加入，去除多餘的Note
+    #keypoints_json[59].pop("Embedding")
+    for i in range(1, len(keypoints_json[59]["Notes"])):
+        keypoints_json[59]["Notes"].pop()
+    print(keypoints_json[59]["Notes"])
+    
+    #keypoints_json[60].pop("Embedding")
+    for i in range(1, len(keypoints_json[60]["Notes"])):
+        keypoints_json[60]["Notes"].pop()
+    print(keypoints_json[60]["Notes"])
+
+    # 寫回keypoints.json
+    text_processer.write_json(keypoints_json, keypoints_path)
+    '''
+
 if __name__ == "__main__":
     # 解析命令行參數
     parser = argparse.ArgumentParser(description='啟動HTMX應用程式')
@@ -41,6 +63,11 @@ if __name__ == "__main__":
         # 測試模式，僅在內網運行
         print("測試模式：僅在內網運行，訪問 http://localhost:5001 查看效果")
         app.run(debug=True, host='0.0.0.0', port=PORT)
+    elif args.mode.lower() == 'check':
+        # 檢查模式，不開啟伺服器，僅執行固定檢查流程
+        print("檢查模式：不開啟伺服器，僅執行固定檢查流程")
+        check_process()
+
     else:
         # 對外公開模式
         # 1️⃣ 啟動 ngrok 並取得公開網址
