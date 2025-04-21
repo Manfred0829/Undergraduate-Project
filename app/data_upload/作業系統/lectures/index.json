@@ -5,8 +5,13 @@
         "status": "done"
     },
     {
-        "id": "744415b9-fd5c-4128-9e78-960f1984e98d",
+        "id": "9ed3000a-e0ae-4d48-8c8b-3d63794f26ac",
         "filename": "CH03_Processes-上課版.pdf",
+        "status": "done"
+    },
+    {
+        "id": "04884514-eb66-4227-b090-0e7e4acf2dda",
+        "filename": "CH01_Introduction-上課版.pdf",
         "status": "error"
     }
 ]
