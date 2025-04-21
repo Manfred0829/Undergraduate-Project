@@ -816,7 +816,17 @@
                     }
                     
                     const files = document.getElementById('note-file-upload').files;
-                    const lecture_name = document.getElementById('related-lecture').value;
+                    const lectureSelect = document.getElementById('related-lecture');
+                    const lecture_id = lectureSelect.value;
+                    
+                    // 驗證是否已選擇講義
+                    if (!lecture_id || lecture_id === '') {
+                        showNoteUploadStatus('請選擇對應講義', 'alert-danger');
+                        return;
+                    }
+
+                    // 取得講義名稱文字（顯示用）
+                    const lecture_name = lectureSelect.options[lectureSelect.selectedIndex]?.text || '';
                     
                     // 顯示上傳中狀態
                     showNoteUploadStatus('上傳中，請稍候...', 'alert-info');
@@ -831,9 +841,8 @@
                         const formData = new FormData();
                         formData.append('file', files[i]);
                         formData.append('subject', currentSubject);
-                        if (lecture_name) {
-                            formData.append('lecture_name', lecture_name);
-                        }
+                        formData.append('lecture_id', lecture_id);
+                        formData.append('lecture_name', lecture_name);
                         
                         // 發送上傳請求
                         fetch('/htmx/upload/note', {

@@ -105,9 +105,14 @@ def upload_note_route():
     file = request.files['file']
     subject = request.form.get('subject')
     lecture_name = request.form.get('lecture_name')
-    
+
     if not subject:
         return jsonify({'success': False, 'error': '請提供科目名稱'}), 400
+
+    # 檢查講義名稱
+    print(f"lecture_name: {lecture_name}")
+    if not lecture_name:
+        return jsonify({'success': False, 'error': '請提供講義名稱'}), 400
     
     result = upload_note(file, subject)
     

@@ -531,20 +531,24 @@ def delete_note_htmx(subject, note_id):
 
     # delete related note in keypoints.json
     notes_path = os.path.join(directory_server_path, file_name_without_ext + '.json')
-    if os.path.exists(notes_path):
+    if  os.path.exists(notes_path):
         notes_json = text_processer.read_json(notes_path, default_content={})
-        keypoint_name = notes_json['Lecture_Name']
-        keypoint_name_without_ext = keypoint_name.split('.')[0]
-        keypoint_path = os.path.join("app", "data_server", subject, "lectures", keypoint_name_without_ext, "keypoints.json")
-        keypoint_json = text_processer.read_json(keypoint_path, default_content={})
 
-        for note in notes_json['Notes']:
-            k_idx = note['Keypoint_id']
-            for note_kp in keypoint_json[k_idx]['Notes']:
-                if note_kp['Title'] == note['Title']:
-                    keypoint_json[k_idx]['Notes'].remove(note_kp)
+        if 'Lecture_Name' in notes_json:
+            keypoint_name = notes_json['Lecture_Name']
+            keypoint_name_without_ext = keypoint_name.split('.')[0]
+            keypoint_path = os.path.join("app", "data_server", subject, "lectures", keypoint_name_without_ext, "keypoints.json")
 
-        text_processer.write_json(keypoint_json, keypoint_path)
+            if os.path.exists(keypoint_path):
+                keypoint_json = text_processer.read_json(keypoint_path, default_content={})
+
+                for note in notes_json['Notes']:
+                    k_idx = note['Keypoint_id']
+                    for note_kp in keypoint_json[k_idx]['Notes']:
+                        if note_kp['Title'] == note['Title']:
+                            keypoint_json[k_idx]['Notes'].remove(note_kp)
+
+                text_processer.write_json(keypoint_json, keypoint_path)
 
     # 安全刪除函數
     def safe_remove(file_path):
@@ -559,6 +563,7 @@ def delete_note_htmx(subject, note_id):
 
     # delete server
     safe_remove(os.path.join(directory_server_path, file_name_without_ext + '.json'))
+    safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_lines_bounding_box.png'))
 
     # delete index
     if i >= 0:

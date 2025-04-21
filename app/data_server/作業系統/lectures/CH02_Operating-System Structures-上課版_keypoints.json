@@ -93176,8 +93176,14 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -5,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "491246387_4142332459345336_1714508837184402981_n.jpg",
+                "Note_Index": 0
+            }
+        ]
     },
     {
         "Title": "Disadvantages of Microkernel Architecture",
@@ -94729,8 +94735,14 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -8,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "491246387_4142332459345336_1714508837184402981_n.jpg",
+                "Note_Index": 1
+            }
+        ]
     },
     {
         "Title": "Operating System Structures",

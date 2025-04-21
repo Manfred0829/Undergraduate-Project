@@ -89,11 +89,11 @@ def processing_note(subject, lecture_name, img_path):
 
         # simularity process
         lecturename_without_ext = os.path.splitext(lecture_name)[0]
-        keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext, "_keypoints.json") # 讀取keypoints資料
+        keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json") # 讀取keypoints資料
         keypoints_json = text.read_json(keypoints_path)
         keypoints_embedding = [k["Embedding"] for k in keypoints_json]
 
-        def _calculate_learning_rate(self,progress,diff):
+        def _calculate_learning_rate(progress,diff):
             if progress <= 0: # 若小於0則設為0%
                 return 0.0
             elif progress >= 3*diff: # 若大於上限則為100%
@@ -104,6 +104,8 @@ def processing_note(subject, lecture_name, img_path):
         for n_idx, note in enumerate(notes_json):
             # 筆記json中儲存k_idx
             k_idx = sim.get_most_similar_index(note["Embedding"],keypoints_embedding)
+            #print(f"k_idx: {k_idx}")
+            note["Keypoint_Index"] = -1
             note["Keypoint_Index"] = k_idx
 
             # 講義json中儲存n_idx
@@ -124,6 +126,7 @@ def processing_note(subject, lecture_name, img_path):
         logger.info("相似度對應處理完成")
         
         # save
+        #print(f"notes_json: {notes_json}")
         notes_save = {"Lecture_Name": lecture_name, "Notes": notes_json}
         output_path = os.path.join(notes_output_dir, f"{filename_without_ext}.json")
         text.write_json(notes_save, output_path)
@@ -335,7 +338,7 @@ def processing_lecture(subject, pdf_path):
         text.write_json(topics_json, topics_path)
         logger.info(f"主題嵌入向量已保存到: {topics_path}")
 
-
+        logger.info(f"講義{filename_without_ext}處理完成")
         return {
             "success": True, 
             "message": "講義處理完成", 
@@ -604,11 +607,12 @@ def processing_update_topics(subject, lecture_name, answer_results):
 
 def _get_notes_from_keypoint(subject, keypoint_json):
     result_notes = []
-    for note in keypoint_json["Notes"]:
-        notes_path = os.path.join("app", "data_server", subject, "notes", note["Notes_File_Name"])
+    for note_kp in keypoint_json["Notes"]:
+        note_name_without_ext = os.path.splitext(note_kp["Notes_File_Name"])[0]
+        notes_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
         try:
             notes_json = text.read_json(notes_path)
-            result_notes.append(notes_json[note["Note_Index"]])
+            result_notes.append(notes_json["Notes"][note_kp["Note_Index"]])
         except Exception as e:
             print(f"Error reading notes file {notes_path}: {e}")
             continue  # 讀取錯誤則跳過此筆資料

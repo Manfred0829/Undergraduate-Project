@@ -100,6 +100,9 @@ class OpenAIRequest(LazySingleton):
 
 
     def generate_img_OCR(self, base64_image, request_msg='What words are in the picture? Only give me the words.', max_retries=3):
+        # 避免API頻率過高
+        time.sleep(0.1)
+
         for attempt in range(max_retries):
             try:
                 response = self.model.chat.completions.create(
@@ -190,8 +193,8 @@ class OpenAIRequest(LazySingleton):
         prompt_prefix = f"""The content below is a student note of the subject {subject}, complete the following task.
 
         Task:
-        1. If the note contains conceptual errors, please correct the Content description and output as the json format: {{"isCorrected":True, "Corrected_Content":"the corrected content of the note"}}
-        2. If the note does not contains conceptual errors, please output as the json format: {{"isCorrected":False}}
+        1. If the note contains conceptual errors, please correct the Content description and output as the json format: {{"isCorrected":true, "Corrected_Content":"the corrected content of the note"}}
+        2. If the note does not contains conceptual errors, please output as the json format: {{"isCorrected":false}}
 
         text of a student note:
         """
