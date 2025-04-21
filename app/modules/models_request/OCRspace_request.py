@@ -124,7 +124,7 @@ class OCRspaceRequest(LazySingleton):
             img = self._check_and_compress_image(img,p_idx=i)
             
             # 嘗試使用所有可用的token
-            for i in range(self.TOKEN_NUM):
+            for j in range(self.TOKEN_NUM):
                 try:
                     # 每次嘗試都使用當前的token index調用OCR
                     OCR_result_str = self.generate_img_OCR(img, language=language)
@@ -147,8 +147,8 @@ class OCRspaceRequest(LazySingleton):
                     print(f"OCR page {i+1} encounter error with token {self.TOKEN_INDEX+1}: {str(e)}")
                     print(OCR_result_json)
                     
-                    if i != self.TOKEN_NUM - 1:
-                        print("==> Trying next token...")
+                    if j != self.TOKEN_NUM - 1:
+                        print(f"==> Trying next token: {self.TOKEN_LIST[self.TOKEN_INDEX][:6]}")
                         self._change_token()
                     else:
                         print("==> All tokens have been tried and failed.")

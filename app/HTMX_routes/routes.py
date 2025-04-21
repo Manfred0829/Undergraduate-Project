@@ -309,3 +309,21 @@ def htmx_delete_subject():
     else:
         return jsonify(result), 500
 
+'''
+@htmx_bp.route('query_keypoint/<subject>/<lecture_name>')
+def query_keypoint(subject, lecture_name):
+    """API端點：查詢指定講義的重點"""
+
+    query_text = request.form.get('query_text')
+
+    try:
+        result = processing_query_keypoint(subject, lecture_name, query_text)
+
+        return jsonify({
+            'success': True,
+            'result': result
+        })
+    except Exception as e:
+        print('error:', e)
+        return jsonify({'success': False, 'error': str(e)}), 500
+'''
