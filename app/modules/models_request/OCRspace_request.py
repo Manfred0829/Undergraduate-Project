@@ -118,27 +118,37 @@ class OCRspaceRequest(LazySingleton):
         OCR_results = []
 
         for img in img_list:
-            OCR_result_str = self.generate_img_OCR(img)
-            OCR_result_json = json.loads(OCR_result_str)
+            
+            # 嘗試使用所有可用的token
             for i in range(self.TOKEN_NUM):
                 try:
+                    # 每次嘗試都使用當前的token index調用OCR
+                    OCR_result_str = self.generate_img_OCR(img, language=language)
+                    OCR_result_json = json.loads(OCR_result_str)
+                    
+                    # 檢查OCR結果
+                    if 'ParsedResults' not in OCR_result_json or not OCR_result_json['ParsedResults']:
+                        raise Exception(f"No parsed results.")
+                    
                     if 'TextOverlay' not in OCR_result_json['ParsedResults'][0]:
                         page_lines = ['The page is empty.']
                     else:
                         page_lines = OCR_result_json['ParsedResults'][0]['TextOverlay']['Lines']
+                    
                     OCR_results.append(page_lines)
                     break
+                    
                 except Exception as e:
+                    print(f"OCRspace encounter error with token {self.TOKEN_INDEX}: {str(e)}")
+                    print(OCR_result_json)
+                    
                     if i != self.TOKEN_NUM - 1:
-                        print("OCRspace encounter error, try to change token:")
-                        print(OCR_result_json)
+                        print("Trying next token...")
                         self._change_token()
                     else:
-                        print("OCRspace encounter error, all tokens are used:")
-                        print(OCR_result_json)
+                        print("All tokens have been tried and failed.")
                         raise e
-  
-                        
+            
 
         pages_list = self._merge_words_to_pages(OCR_results)
         return pages_list
