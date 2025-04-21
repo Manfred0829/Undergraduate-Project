@@ -102,6 +102,7 @@ class OpenAIRequest(LazySingleton):
 
 
     def generate_img_OCR(self, base64_image, request_msg='What words are in the picture? Only give me the words.', max_retries=3):
+        request_msg = "Extract only the words from the picture. Include only English or Traditional Chinese."
         # 避免API頻率過高
         time.sleep(0.1)
 
