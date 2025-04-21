@@ -171,7 +171,7 @@ def processing_lecture(subject, pdf_path):
         OCRspace = OCRspaceRequest()
         
         # 限制處理頁數，防止API成本過高 (測試用)
-        max_pages = min(8, len(img_list))
+        max_pages = min(20, len(img_list))
         pages_list = OCRspace.processing_handouts_OCR(img_list[0:max_pages],language='cht')
         logger.info(f"OCR識別完成，共處理 {len(pages_list)} 頁")
     
