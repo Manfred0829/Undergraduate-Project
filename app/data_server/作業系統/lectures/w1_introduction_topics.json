@@ -1,0 +1,20 @@
+[
+    {
+        "Topic": "Grading and Course Structure",
+        "k_start": 0,
+        "k_end": 0,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "Fundamentals of Assembly Language",
+        "k_start": 0,
+        "k_end": 2,
+        "Wrong_count": 0
+    },
+    {
+        "Topic": "System Programming Concepts",
+        "k_start": 2,
+        "k_end": 5,
+        "Wrong_count": 0
+    }
+]

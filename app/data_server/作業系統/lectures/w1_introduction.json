@@ -1,0 +1,98 @@
+{
+    "Chapter": "Unit 1: Introduction to System Programming",
+    "Sections": [
+        {
+            "Section": "Course Overview and Programming Basics",
+            "Starting_topic": 1,
+            "Topics": [
+                {
+                    "Topic": "Grading and Course Structure",
+                    "Starting_page": 3,
+                    "Pages": [
+                        {
+                            "Original_text": "Gradingpolicy\nMidtermexam(40%)\nTWOexamsforassemblylanguage,20%each\nFinalexam(30%)\nSystemprogramming\nAssignment(30%)\n",
+                            "Keypoints": [],
+                            "Info": {
+                                "Type": "Outline",
+                                "Content": "Grading policy, Midterm exam (40%), Assembly language exams (20% each), Final exam (30%), System programming, Assignment (30%)"
+                            },
+                            "page_idx": 2
+                        }
+                    ]
+                },
+                {
+                    "Topic": "Fundamentals of Assembly Language",
+                    "Starting_page": 4,
+                    "Pages": [
+                        {
+                            "Original_text": "WhatisAssembIyLanguage?\nAssemblylanguageisalow-levelprogramminglanguagethatisveryclosetO\nmachinelanguagebutprovidesamoreunderstandablerepresentation\n壮usesmnemonics(e.g.ADD,INC)tOrepresentmachineinstructions,\naddresses,andOtheropcodes,allowingprogrammerstOdirectlycontrolthe\nhardware\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Assembly Language",
+                                    "Content": "• Low-level programming language\n• Closely related to machine language\n• Uses mnemonics (e.g. ADD, INC)\n• Represents machine instructions and opcodes\n• Allows direct hardware control"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Assembly language description"
+                            },
+                            "page_idx": 3
+                        },
+                        {
+                            "Original_text": "WhatisAssembIyLanguage?\nspecifictOaparticularprocessorarchitecture\nAssemblylanguageis\nwhich\nmeansthattheassmblylanguagecodewillbedesigneddifferentlyfor\ndifferentprocessors\nAssemblylanguagesareusuallyusedinsituationswhere\nprecisecontrol\nhardwareisrequired,suchasembeddedsystems,driverdevelopment,\nsystemstartupprograms,etc.\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Overview of Assembly Language",
+                                    "Content": "• Specific to particular processor architecture\n• Designed differently for different processors\n• Used for precise control over hardware\n• Common in embedded systems, driver development, system startup programs"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Concept of Assembly Language"
+                            },
+                            "page_idx": 4
+                        }
+                    ]
+                },
+                {
+                    "Topic": "System Programming Concepts",
+                    "Starting_page": 6,
+                    "Pages": [
+                        {
+                            "Original_text": "WhatisSystemProgramming?\nSystemsprogrammingreferst0theprocess0fdesigning,developing,and\nmaintainingsystemsoftware\nthatprovidesabridgebetweenhardwareand\napplications(e.g.,operatingsystems,devicedrivers)\ninsystemprogrammingforcommunicating\nAssemblylanguageisabasictOOl\ndirectlywithhardware,whilesystemprogrammingreferstOthedevelopment\nOfunderlyingsoftwarethatenablesthehardwaretOexecuteapplications.\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Understanding System Programming",
+                                    "Content": "• Process of designing, developing, and maintaining system software\n• Acts as a bridge between hardware and applications (e.g., operating systems, device drivers)\n• Involves development of software enabling hardware to execute applications\n• Assembly language is a basic tool for communicating directly with hardware"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Definition of System Programming"
+                            },
+                            "page_idx": 5
+                        },
+                        {
+                            "Original_text": "WhyShouIdWeLearnThese?\nUnderstandhowcomputerswork\nhOWtheprocessorexecutesinstructions,hOWmemoryiSmanagedandused,and\nhowtheinput/outputsystemworks.\nPerformanceoptimization\n○suchasinembeddedsystemsorhigh-performancecomputingapplications\nSystemprogramdevelopment\n○systemprograms,suchasoperatingsystems,drivers,etc.\nlnterview·\nThankstoChatGPT\n",
+                            "Keypoints": [
+                                {
+                                    "Title": "Importance of Learning Computer Basics",
+                                    "Content": "• Understand how computers work\n• Learn processor instruction execution\n• Knowledge of memory management and usage\n• Comprehend input/output system functionality"
+                                },
+                                {
+                                    "Title": "Applications of Knowledge",
+                                    "Content": "• Performance optimization in embedded systems\n• High-performance computing applications\n• Development of system programs like operating systems and drivers"
+                                }
+                            ],
+                            "Info": {
+                                "Type": "Concept",
+                                "Content": "Understanding computer systems and performance optimization"
+                            },
+                            "page_idx": 6
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

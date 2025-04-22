@@ -774,9 +774,20 @@ def processing_query_keypoint(subject, lecture_name, query_text):
 
     # 計算每個重點的餘弦相似度
     keypoints_embedding = [keypoint["Embedding"] for keypoint in keypoints_json]
-    target_k_idx = sim.get_most_similar_index(query_embedding, keypoints_embedding)
-    target_keypoint = keypoints_json[target_k_idx]
+    try:
+        target_k_idx = sim.get_most_similar_index(query_embedding, keypoints_embedding,threshold=0.30, need_threshold=True)
+    except Exception as e:
+        logger.error(f"查詢重點時發生錯誤: {str(e)}")
 
+
+    if target_k_idx == -1:
+        return {
+            "Title": "找不到相關重點",
+            "Content": "找不到相關重點",
+            "Explanation": "找不到相關重點"
+        }
+
+    target_keypoint = keypoints_json[target_k_idx]
 
     # 生成重點解釋
     explanation = OpenAI.processing_keypoint_explanation(subject, target_keypoint)
