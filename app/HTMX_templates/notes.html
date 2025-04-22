@@ -1,16 +1,16 @@
 <div class="content-panel">
-    <h2>筆記列表</h2>
+    <h2>課程筆記</h2>
     
     <div class="notes-container">
-        <div class="note-selector">
-            <select id="notes-select" onchange="loadNotesDetails(this.options[this.selectedIndex].text)">
-                <option value="">請選擇筆記</option>
+        <div class="lecture-selector">
+            <select id="lectures-select" onchange="loadNotesDetails(this.options[this.selectedIndex].text)">
+                <option value="">請選擇講義</option>
             </select>
         </div>
         
         <div class="notes-scroll" id="notes-content">
             <!-- 筆記列表項目將透過JavaScript動態加載 -->
-            <div class="loading">請先選擇筆記...</div>
+            <div class="loading">請先選擇講義...</div>
         </div>
     </div>
 </div>
@@ -21,12 +21,12 @@
         padding: 15px 0;
     }
 
-    .note-selector {
+    .lecture-selector {
         margin-bottom: 20px;
         width: 100%;
     }
 
-    .note-selector select {
+    .lecture-selector select {
         width: 100%;
         padding: 10px;
         border: 1px solid var(--border-color);
@@ -198,6 +198,30 @@
         border-left: 4px solid #2196f3;
         color: #0c5460;
     }
+
+    /* 筆記內容樣式，支援自動換行 */
+    .note-content {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.5;
+        font-family: inherit;
+        background-color: #fafafa;
+        padding: 12px;
+        border-radius: 4px;
+        border-left: 3px solid #e0e0e0;
+        margin-bottom: 8px;
+    }
+
+    .wrong-content {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.5;
+        font-family: inherit;
+        padding: 10px;
+        color: #721c24;
+        background-color: #fff3f3;
+        border-radius: 3px;
+    }
 </style>
 
 <script>
@@ -212,24 +236,24 @@
             const selectedSubject = subjectDropdown.options[subjectDropdown.selectedIndex].text;
             if (selectedSubject && selectedSubject !== '+ 新增科目' && selectedSubject !== '載入中...') {
                 console.log('從下拉框獲取的科目:', selectedSubject);
-                updateNotesSelector(selectedSubject);
+                updateLecturesSelector(selectedSubject);
             } else {
                 // 如果下拉框沒有有效選項，直接通過API獲取科目列表
-                fetchSubjectsAndUpdateNotes();
+                fetchSubjectsAndUpdateLectures();
             }
         } else {
             // 如果找不到下拉框或尚未初始化，直接通過API獲取科目列表
-            fetchSubjectsAndUpdateNotes();
+            fetchSubjectsAndUpdateLectures();
         }
         
-        // 當科目選擇變更時，更新筆記選擇器
+        // 當科目選擇變更時，更新講義選擇器
         if (subjectDropdown) {
             subjectDropdown.addEventListener('change', function() {
                 if (this.selectedIndex >= 0) {
                     const selectedSubject = this.options[this.selectedIndex].text;
                     if (selectedSubject && selectedSubject !== '+ 新增科目') {
                         console.log('科目變更為:', selectedSubject);
-                        updateNotesSelector(selectedSubject);
+                        updateLecturesSelector(selectedSubject);
                     }
                 }
             });
@@ -240,13 +264,13 @@
             const newSubject = e.detail.subject;
             console.log('收到科目變更事件:', newSubject);
             if (newSubject && newSubject !== '+ 新增科目') {
-                updateNotesSelector(newSubject);
+                updateLecturesSelector(newSubject);
             }
         });
     });
     
-    // 獲取科目列表並更新筆記選擇器
-    function fetchSubjectsAndUpdateNotes() {
+    // 獲取科目列表並更新講義選擇器
+    function fetchSubjectsAndUpdateLectures() {
         console.log('開始獲取科目列表...');
         const subjectDropdown = document.getElementById('subject-dropdown');
         
@@ -264,7 +288,7 @@
                     .then(subjects => {
                         console.log('從API獲取的科目列表:', subjects);
                         if (subjects && subjects.length > 0) {
-                            updateNotesSelector(subjects[0]);
+                            updateLecturesSelector(subjects[0]);
                         } else {
                             console.error('獲取到的科目列表為空');
                             document.getElementById('notes-content').innerHTML = 
@@ -285,7 +309,7 @@
                     
                     // 檢查選定的科目是否有效
                     if (selectedSubject && selectedSubject !== '載入中...' && selectedSubject !== '+ 新增科目') {
-                        updateNotesSelector(selectedSubject);
+                        updateLecturesSelector(selectedSubject);
                     } else {
                         console.warn('無效的科目選擇:', selectedSubject);
                     }
@@ -294,113 +318,113 @@
                 }
             }
         } catch (e) {
-            console.error('獲取科目或筆記時出錯:', e);
+            console.error('獲取科目或講義時出錯:', e);
             document.getElementById('notes-content').innerHTML = 
                 `<div class="alert alert-danger">處理科目時發生錯誤: ${e.message}</div>`;
         }
     }
 
-    // 為特定科目更新筆記選擇器
-    function updateNotesSelector(subjectName) {
+    // 為特定科目更新講義選擇器
+    function updateLecturesSelector(subjectName) {
         if (!subjectName) {
-            console.error('科目名稱為空，無法獲取筆記');
+            console.error('科目名稱為空，無法獲取講義');
             return;
         }
         
-        console.log(`正在獲取科目 "${subjectName}" 的筆記列表...`);
-        const notesSelect = document.getElementById('notes-select');
+        console.log(`正在獲取科目 "${subjectName}" 的講義列表...`);
+        const lecturesSelect = document.getElementById('lectures-select');
         
-        if (!notesSelect) {
-            console.error('找不到筆記選擇器');
+        if (!lecturesSelect) {
+            console.error('找不到講義選擇器');
             return;
         }
         
         // 完全清空選擇器，包括第一個選項
-        notesSelect.innerHTML = '';
+        lecturesSelect.innerHTML = '';
         
         // 添加默認選項
         const defaultOption = document.createElement('option');
         defaultOption.value = "";
-        defaultOption.text = "請選擇筆記";
-        notesSelect.add(defaultOption);
+        defaultOption.text = "請選擇講義";
+        lecturesSelect.add(defaultOption);
         
         // 顯示載入中提示
         const loadingOption = document.createElement('option');
         loadingOption.text = '載入中...';
         loadingOption.disabled = true;
-        notesSelect.add(loadingOption);
+        lecturesSelect.add(loadingOption);
         
-        // 調用API獲取筆記列表
-        fetch(`/htmx/api/notes/${subjectName}`)
+        // 調用API獲取講義列表
+        fetch(`/htmx/api/lectures/${subjectName}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`獲取筆記API錯誤: ${response.status}`);
+                    throw new Error(`獲取講義API錯誤: ${response.status}`);
                 }
                 return response.json();
             })
-            .then(notes => {
-                console.log(`獲取到科目 "${subjectName}" 的筆記:`, notes);
+            .then(lectures => {
+                console.log(`獲取到科目 "${subjectName}" 的講義:`, lectures);
                 
                 // 清空選擇器，只保留第一個默認選項
-                while (notesSelect.options.length > 1) {
-                    notesSelect.remove(1);
+                while (lecturesSelect.options.length > 1) {
+                    lecturesSelect.remove(1);
                 }
                 
-                if (notes && notes.length > 0) {
-                    // 添加筆記選項
-                    notes.forEach(note => {
+                if (lectures && lectures.length > 0) {
+                    // 添加講義選項
+                    lectures.forEach(lecture => {
                         const option = document.createElement('option');
-                        option.value = note.id;
-                        option.text = note.filename;
-                        notesSelect.add(option);
+                        option.value = lecture.id;
+                        option.text = lecture.filename;
+                        lecturesSelect.add(option);
                     });
-                    console.log(`已加載 ${notes.length} 個筆記到選擇器`);
+                    console.log(`已加載 ${lectures.length} 個講義到選擇器`);
                     
-                    // 自動選擇第一個筆記
-                    if (notes.length > 0) {
-                        notesSelect.selectedIndex = 1; // 選擇第一個筆記（索引0是"請選擇筆記"提示選項）
+                    // 自動選擇第一個講義
+                    if (lectures.length > 0) {
+                        lecturesSelect.selectedIndex = 1; // 選擇第一個講義（索引0是"請選擇講義"提示選項）
                         
-                        // 觸發change事件，載入該筆記的內容
-                        loadNotesDetails(notes[0].filename);
+                        // 觸發change事件，載入該講義的內容
+                        loadNotesDetails(lectures[0].filename);
                         
-                        console.log(`自動選擇了第一個筆記: ${notes[0].filename}`);
+                        console.log(`自動選擇了第一個講義: ${lectures[0].filename}`);
                     }
                 } else {
-                    // 無筆記時添加提示
+                    // 無講義時添加提示
                     const emptyOption = document.createElement('option');
-                    emptyOption.text = '該科目暫無筆記';
+                    emptyOption.text = '該科目暫無講義';
                     emptyOption.disabled = true;
-                    notesSelect.add(emptyOption);
+                    lecturesSelect.add(emptyOption);
                     document.getElementById('notes-content').innerHTML = 
-                        `<div class="alert alert-info">科目 "${subjectName}" 下暫無筆記，請先上傳筆記</div>`;
+                        `<div class="alert alert-info">科目 "${subjectName}" 下暫無講義，請先上傳講義</div>`;
                 }
             })
             .catch(error => {
-                console.error(`獲取科目 "${subjectName}" 的筆記時出錯:`, error);
+                console.error(`獲取科目 "${subjectName}" 的講義時出錯:`, error);
                 // 清空選擇器，只保留第一個默認選項
-                while (notesSelect.options.length > 1) {
-                    notesSelect.remove(1);
+                while (lecturesSelect.options.length > 1) {
+                    lecturesSelect.remove(1);
                 }
                 // 加入錯誤提示
                 const errorOption = document.createElement('option');
                 errorOption.text = '加載失敗，請重試';
                 errorOption.disabled = true;
-                notesSelect.add(errorOption);
+                lecturesSelect.add(errorOption);
                 document.getElementById('notes-content').innerHTML = 
-                    `<div class="alert alert-danger">獲取筆記失敗: ${error.message}</div>`;
+                    `<div class="alert alert-danger">獲取講義失敗: ${error.message}</div>`;
             });
     }
 
-    // 加載特定筆記的詳細內容
-    function loadNotesDetails(noteName) {
-        if (!noteName || noteName === '請選擇筆記' || noteName === '載入中...' || 
-            noteName === '該科目暫無筆記' || noteName === '加載失敗，請重試') {
+    // 加載特定講義的筆記詳細內容
+    function loadNotesDetails(lectureName) {
+        if (!lectureName || lectureName === '請選擇講義' || lectureName === '載入中...' || 
+            lectureName === '該科目暫無講義' || lectureName === '加載失敗，請重試') {
             document.getElementById('notes-content').innerHTML = 
-                '<div class="no-data">請選擇一個筆記以查看內容</div>';
+                '<div class="no-data">請選擇一個講義以查看相關筆記</div>';
             return;
         }
         
-        console.log(`正在加載筆記 "${noteName}" 的詳細內容...`);
+        console.log(`正在加載講義 "${lectureName}" 的相關筆記...`);
         const notesContent = document.getElementById('notes-content');
         
         // 顯示加載中
@@ -422,7 +446,7 @@
         }
         
         // 從API獲取筆記詳細內容
-        fetch(`/htmx/notes/get_notes/${currentSubject}/${noteName}`)
+        fetch(`/htmx/notes/get_notes/${currentSubject}/${lectureName}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('獲取筆記詳細內容失敗');
@@ -440,14 +464,6 @@
                         if (data.notes.length > 0) {
                             console.log('第一個筆記樣本:', data.notes[0]);
                         }
-                    } else if (typeof data.notes === 'object') {
-                        console.log('筆記對象鍵:', Object.keys(data.notes));
-                        if (data.notes.Notes) {
-                            console.log('內部筆記陣列長度:', data.notes.Notes.length);
-                            if (data.notes.Notes.length > 0) {
-                                console.log('內部第一個筆記樣本:', data.notes.Notes[0]);
-                            }
-                        }
                     }
                 }
                 
@@ -457,38 +473,20 @@
                     
                     // 檢查返回的數據格式
                     if (Array.isArray(data.notes)) {
-                        // 直接是筆記數組的情況
-                        const notes = data.notes;
-                        
-                        if (notes.length > 0) {
+                        // 直接是筆記數組的情況                        
+                        if (data.notes.length > 0) {
                             // 遍歷顯示筆記項目
-                            notes.forEach(note => {
-                                displayNoteItem(notesContent, note, noteName);
+                            data.notes.forEach(note => {
+                                displayNoteItem(notesContent, note, lectureName);
                             });
                         } else {
-                            notesContent.innerHTML = '<div class="no-data">該筆記沒有內容或尚未處理</div>';
-                        }
-                    } else if (data.notes.Notes && Array.isArray(data.notes.Notes)) {
-                        // 包含 Lecture_Name 和 Notes 字段的對象
-                        const lectureInfo = document.createElement('div');
-                        lectureInfo.className = 'alert alert-info';
-                        lectureInfo.innerHTML = `<strong>關聯講義:</strong> ${data.notes.Lecture_Name || '未關聯講義'}`;
-                        notesContent.appendChild(lectureInfo);
-                        
-                        // 遍歷顯示筆記項目
-                        if (data.notes.Notes.length > 0) {
-                            data.notes.Notes.forEach(note => {
-                                displayNoteItem(notesContent, note, data.notes.Lecture_Name);
-                            });
-                        } else {
-                            notesContent.innerHTML = '<div class="no-data">該筆記沒有內容或尚未處理</div>';
+                            notesContent.innerHTML += '<div class="no-data">該講義尚未有相關筆記</div>';
                         }
                     } else {
-                        // 單個筆記對象的情況
-                        displayNoteItem(notesContent, data.notes, noteName);
+                        notesContent.innerHTML += '<div class="no-data">該講義尚未有相關筆記</div>';
                     }
                 } else {
-                    notesContent.innerHTML = '<div class="no-data">該筆記沒有內容或尚未處理</div>';
+                    notesContent.innerHTML = '<div class="no-data">該講義尚未有相關筆記</div>';
                 }
             })
             .catch(error => {
@@ -527,18 +525,6 @@
             `;
         }
         
-        // 關聯講義標籤
-        if (lectureName) {
-            tagsHTML += `
-                <span class="note-tag lecture">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    講義: ${lectureName}
-                </span>
-            `;
-        }
-        
         // 已修正標籤
         if (normalizedNote.is_corrected) {
             tagsHTML += `
@@ -557,7 +543,7 @@
             <div class="note-meta">
                 ${tagsHTML}
             </div>
-            <pre>${normalizedNote.content}</pre>
+            <div class="note-content">${normalizedNote.content}</div>
         `;
         
         // 如果是已修正的筆記，顯示原始錯誤內容
@@ -565,7 +551,7 @@
             noteHTML += `
                 <div class="corrected-note">
                     <div class="corrected-note-title">原始錯誤內容:</div>
-                    <pre>${normalizedNote.wrong_content}</pre>
+                    <div class="wrong-content">${normalizedNote.wrong_content}</div>
                 </div>
             `;
         }
@@ -583,7 +569,7 @@
         console.log(`收到科目變更事件 [${trigger}]，選擇的科目: ${selectedSubject}`);
         
         if (selectedSubject) {
-            updateNotesSelector(selectedSubject);
+            updateLecturesSelector(selectedSubject);
         }
     });
 
@@ -593,8 +579,8 @@
         
         // 延遲執行以確保HTMX已完成頁面加載
         setTimeout(function() {
-            console.log('嘗試初始化筆記選擇器');
-            fetchSubjectsAndUpdateNotes();
+            console.log('嘗試初始化講義選擇器');
+            fetchSubjectsAndUpdateLectures();
         }, 300);
     })();
 </script>
