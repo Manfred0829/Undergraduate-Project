@@ -74,7 +74,7 @@ class QuestioningManager():
             return float(progress / (3*diff))
 
     def _calculate_T(self):
-        return self.T_min + self.overall_lr * (self.T_max - self.T_min)
+        return self.T_max - self.overall_lr * (self.T_max - self.T_min)
 
 
     """ 主流程函數 """
