@@ -3102,8 +3102,14 @@
         ],
         "Difficulty": 1,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": -2,
+        "Learning_Rate": 0.0,
+        "Notes": [
+            {
+                "Notes_File_Name": "作業系統ch4_page-0005.jpg",
+                "Note_Index": 1
+            }
+        ]
     },
     {
         "Title": "Chrome Application Instances",
@@ -21766,7 +21772,7 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": -4,
+        "Learning_Progress": -14,
         "Learning_Rate": 0.0,
         "Notes": [
             {
@@ -21776,6 +21782,26 @@
             {
                 "Notes_File_Name": "作業系統ch4_page-0005.jpg",
                 "Note_Index": 3
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0004.jpg",
+                "Note_Index": 0
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0004.jpg",
+                "Note_Index": 1
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0005.jpg",
+                "Note_Index": 1
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0005.jpg",
+                "Note_Index": 2
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0005.jpg",
+                "Note_Index": 2
             }
         ]
     },
@@ -31094,12 +31120,20 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": -1,
+        "Learning_Progress": -5,
         "Learning_Rate": 0.0,
         "Notes": [
             {
                 "Notes_File_Name": "作業系統ch4_page-0003.jpg",
                 "Note_Index": 1
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0005.jpg",
+                "Note_Index": 0
+            },
+            {
+                "Notes_File_Name": "作業系統ch4_page-0005.jpg",
+                "Note_Index": 0
             },
             {
                 "Notes_File_Name": "作業系統ch4_page-0005.jpg",
