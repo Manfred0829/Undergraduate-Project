@@ -197,7 +197,8 @@ class OpenAIRequest(LazySingleton):
         prompt_prefix = f"""The content below is a student note of the subject {subject}, complete the following task.
 
         Task:
-        1. If the note contains conceptual errors, please correct the Content description and output as the json format: {{"isCorrected":true, "Corrected_Content":"the corrected content of the note"}}
+
+        1. If the note contains conceptual errors (ignoring tense, grammar, or spelling errors), please correct the Content description and output as the json format: {{"isCorrected":true, "Corrected_Content":"the corrected content of the note"}}
         2. If the note does not contains conceptual errors, please output as the json format: {{"isCorrected":false}}
 
         text of a student note:
