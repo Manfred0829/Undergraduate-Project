@@ -492,7 +492,7 @@ def processing_get_keypoints(subject, lecture_name):
 
     return keypoints_json
 
-
+'''
 def processing_get_notes(subject, note_name):
     """
     獲取指定筆記的詳細信息
@@ -546,7 +546,35 @@ def processing_get_notes(subject, note_name):
             "Lecture_Name": note_name,
             "Notes": []
         }
+'''
 
+def processing_get_notes(subject, lecture_name):
+    try:
+        related_notes = []
+        
+        note_index_path = os.path.join("app", "data_upload", subject, "notes", "index.json")
+        note_index_json = text.read_json(note_index_path, default_content=[])
+
+        for note_entry in note_index_json:
+            note_name_without_ext = os.path.splitext(note_entry["filename"])[0]
+            note_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
+            note_json = text.read_json(note_path, default_content=[])
+
+            print(f"Compare: {note_json['Lecture_Name']} == {lecture_name}")
+            if note_json["Lecture_Name"] == lecture_name:
+                print(f"找到講義 {lecture_name} 的筆記: {note_entry['filename']}")
+                for note in note_json.get("Notes", []):
+                    # 刪除不需要的欄位（安全 pop）
+                    for field in ["Embedding"]:
+                        note.pop(field, None)
+                    
+                    # note["Lecture_Name"] = note_json["Lecture_Name"]
+                    related_notes.append(note)
+
+        return related_notes
+    except Exception as e:
+        logger.error(f"獲取筆記時發生錯誤: {str(e)}")
+        return []
 
 def processing_get_questions(subject, lecture_name, num_questions):
     # 讀取 json

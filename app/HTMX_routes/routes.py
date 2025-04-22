@@ -164,16 +164,17 @@ def notes_fragment():
     # 渲染模板而不需要傳遞數據，數據將由JavaScript動態加載
     return render_template('HTMX_templates/notes.html')
 
-@htmx_bp.route('/notes/get_notes/<subject>/<note_name>')
-def notes_get_notes(subject, note_name):
+@htmx_bp.route('/notes/get_notes/<subject>/<lecture_name>')
+def notes_get_notes(subject, lecture_name):
     """API端點：獲取指定科目的所有筆記詳細資訊"""
     # 檢查科目是否存在
     subjects = get_subjects()
     if subject not in subjects:
         return jsonify({'success': False, 'error': '科目不存在'}), 404
     
+    print(f"獲取講義 {lecture_name} 的筆記")
     try:    
-        notes = processing_get_notes(subject, note_name)
+        notes = processing_get_notes(subject, lecture_name)
         #print(f"獲取到的筆記數據: {notes}")  # 添加日誌輸出以查看數據結構
         
         return jsonify({
