@@ -26407,8 +26407,8 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": -1,
-        "Learning_Rate": 0.0,
+        "Learning_Progress": 2,
+        "Learning_Rate": 0.3333333333333333,
         "Notes": [
             {
                 "Notes_File_Name": "490414981_482313444877484_5940210791278696111_n.jpg",
@@ -31076,7 +31076,7 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
+        "Learning_Progress": -3,
         "Learning_Rate": 0.0
     },
     {
@@ -40394,7 +40394,7 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": 0,
+        "Learning_Progress": -3,
         "Learning_Rate": 0.0
     },
     {
@@ -54383,8 +54383,8 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
-        "Learning_Rate": 0.0
+        "Learning_Progress": 3,
+        "Learning_Rate": 0.5
     },
     {
         "Title": "Categories of System Programs",
@@ -93220,7 +93220,7 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": -7,
+        "Learning_Progress": -10,
         "Learning_Rate": 0.0,
         "Notes": [
             {
