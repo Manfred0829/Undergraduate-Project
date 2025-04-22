@@ -506,7 +506,7 @@
         listItem.querySelector('.download-btn').addEventListener('click', function() {
             const noteId = this.getAttribute('data-id');
             const filename = this.getAttribute('data-filename');
-            downloadNote(subject, noteId, filename);
+            downloadNote(subject, filename);
         });
         
         // 綁定刪除按鈕事件
@@ -520,8 +520,8 @@
     }
     
     // 下載筆記
-    function downloadNote(subject, noteId, filename) {
-        window.open(`/htmx/upload/download/notes/${subject}/${noteId}`, '_blank');
+    function downloadNote(subject, filename) {
+        window.open(`/htmx/upload/download/notes/${subject}/${filename}`, '_blank');
     }
     
     // 刪除筆記

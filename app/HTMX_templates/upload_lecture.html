@@ -360,7 +360,7 @@
                                 ${lecture.filename}
                             </div>
                             <div class="file-actions">
-                                <button class="file-action-btn download-btn" data-id="${lecture.id}">下載</button>
+                                <button class="file-action-btn download-btn" data-id="${lecture.id}" data-filename="${lecture.filename}">下載</button>
                                 <button class="file-action-btn delete-btn" data-id="${lecture.id}">刪除</button>
                             </div>
                         </div>
@@ -372,7 +372,8 @@
                 // 綁定下載和刪除按鈕事件
                 document.querySelectorAll('.download-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
-                        downloadLecture(this.getAttribute('data-id'));
+                        const filename = this.getAttribute('data-filename');
+                        downloadLecture(filename);
                     });
                 });
 
@@ -391,14 +392,14 @@
     }
     
     // 下載講義
-    function downloadLecture(lectureId) {
+    function downloadLecture(filename) {
         const subject = getCurrentSubject();
         if (!subject) {
             showUploadStatus('請先選擇科目', 'alert-info');
             return;
         }
         
-        window.location.href = `/htmx/upload/download/lectures/${subject}/${lectureId}`;
+        window.location.href = `/htmx/upload/download/lectures/${subject}/${filename}`;
     }
     
     // 刪除講義

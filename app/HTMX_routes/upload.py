@@ -159,20 +159,15 @@ def delete_note_route(subject, note_id):
     
 
 # 下載檔案
-@upload_bp.route('/download/<file_type>/<subject>/<file_id>', methods=['GET'])
-def download_file(file_type, subject, file_id):
+@upload_bp.route('/download/<file_type>/<subject>/<file_name>', methods=['GET'])
+def download_file(file_type, subject, file_name):
     """下載檔案"""
     if file_type not in ['lectures', 'notes']:
         return jsonify({'success': False, 'error': '不支持的檔案類型'}), 400
     
     try:
-        # 獲取檔案名稱
-        filename = get_file_name_from_id(subject, file_type, file_id)
-        if not filename:
-            return jsonify({'success': False, 'error': '找不到該檔案'}), 404
-        
         # 檔案路徑
-        file_path = os.path.join("app", "data_upload", subject, file_type, filename)
+        file_path = os.path.join("app", "data_upload", subject, file_type, file_name)
         if not os.path.exists(file_path):
             return jsonify({'success': False, 'error': '檔案不存在'}), 404
         
@@ -180,6 +175,6 @@ def download_file(file_type, subject, file_id):
         directory = os.path.dirname(file_path)
         
         # 使用 Flask 的 send_from_directory 函數下載檔案
-        return send_from_directory(directory, filename, as_attachment=True)
+        return send_from_directory(directory, file_name, as_attachment=True)
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
