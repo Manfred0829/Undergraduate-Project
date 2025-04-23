@@ -30,7 +30,7 @@
         <!-- 三欄內容區域 -->
         <div class="key-points-content">
             <!-- 左側：講義預覽 -->
-            <div class="content-column">
+            <div class="content-column lecture-preview-column">
                 <div class="column-header">原始講義頁面</div>
                 <div class="column-content">
                     <div class="lecture-preview" id="lecture-preview-container">
@@ -39,8 +39,8 @@
                 </div>
             </div>
             
-            <!-- 中間：講義重點 -->
-            <div class="content-column">
+            <!-- 右上：講義重點 -->
+            <div class="content-column lecture-points-column">
                 <div class="column-header">講義重點</div>
                 <div class="column-content" id="lecture-key-points">
                     <!-- 動態載入內容 -->
@@ -48,8 +48,8 @@
                 </div>
             </div>
             
-            <!-- 右側：筆記重點 -->
-            <div class="content-column">
+            <!-- 右下：筆記重點 -->
+            <div class="content-column notes-points-column">
                 <div class="column-header">筆記重點</div>
                 <div class="column-content" id="notes-key-points">
                     <!-- 動態載入內容 -->
@@ -63,7 +63,7 @@
 <style>
     /* 重點統合樣式 */
     .key-points-integration {
-        padding: 0;
+        padding: 0 20px 20px 0;
     }
 
     .key-points-nav {
@@ -120,9 +120,36 @@
 
     .key-points-content {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 60% calc(40% - 20px);
+        grid-template-rows: calc(50vh - 100px) calc(50vh - 100px);
+        grid-template-areas: 
+            "lecture lecture-points"
+            "lecture notes-points";
         gap: 20px;
         margin-top: 20px;
+        margin-bottom: 20px;
+        height: calc(100vh - 220px);
+    }
+
+    .lecture-preview-column {
+        grid-area: lecture;
+        max-height: calc(100vh - 200px);
+    }
+
+    .lecture-points-column {
+        grid-area: lecture-points;
+        display: flex;
+        flex-direction: column;
+        height: calc(50vh - 100px);
+        max-height: calc(50vh - 100px);
+    }
+
+    .notes-points-column {
+        grid-area: notes-points;
+        display: flex;
+        flex-direction: column;
+        height: calc(50vh - 100px);
+        max-height: calc(50vh - 100px);
     }
 
     .content-column {
@@ -261,6 +288,13 @@
         background-color: #e3f2fd;
         border-left: 4px solid #2196f3;
         color: #0c5460;
+    }
+
+    .lecture-points-column .column-content,
+    .notes-points-column .column-content {
+        overflow-y: auto;
+        flex: 1;
+        max-height: calc(50vh - 150px);
     }
 </style>
 
