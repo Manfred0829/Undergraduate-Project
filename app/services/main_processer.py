@@ -560,9 +560,9 @@ def processing_get_notes(subject, lecture_name):
             note_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
             note_json = text.read_json(note_path, default_content=[])
 
-            print(f"Compare: {note_json['Lecture_Name']} == {lecture_name}")
+            #print(f"Compare: {note_json['Lecture_Name']} == {lecture_name}")
             if note_json["Lecture_Name"] == lecture_name:
-                print(f"找到講義 {lecture_name} 的筆記: {note_entry['filename']}")
+                #print(f"找到講義 {lecture_name} 的筆記: {note_entry['filename']}")
                 for note in note_json.get("Notes", []):
                     # 刪除不需要的欄位（安全 pop）
                     for field in ["Embedding"]:

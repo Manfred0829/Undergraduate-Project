@@ -5,11 +5,6 @@
         "status": "done"
     },
     {
-        "id": "9e3ccfb4-f2a1-4920-8440-db8dbae927e6",
-        "filename": "482763211_1201596088139166_8275174946244680282_n.jpg",
-        "status": "done"
-    },
-    {
         "id": "42e63e2d-e9b6-4152-8a80-7b4db9eb9596",
         "filename": "486115451_643296025332895_6834983261547287041_n.jpg",
         "status": "done"
@@ -52,6 +47,11 @@
     {
         "id": "1c8bbc26-83f6-4df0-b3a1-dbc5ead9fa20",
         "filename": "作業系統ch4_page-0005.jpg",
+        "status": "done"
+    },
+    {
+        "id": "b91b13de-c8b2-479a-a96e-579d936bdda3",
+        "filename": "482763211_1201596088139166_8275174946244680282_n.jpg",
         "status": "done"
     }
 ]
