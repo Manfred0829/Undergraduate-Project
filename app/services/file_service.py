@@ -375,7 +375,7 @@ def get_notes_from_keypoint(subject, keypoint_json):
         note_name_without_ext = os.path.splitext(note_kp["Notes_File_Name"])[0]
         notes_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
         try:
-            notes_json = text.read_json(notes_path)
+            notes_json = text_processer.read_json(notes_path)
             result_notes.append(notes_json["Notes"][note_kp["Note_Index"]])
         except Exception as e:
             print(f"Error reading notes file {notes_path}: {e}")
