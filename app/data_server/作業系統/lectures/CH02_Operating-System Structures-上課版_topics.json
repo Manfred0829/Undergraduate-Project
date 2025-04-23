@@ -3,13 +3,13 @@
         "Topic": "Operating System Services and Interfaces",
         "k_start": 0,
         "k_end": 16,
-        "Wrong_count": 0
+        "Wrong_count": 1
     },
     {
         "Topic": "System Calls and APIs in Operating Systems",
         "k_start": 16,
         "k_end": 36,
-        "Wrong_count": 2
+        "Wrong_count": 1
     },
     {
         "Topic": "Operating System Design and Implementation",
@@ -21,7 +21,7 @@
         "Topic": "Operating System Structures and Approaches",
         "k_start": 46,
         "k_end": 62,
-        "Wrong_count": 2
+        "Wrong_count": 0
     },
     {
         "Topic": "Modern Operating System Methodologies",

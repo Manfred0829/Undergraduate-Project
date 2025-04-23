@@ -517,6 +517,18 @@ def delete_lecture_htmx(subject, lecture_id):
     safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_overall_lr.json'))
     safe_remove(os.path.join(directory_server_path, file_name_without_ext + '_tree.png'))
 
+    # delete related notes in keypoints.json
+    notes_index_path = os.path.join("app", "data_upload", subject, "notes", "index.json")
+    notes_register = text_processer.read_json(notes_index_path, default_content=[])
+
+    for note in notes_register:
+        note_name_without_ext = os.path.splitext(note.get("filename"))[0]
+        notes_path = os.path.join("app", "data_server", subject, "notes", note_name_without_ext + ".json")
+        notes_json = text_processer.read_json(notes_path, default_content={})
+
+        if notes_json != {} and notes_json['Lecture_Name'] == filename:
+            delete_note_htmx(subject, note.get("id"))
+
     # delete index
     if i >= 0:
         register.pop(i)

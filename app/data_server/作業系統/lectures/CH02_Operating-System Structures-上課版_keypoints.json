@@ -15536,7 +15536,7 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
+        "Learning_Progress": -3,
         "Learning_Rate": 0.0
     },
     {
@@ -45053,7 +45053,7 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
+        "Learning_Progress": -3,
         "Learning_Rate": 0.0
     },
     {
@@ -46606,7 +46606,7 @@
         ],
         "Difficulty": 2,
         "Importance": 3,
-        "Learning_Progress": -2,
+        "Learning_Progress": -5,
         "Learning_Rate": 0.0,
         "Notes": [
             {
@@ -76131,7 +76131,7 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": 0,
+        "Learning_Progress": -3,
         "Learning_Rate": 0.0
     },
     {
@@ -91661,9 +91661,13 @@
         ],
         "Difficulty": 2,
         "Importance": 2,
-        "Learning_Progress": -2,
+        "Learning_Progress": -4,
         "Learning_Rate": 0.0,
         "Notes": [
+            {
+                "Notes_File_Name": "482763211_1201596088139166_8275174946244680282_n.jpg",
+                "Note_Index": 0
+            },
             {
                 "Notes_File_Name": "482763211_1201596088139166_8275174946244680282_n.jpg",
                 "Note_Index": 0
