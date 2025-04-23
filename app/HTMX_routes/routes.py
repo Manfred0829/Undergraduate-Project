@@ -130,11 +130,17 @@ def integration_get_num_pages(subject, lecture_name):
 def integration_get_page_info(subject, lecture_name, page_num):
     """API端點：獲取指定講義特定頁的預覽圖"""
 
-    data = processing_get_page_info(subject, lecture_name, int(page_num)-1)
-    return jsonify({
-        'success': True,
-        'data': data
-    })
+    try:
+        print("=================================")
+        data = processing_get_page_info(subject, lecture_name, int(page_num)-1)
+        print("=================================")
+        return jsonify({
+            'success': True,
+            'data': data
+        })
+    except Exception as e:
+        print('error:', e)
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 # 重點列表片段
 @htmx_bp.route('/key_points')

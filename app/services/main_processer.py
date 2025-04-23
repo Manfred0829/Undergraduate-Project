@@ -550,6 +550,10 @@ def processing_get_notes(subject, note_name):
 
 def processing_get_notes(subject, lecture_name):
     try:
+        lecturename_without_ext = os.path.splitext(lecture_name)[0]
+        keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
+        keypoints_json = text.read_json(keypoints_path, default_content=[])
+        
         related_notes = []
         
         note_index_path = os.path.join("app", "data_upload", subject, "notes", "index.json")
@@ -568,6 +572,13 @@ def processing_get_notes(subject, lecture_name):
                     for field in ["Embedding"]:
                         note.pop(field, None)
                     
+                    
+                    # 取得對應頁數
+                    kp_idx = note.get("Keypoint_Index")
+                    from_page = keypoints_json[kp_idx].get("from_page")
+                    note["Title"] = f"講義第{from_page+1}頁 - {note.get('Title')}"
+                    
+
                     # note["Lecture_Name"] = note_json["Lecture_Name"]
                     related_notes.append(note)
 
@@ -681,6 +692,7 @@ def processing_get_page_info(subject, lecture_name, page_index):
         result_keypoints.append(temp)
 
     # 3. notes
+    print("test1")
     result_notes = []
     for keypoint in target_keypoints:
         if "Notes" in keypoint:
@@ -688,7 +700,7 @@ def processing_get_page_info(subject, lecture_name, page_index):
             for note in notes:
                 temp = {"Title": note["Title"], "Content": note["Content"]}
                 result_notes.append(temp)
-
+    print("test2")
     result = {"Image": result_img_base64,
               "Keypoints": result_keypoints,
               "Notes": result_notes}
