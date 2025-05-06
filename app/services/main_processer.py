@@ -774,7 +774,7 @@ def processing_get_history(subject, lecture_name):
     logger.info(f'歷史數據處理完成: \n{result}')
     return result
 
-
+'''
 def processing_query_keypoint(subject, lecture_name, query_text):
     lecturename_without_ext = os.path.splitext(lecture_name)[0]
     keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
@@ -811,5 +811,58 @@ def processing_query_keypoint(subject, lecture_name, query_text):
     }
 
     return result
+'''
+
+def processing_query_keypoint(subject, lecture_name, query_text):
+    lecturename_without_ext = os.path.splitext(lecture_name)[0]
+    keypoints_path = os.path.join("app", "data_server", subject, "lectures", lecturename_without_ext + "_keypoints.json")
+    keypoints_json = text.read_json(keypoints_path, default_content=[])
+
+    OpenAI = OpenAIRequest()
+    # 提取查詢之關鍵字
+    query_keywords = OpenAI.processing_query_extract_keywords(subject,query_text)
+    #print(f"query_keywords: {query_keywords}")
+
+    if query_keywords == "UNRELATED":
+        return {
+            "Title": "查詢與科目無關",
+            "Content": "查詢與科目無關",
+            "Explanation": "查詢與科目無關"
+        }
+
+    # 生成查詢向量
+    query_embedding = OpenAI.processing_embedding([query_keywords])
+    query_embedding = query_embedding[0]
+
+    # 計算每個重點的餘弦相似度
+    keypoints_embedding = [keypoint["Embedding"] for keypoint in keypoints_json]
+    try:
+        top_k_indices = sim.get_top_k_similar_index(query_embedding, keypoints_embedding, threshold=0.30, need_threshold=True,k=5)
+    except Exception as e:
+        logger.error(f"查詢重點時發生錯誤: {str(e)}")
 
 
+    if len(top_k_indices) == 0:
+        return {
+            "Title": "找不到相關重點",
+            "Content": "找不到相關重點",
+            "Explanation": "找不到相關重點"
+        }
+
+    top_k_keypoints = [keypoints_json[i] for i in top_k_indices]
+
+    # 提取相關重點
+    related_keypoint = OpenAI.processing_query_keypoints_related(subject, query_text, top_k_keypoints)
+    #print(f"related_keypoint: {related_keypoint}")
+
+    # 生成重點解釋
+    explanation = OpenAI.processing_query_keypoints_response(subject, query_text, related_keypoint)
+    #print(f"explanation: {explanation}")
+
+    result = {
+        "Title": related_keypoint["Title"],
+        "Content": related_keypoint["Content"],
+        "Explanation": explanation
+    }
+
+    return result
