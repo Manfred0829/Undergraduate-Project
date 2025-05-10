@@ -855,6 +855,13 @@ def processing_query_keypoint(subject, lecture_name, query_text):
     related_keypoint = OpenAI.processing_query_keypoints_related(subject, query_text, top_k_keypoints)
     #print(f"related_keypoint: {related_keypoint}")
 
+    if related_keypoint["Title"] == "UNRELATED":
+        return {
+            "Title": "找不到相關重點",
+            "Content": "找不到相關重點",
+            "Explanation": "找不到相關重點"
+        }
+
     # 生成重點解釋
     explanation = OpenAI.processing_query_keypoints_response(subject, query_text, related_keypoint)
     #print(f"explanation: {explanation}")

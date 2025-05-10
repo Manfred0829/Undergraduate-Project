@@ -587,11 +587,21 @@ class OpenAIRequest(LazySingleton):
     
 
     def processing_query_keypoints_related(self, subject, query_text, top_k_keypoints):
+        # please extract the actual related keypoints and summarize them into one keypoint as the following json format:
+
         prompt = f"""
-        You are given a query text about the subject {subject}, and a list of top k similar keypoints, please extract the actual related keypoints and summarize them into one keypoint as the following json format:
+        You are given a query text about the subject {subject}, and a list of top k similar keypoints, please act as a RAG system to determine whether there is a keypoint content meet the requirement of the query text.
+        
+        If there is a keypoint content meet the requirement of the query text, please extract the actual related keypoints and summarize them into one keypoint as the following json format:
         {{
         "Title": "keypoint title",
         "Content": "keypoint content"
+        }}
+
+        If there is no keypoints content meet the requirement of the query text, return the following json format:
+        {{
+        "Title": "UNRELATED",
+        "Content": "UNRELATED"
         }}
 
         below is the query text:
@@ -600,7 +610,9 @@ class OpenAIRequest(LazySingleton):
         below is the list of top k similar keypoints:
         """
 
+        #print("query_text: ", query_text)
         for keypoint in top_k_keypoints:
+            #print("keypoint: ", "Title: " + keypoint["Title"] + "\nContent: " + keypoint["Content"] + "\n\n")
             prompt += "Title: " + keypoint["Title"] + "\nContent: " + keypoint["Content"] + "\n\n"
 
         return self.generate_content(prompt, return_json=True)
