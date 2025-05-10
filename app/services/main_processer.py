@@ -823,7 +823,7 @@ def processing_query_keypoint(subject, lecture_name, query_text):
     query_keywords = OpenAI.processing_query_extract_keywords(subject,query_text)
     #print(f"query_keywords: {query_keywords}")
 
-    if query_keywords == "UNRELATED":
+    if query_keywords == "PROMPT INJECTION ATTACK":
         return {
             "Title": "查詢與科目無關",
             "Content": "查詢與科目無關",
